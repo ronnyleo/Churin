@@ -1,0 +1,15 @@
+{
+    "name": "restaurante-app",
+    "version": "1.0.0",
+    "description": "Aplicación de gestión de pedidos para un restaurante",
+    "main": "server.js",
+    "scripts": {
+      "start": "node server.js"
+    },
+    "dependencies": {
+      "express": "^4.17.1",
+      "mongoose": "^5.12.3",
+      "body-parser": "^1.19.0"
+    }
+  }
+  
