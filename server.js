@@ -35,4 +35,4 @@ pool.connect()
   .then(() => console.log('Connected to PostgreSQL database on Render'))
   .catch(err => console.error('Error connecting to PostgreSQL database', err));
 
-module.exports = client;
+module.exports = pool;

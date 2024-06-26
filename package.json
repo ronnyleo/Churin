@@ -1,5 +1,5 @@
 {
-    "name": "restaurante-app",
+    "name": "churin-app",
     "version": "1.0.0",
     "description": "Aplicación de gestión de pedidos para un restaurante",
     "main": "server.js",
