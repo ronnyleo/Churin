@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import MenuList from './components/MenuList'; // Ajusta la ruta según la ubicación de MenuList
 import axios from 'axios';
 
 const App = () => {
