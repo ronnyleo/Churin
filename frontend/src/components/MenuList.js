@@ -9,7 +9,7 @@ function MenuList () {
     async function fetchMenu () {
       try {
         const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/menu`);
-        setMenu(response.data); // Actualiza el estado con los datos del menú
+        setMenuItems(response.data); // Actualiza el estado con los datos del menú
       } catch (error) {
         console.error('Error al obtener el menú:', error);
       }
