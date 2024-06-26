@@ -1,6 +1,7 @@
 // server.js
 const express = require('express');
 const menuRouter = require('./routes/menu');
+const { Client } = require('pg');
 const app = express();
 const port = process.env.PORT || 3001;
 const client = require('./db'); // Asegúrate de que el cliente de PostgreSQL esté exportado correctamente
