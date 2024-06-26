@@ -1,5 +1,6 @@
 // backend/db.js
 const { Client } = require('pg');
+const pgp = require('pg-promise')();
 require('dotenv').config(); // Asegúrate de tener esta línea al principio para cargar las variables de entorno
 
 /*
