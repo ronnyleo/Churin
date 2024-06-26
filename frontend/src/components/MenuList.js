@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function MenuList () {
-  const [menu, setMenu] = useState([]);
+  const [menuItems, setMenuItems] = useState([]);
 
   useEffect(() => {
     // Función para obtener el menú desde el backend
