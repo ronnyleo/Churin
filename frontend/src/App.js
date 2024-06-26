@@ -8,7 +8,7 @@ const App = () => {
     // Función para hacer la solicitud GET al backend cuando el componente se monta
     const fetchMenu = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/api/menu');
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/menu`);
         setMenuItems(response.data); // Actualiza el estado con los datos recibidos
       } catch (error) {
         console.error('Error al obtener el menú:', error);
