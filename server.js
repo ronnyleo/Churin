@@ -6,7 +6,7 @@ const client = require('./db'); // Asegúrate de que el cliente de PostgreSQL es
 
 // Define a route for the root URL (/)
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.send('El amor de mi vida esta leyendo esto');
 });
 
 app.get('/test-db', async (req, res) => {
