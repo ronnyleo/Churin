@@ -20,13 +20,13 @@ const App = () => {
   }, []); // El segundo argumento [] asegura que useEffect se ejecute solo una vez al montar el componente
 
   return (
-    <div>
-      <h1>Menú del Restaurante</h1>
-      <ul>
-        {menuItems.map(item => (
-          <li key={item.id}>{item.nombre} - {item.descripcion}</li>
-        ))}
-      </ul>
+    <div className="App">
+      <header className="App-header">
+        <h1>Churin Churin</h1>
+      </header>
+      <main>
+        <MenuList />
+      </main>
     </div>
   );
 };
