@@ -14,17 +14,17 @@ const client = new Client({
 
 //const db = pgp(process.env.DATABASE_URL);
 
-const client = new Client({
+const db = new pgp({
   connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false, // Configura según la configuración de tu base de datos
   },
 });
 
-client.connect()
+db.connect()
   .then(() => console.log('Connected to PostgreSQL database on Render'))
   .catch(err => console.error('Error connecting to PostgreSQL database', err));
 
-module.exports = client;
+module.exports = db;
 
 
