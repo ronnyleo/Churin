@@ -23,7 +23,7 @@ const App = () => {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Churin Churin</h1>
+        <h1>ChurinChurin Funflais</h1>
       </header>
       <main>
         <MenuList />

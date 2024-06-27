@@ -21,7 +21,7 @@ function MenuList () {
 
   return (
     <div>
-      <h2>Menú del Restaurante</h2>
+      <h2>Menú</h2>
       <ul>
         {menuItems.map(item => (
           <li key={item.id}>
