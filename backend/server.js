@@ -17,15 +17,6 @@ app.use(cors());
 app.use('/api', menuRouter); // Monta el enrutador del menú bajo /api/menu
 app.use(express.json());
 
-/*
-// Datos de ejemplo para el menú del restaurante
-const menuItems = [
-  { id: 1, nombre: 'Plato 1', descripcion: 'Descripción del plato 1' },
-  { id: 2, nombre: 'Plato 2', descripcion: 'Descripción del plato 2' },
-  { id: 3, nombre: 'Plato 3', descripcion: 'Descripción del plato 3' },
-];
-*/
-
 // Ruta API para obtener el menú del restaurante
 app.get('/api/menu', (req, res) => {
   res.json(menuItems);
