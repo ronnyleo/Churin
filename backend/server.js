@@ -32,7 +32,7 @@ app.get('/api/menu', (req, res) => {
 });
 
 // Ruta para subir imágenes
-app.use('/api/upload',uploadRouter);
+app.use('/api/upload', uploadRouter);
 //app.use('/api/upload', upload.single('image'), require('./routes/upload'));
 
 // Ruta de prueba para verificar la conexión a la base de datos

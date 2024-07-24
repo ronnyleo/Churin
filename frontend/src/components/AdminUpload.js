@@ -6,6 +6,7 @@ function AdminUpload() {
     const [authenticated, setAuthenticated] = useState(true); 
     const [file, setFile] = useState(null);
     const [nombre, setNombre] = useState('');
+    const [tipo, setTipo] = useState('');
     const [imageUrl, setImageUrl] = useState('');
 
     const handleFileChange = (event) => {
@@ -47,7 +48,7 @@ function AdminUpload() {
 
   return (
     <div>
-      <h2>Subir Imagen</h2>
+      <h2>Nuevo plato: </h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="nombre">Nombre:</label>
@@ -59,6 +60,18 @@ function AdminUpload() {
             required
           />
         </div>
+        {/* THIS ONE IS A VALID COMMENT 
+        <div>
+          <label htmlFor="tipo plato">Tipo de plato:</label>
+          <input
+            type="number"
+            id="tipo_plato"
+            value={nombre}
+            onChange={(e) => setTipo(e.target.value)}
+            required
+          />
+        </div>
+        */}
         <div>
           <label htmlFor="image">Seleccionar Imagen:</label>
           <input

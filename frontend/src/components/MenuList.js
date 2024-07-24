@@ -25,7 +25,7 @@ function MenuList () {
       <ul>
         {menuItems.map(item => (
           <li key={item.id}>
-            <strong>{item.nombre}</strong>: {item.descripcion} - ${item.precio} 
+            <strong>{item.nombre}</strong>: {item.descripcion} - ${item.precio}  - {item.id} 
             <img src={item.imageUrl} alt={item.imageNombre} />
           </li>
         ))}
