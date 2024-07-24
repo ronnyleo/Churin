@@ -21,11 +21,12 @@ function MenuList () {
 
   return (
     <div>
-      <h2>Menú del Restaurante</h2>
+      <h2>Menú</h2>
       <ul>
         {menuItems.map(item => (
           <li key={item.id}>
-            <strong>{item.nombre}</strong>: {item.descripcion} - ${item.precio}
+            <strong>{item.nombre}</strong>: {item.descripcion} - ${item.precio}  - {item.id} 
+            <img src={item.imageUrl} alt={item.imageNombre} />
           </li>
         ))}
       </ul>
