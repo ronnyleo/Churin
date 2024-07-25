@@ -20,12 +20,13 @@ app.use(express.json());
 
 // Rutas principales
 
-// Sirve archivos estáticos desde la carpeta build
-app.use(express.static(path.join(__dirname, 'build')));
 
-// Redirige todas las solicitudes al archivo index.html
+// Servir archivos estáticos desde la carpeta build del frontend
+app.use(express.static(path.join(__dirname, '../frontend/build')));
+
+// Redirigir todas las solicitudes al archivo index.html
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
 });
 
 //Ruta de bienvenida para el root URL (/)
