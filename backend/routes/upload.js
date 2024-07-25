@@ -3,32 +3,57 @@ const router = express.Router();
 const cloudinary = require('../cloudinary');
 const client = require('../db');
 const multer = require('multer');
+const sharp = require('sharp');
+const path = require('path');
+const fs = require('fs');
 const upload = multer({ dest: 'uploads/' }); // Multer configurado para guardar archivos temporalmente
 
-// Ruta para subir una imagen
+// Ruta para subir un plato con imagen
 router.post('/', upload.single('image'), async (req, res) => {
+  const { name, description, price, type } = req.body;
+
+  // Validar que todos los campos están presentes
+  if (!name || !description || !price || !type || !req.file) {
+    return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
+  }
+
   try {
-    const result = await cloudinary.uploader.upload(req.file.path);
-    const imageUrl = result.secure_url;
+     // Redimensionar la imagen a 150x150 píxeles usando sharp
+     const resizedImagePath = path.join('uploads', 'resized-' + req.file.filename);
+     await sharp(req.file.path)
+       .resize(150, 150) // Ajusta el tamaño deseado
+       .toFile(resizedImagePath);
+ 
+     // Subir la imagen redimensionada a Cloudinary
+     const result = await cloudinary.uploader.upload(resizedImagePath);
+     const imageUrl = result.secure_url;
+ 
+     // Eliminar archivos temporales
+     fs.unlinkSync(req.file.path);
+     fs.unlinkSync(resizedImagePath);
+ 
 
-    // Guardar la URL de la imagen en la base de datos
-    await client.query('INSERT INTO menu_images (image_url) VALUES ($1)', [imageUrl]);
+    // Guardar todos los datos del plato en la base de datos
+    const query = 'INSERT INTO menu (nombre, descripcion, precio, tipo_id, image_url) VALUES ($1, $2, $3, $4, $5)';
+    const values = [name, description, price, type, imageUrl];
+    await client.query(query, values);
 
-    res.json({ imageUrl });
+    res.json({ message: 'Plato subido exitosamente', imageUrl });
+    console.log('Plato subido correctamente');
   } catch (error) {
-    console.error('Error al subir la imagen:', error);
-    res.status(500).json({ error: 'Error al subir la imagen' });
+    console.error('Error al subir el plato:', error);
+    res.status(500).json({ error: 'Error al subir el plato' });
   }
 });
 
-// Ruta para obtener todas las imágenes
+// Ruta para obtener todos los platos
 router.get('/', async (req, res) => {
   try {
-    const result = await client.query('SELECT image_url FROM menu_images');
-    res.json(result.rows); 
+    const result = await client.query('SELECT * FROM menu');
+    res.json(result.rows);
   } catch (error) {
-    console.error('Error al obtener las imágenes:', error);
-    res.status(500).json({ error: 'Error al obtener las imágenes' });
+    console.error('Error al obtener los platos:', error);
+    res.status(500).json({ error: 'Error al obtener los platos' });
   }
 });
 

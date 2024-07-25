@@ -1,0 +1,28 @@
+/* Estilo general para el contenedor de la lista */
+.menu-list {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  /* Estilo para cada ítem de la lista */
+  .menu-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd; /* Línea divisoria entre ítems */
+    padding-bottom: 10px;
+  }
+  
+  /* Estilo para la imagen del ítem del menú */
+  .menu-item img {
+    width: 100px; /* Ajusta el tamaño según tus necesidades */
+    height: auto;
+    margin-left: 10px; /* Espacio entre el texto y la imagen */
+  }
+  
+  /* Estilo para el nombre del plato */
+  .menu-item strong {
+    margin-right: 10px;
+  }
+  
