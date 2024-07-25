@@ -6,6 +6,8 @@ const menuRouter = require('./routes/menu');
 const uploadRouter = require('./routes/upload');
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' }); // Directorio temporal para guardar archivos
+const path = require('path');
+
 
 const app = express();
 const port = process.env.PORT || 3001;
