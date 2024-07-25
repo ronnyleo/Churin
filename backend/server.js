@@ -22,12 +22,12 @@ app.use(express.json());
 
 
 // Servir archivos estáticos desde la carpeta build del frontend
-app.use(express.static(path.join(__dirname, '../frontend/build')));
+//app.use(express.static(path.join(__dirname, '../frontend/build')));
 
 // Redirigir todas las solicitudes al archivo index.html
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
-});
+//app.get('*', (req, res) => {
+ // res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
+//});
 
 //Ruta de bienvenida para el root URL (/)
 app.get('/', (req, res) => {
