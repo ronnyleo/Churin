@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { Autocomplete, TextField } from '@mui/material'; // Asegúrate de que MUI esté instalado
 import '../styles/AdminUpload.css';
@@ -66,6 +67,9 @@ function AdminUpload() {
 
   return (
     <div className='form-admin'>
+    <Link to='/'>
+      <button>Volver al menú</button>
+    </Link>
       <h2>Subir plato al menú: </h2>
       <form onSubmit={handleSubmit} className='form-plato'>
         <div className='form-group'>
@@ -117,7 +121,7 @@ function AdminUpload() {
             required
           />
         </div>
-        <button type="submit">Subir imagen</button>
+        <button type="submit">Subir plato</button>
       </form>
       {imageUrl && (
         <div>
