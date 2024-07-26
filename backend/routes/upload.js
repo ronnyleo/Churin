@@ -11,7 +11,7 @@ const upload = multer({ dest: 'uploads/' }); // Multer configurado para guardar 
 // Ruta para subir un plato con imagen
 router.post('/', upload.single('image'), async (req, res) => {
   const { name, description, price, type } = req.body;
-
+  const tipo_id = parseInt(type, 10); // Asegúrate de que `type` se convierte a número entero
   // Validar que todos los campos están presentes
   if (!name || !description || !price || !type || !req.file) {
     return res.status(400).json({ error: 'Todos los campos son obligatorios.' });

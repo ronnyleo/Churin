@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import '../styles//MenuList.css'; // Asegúrate de que el archivo CSS esté en la misma carpeta o ajusta la ruta según sea necesario
 
@@ -22,6 +23,9 @@ function MenuList() {
 
   return (
     <div className="menu-list">
+      <Link to='/admin'>
+        <button>Admin</button>
+      </Link>
       <h2>Realiza tu pedido</h2>
       <ul>
         {menuItems.map(item => (

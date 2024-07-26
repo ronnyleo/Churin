@@ -4,6 +4,7 @@ const cors = require('cors')
 const client = require('./db'); // Asegúrate de que el cliente de PostgreSQL esté exportado correctamente
 const menuRouter = require('./routes/menu');
 const uploadRouter = require('./routes/upload');
+const tiposRouter =  require('./routes/tipos');
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' }); // Directorio temporal para guardar archivos
 const path = require('path');
@@ -20,14 +21,7 @@ app.use(express.json());
 
 // Rutas principales
 
-
-// Servir archivos estáticos desde la carpeta build del frontend
-//app.use(express.static(path.join(__dirname, '../frontend/build')));
-
-// Redirigir todas las solicitudes al archivo index.html
-//app.get('*', (req, res) => {
- // res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
-//});
+app.use(express.urlencoded({ extended: true }));
 
 //Ruta de bienvenida para el root URL (/)
 app.get('/', (req, res) => {
@@ -37,10 +31,7 @@ app.get('/', (req, res) => {
 // Rutas para el menú del restaurante
 app.use('/api', menuRouter); // Monta el enrutador del menú bajo /api/menu
 
-// Ruta API para obtener el menú del restaurante
-app.get('/api/menu', (req, res) => {
-  res.json(menuItems);
-});
+app.use('/api', tiposRouter);
 
 // Ruta para subir imágenes
 app.use('/api/upload', uploadRouter);
