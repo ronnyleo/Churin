@@ -7,7 +7,7 @@
 
   function MenuList() {
     const [menuItems, setMenuItems] = useState([]);
-
+    const [error, setError] = useState(null);
     useEffect(() => {
       // Función para obtener el menú desde el backend
       async function fetchMenu() {
@@ -16,6 +16,7 @@
           setMenuItems(response.data); // Actualiza el estado con los datos del menú
         } catch (error) {
           console.error('Error al obtener el menú:', error);
+          setError('Hubo un problema al obtener el menú. Por favor, espera 1 minuto e intenta nuevamente.');
         }
       }
 
@@ -30,8 +31,9 @@
           {menuItems.map(item => (
             <li key={item.id} className="menu-item">
               <strong>{item.nombre}</strong> 
-              ${item.precio}
               <img src={item.image_url} alt={item.nombre} className="menu-item-image" />
+              <p>{item.descripcion}</p>
+              ${item.precio}
             </li>
           ))}
         </ul>

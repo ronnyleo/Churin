@@ -67,6 +67,12 @@
         padding: 10px 30px; /* Ajusta el padding para pantallas más pequeñas */
     }
 
+    .navbar-logo-container {
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+    }
+
     .navbar-links {
         width: 100%; /* Asegura que el contenedor ocupe todo el ancho */
         justify-content: center; /* Centra los enlaces horizontalmente */

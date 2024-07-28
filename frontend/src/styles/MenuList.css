@@ -1,28 +1,58 @@
 /* Estilo general para el contenedor de la lista */
 .menu-list {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Estilo para cada ítem de la lista */
+.menu-item {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd; /* Línea divisoria entre ítems */
+  padding-bottom: 10px;
+}
+
+/* Estilo para la imagen del ítem del menú */
+.menu-item img {
+  width: 100%; /* Imagen ocupa el ancho completo del contenedor */
+  max-width: 400px; /* Limita el ancho máximo para pantallas grandes */
+  height: auto;
+  margin-left: 10px; /* Espacio entre el texto y la imagen */
+}
+
+/* Estilo para el nombre del plato */
+.menu-item strong {
+  margin-right: 10px;
+}
+
+/* Diseño para pantallas pequeñas (dispositivos móviles) */
+@media (max-width: 767px) {
+  .menu-list ul {
+      padding: 0;
+      list-style: none; /* Elimina los puntos de la lista */
   }
-  
-  /* Estilo para cada ítem de la lista */
+
   .menu-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #ddd; /* Línea divisoria entre ítems */
-    padding-bottom: 10px;
+      flex: 1 1 100%; /* Muestra 1 ítem por fila */
+      box-sizing: border-box; /* Asegura que el padding y el margen se incluyan en el ancho total */
   }
-  
-  /* Estilo para la imagen del ítem del menú */
-  .menu-item img {
-    width: 400px; /* Ajusta el tamaño según tus necesidades */
-    height: auto;
-    margin-left: 10px; /* Espacio entre el texto y la imagen */
+}
+
+/* Diseño para pantallas grandes (navegadores de escritorio) */
+@media (min-width: 768px) {
+  .menu-list ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px; /* Espacio entre los ítems */
+      padding: 0;
+      list-style: none; /* Elimina los puntos de la lista */
   }
-  
-  /* Estilo para el nombre del plato */
-  .menu-item strong {
-    margin-right: 10px;
+
+  .menu-item {
+      flex: 1 1 calc(33.333% - 20px); /* Muestra 3 ítems por fila */
+      box-sizing: border-box; /* Asegura que el padding y el margen se incluyan en el ancho total */
   }
-  
+}
