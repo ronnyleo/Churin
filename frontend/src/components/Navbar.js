@@ -3,19 +3,32 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Navbar.css'
+import logo from '../assets/logo.jpg'; 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 const Navbar = () => {
 
     return (
         <nav className='navbar-container'>
-            <ul className='navbar'> 
+            <div className='navbar-logo-container'>
+                <img src={logo} alt='logo'></img>
+            </div>
+            <div className='navbar-links'>
+            <ul> 
                 <li>
                     <Link to='/'>Inicio</Link>
                 </li>
                 <li>
-                    <Link to='/Admin'>Admin</Link>
+                    <Link to='/Admin'>
+                        <FontAwesomeIcon icon={faUser} size="lg" /> {/* Icono de Font Awesome */}
+                    </Link>
+                </li>
+                <li>
+                    <Link to='/Login'>Ingresar</Link>
                 </li>
             </ul>
+            </div>
         </nav>
 
     );

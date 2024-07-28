@@ -10,9 +10,6 @@ const App = () => {
   return (
     <Router>
       <div className="App">
-        <header className="App-header">
-          <h1>ChurinChurin Funflais</h1>
-        </header>
         <Navbar />
         <Routes>
           <Route path="/admin" element={<AdminUpload />} /> {/* Ruta para administración */}

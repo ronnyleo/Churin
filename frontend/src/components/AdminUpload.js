@@ -127,7 +127,7 @@ function AdminUpload() {
       {imageUrl && (
         <div>
           <h3>Imagen subida:</h3>
-          <img src={imageUrl} alt="Imagen subida" />
+          <img src={imageUrl} alt="Imagen subida" className='form-img'/>
           <p>Plato subido correctamente</p>
         </div>
       )}

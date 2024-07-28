@@ -1,22 +1,85 @@
 .navbar-container {
+    background-color: #ffffff;
     width: 100%;
-    padding: 0px 40px;
-    border-bottom: 1px solid #333;
+    height: 80px; /* Altura fija */
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Alinea los elementos a los extremos */
+    overflow: hidden; /* Evita el desbordamiento */
+    box-sizing: border-box;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1); /* Sutil sombra */ /* Asegura que el padding no aumente el tamaño total del navbar */
+    padding: 0 100px;
 }
 
-.navbar {
+.navbar-logo-container {
     display: flex;
-    list-style: none;
     align-items: center;
 }
 
-.navbar li {
-    margin: 10px;
-    background-color: #ffe600;
-    padding: 10px 20px;
+.navbar-logo-container img {
+    height: 60px;
 }
 
-.navbar a {
+.navbar-links {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100%; /* Asegúrate de que el contenedor ocupe toda la altura del navbar */
+}
+
+.navbar-links ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    height: 100%; /* Asegúrate de que el ul ocupe toda la altura del navbar */
+}
+
+.navbar-links li {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centra el contenido dentro del li */
+    width: 150px;
+    height: 100%; /* Asegúrate de que los li ocupen toda la altura del navbar */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.navbar-links a {
     text-decoration: none;
     color: black;
+    height: 100%; /* Asegúrate de que el a ocupe toda la altura del li */
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centra el texto dentro del enlace */
+}
+
+.navbar-links li:hover {
+    background-color: #ffd700; /* Color de fondo al pasar el ratón */
+    font-weight: bold;
+}
+
+/* Media queries para pantallas más pequeñas */
+@media (max-width: 768px) {
+    .navbar-container {
+        flex-direction: column;
+        align-items: flex-start;
+        height: auto; /* Permite que la altura se ajuste automáticamente */
+        padding: 10px 30px; /* Ajusta el padding para pantallas más pequeñas */
+    }
+
+    .navbar-links {
+        width: 100%; /* Asegura que el contenedor ocupe todo el ancho */
+        justify-content: center; /* Centra los enlaces horizontalmente */
+    }
+
+    .navbar-links ul {
+        flex-direction: column; /* Cambia la disposición a una columna */
+        width: 100%; /* Asegura que el ul ocupe todo el ancho */
+    }
+
+    .navbar-links li {
+        width: 100%; /* Asegura que los li ocupen todo el ancho */
+        padding: 10px 0; /* Ajusta el padding para pantallas más pequeñas */
+        text-align: center; /* Centra el texto dentro de los enlaces */
+    }
 }

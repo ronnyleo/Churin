@@ -16,7 +16,7 @@
   
   /* Estilo para la imagen del ítem del menú */
   .menu-item img {
-    width: 100px; /* Ajusta el tamaño según tus necesidades */
+    width: 400px; /* Ajusta el tamaño según tus necesidades */
     height: auto;
     margin-left: 10px; /* Espacio entre el texto y la imagen */
   }
