@@ -67,9 +67,6 @@ function AdminUpload() {
 
   return (
     <div className='form-admin'>
-    <Link to='/'>
-      <button>Volver al menú</button>
-    </Link>
       <h2>Subir plato al menú: </h2>
       <form onSubmit={handleSubmit} className='form-plato'>
         <div className='form-group'>
@@ -78,6 +75,7 @@ function AdminUpload() {
             type="text"
             id="nombre"
             value={nombre}
+            placeholder='Nombre del plato'
             onChange={(e) => setNombre(e.target.value)}
             required
           />
@@ -88,6 +86,7 @@ function AdminUpload() {
             type="text"
             id="descripcion"
             value={descripcion}
+            placeholder='Descripción del plato'
             onChange={(e) => setDescripcion(e.target.value)}
             required
           />
@@ -97,8 +96,10 @@ function AdminUpload() {
           <input
             type="number"
             id="precio"
+            placeholder='0.00'
             value={precio}
             onChange={(e) => setPrecio(e.target.value)}
+            step='0.01' // Permite decimales
             required
           />
         </div>
@@ -116,7 +117,7 @@ function AdminUpload() {
           <label htmlFor="image">Seleccionar foto:</label>
           <input
             type="file"
-            id="image"
+            id='image'
             onChange={handleFileChange}
             required
           />

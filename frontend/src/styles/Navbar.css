@@ -1,0 +1,22 @@
+.navbar-container {
+    width: 100%;
+    padding: 0px 40px;
+    border-bottom: 1px solid #333;
+}
+
+.navbar {
+    display: flex;
+    list-style: none;
+    align-items: center;
+}
+
+.navbar li {
+    margin: 10px;
+    background-color: #ffe600;
+    padding: 10px 20px;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: black;
+}

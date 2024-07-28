@@ -21,7 +21,7 @@ router.post('/', upload.single('image'), async (req, res) => {
      // Redimensionar la imagen a 150x150 píxeles usando sharp
      const resizedImagePath = path.join('uploads', 'resized-' + req.file.filename);
      await sharp(req.file.path)
-       .resize(150, 150) // Ajusta el tamaño deseado
+       .resize(500, 500) // Ajusta el tamaño deseado
        .toFile(resizedImagePath);
  
      // Subir la imagen redimensionada a Cloudinary
