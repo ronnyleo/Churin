@@ -88,7 +88,6 @@ function AdminUpload() {
             value={descripcion}
             placeholder='Descripción del plato'
             onChange={(e) => setDescripcion(e.target.value)}
-            required
           />
         </div>
         <div className='form-group'>
