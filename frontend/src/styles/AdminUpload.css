@@ -31,16 +31,6 @@
     box-sizing: border-box; /* Incluye padding y border en el ancho total */
   }
   
-  /* Estilo para el botón */
-  button {
-    padding: 0.5rem 1rem;
-    background-color: #ffe600; /* Color de fondo del botón */
-    color: black; /* Color del texto del botón */
-    border: none; /* Quita el borde del botón */
-    border-radius: 4px; /* Bordes redondeados del botón */
-    cursor: pointer; /* Cambia el cursor cuando se pasa sobre el botón */
-    margin-top: 1rem; /* Espacio arriba del botón */
-  }
   
   /* Estilo para la imagen subida */
   .form-img {

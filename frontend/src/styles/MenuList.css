@@ -1,58 +1,83 @@
 /* Estilo general para el contenedor de la lista */
 .menu-list {
-  max-width: 1200px;
-  margin: 0 auto;
+  overflow: hidden;
+  box-sizing: border-box;
+  width: 90%; /* Ocupa el 90% del ancho de la página */
+  max-width: 1200px; /* Ancho máximo de la lista */
+  margin: 0 auto; /* Centra la lista horizontalmente */
   padding: 20px;
 }
 
-/* Estilo para cada ítem de la lista */
-.menu-item {
+/* Estilo para el encabezado */
+.menu-list h2 {
+  text-align: center;
+  width: 100%;
+}
+
+/* Estilo para la lista */
+.menu-list ul {
+  display: grid;
+  grid-template-columns: 1fr; /* Una columna por defecto */
+  gap: 10px; /* Espacio entre los ítems */
+  padding: 0;
+  list-style: none; /* Elimina los puntos de la lista */
+}
+
+.menu-list li {
   display: flex;
-  align-items: center;
   flex-direction: column;
+  align-items: center; /* Centra los elementos horizontalmente */
+  padding: 10px;
+  box-sizing: border-box; /* Asegura que el padding y el margen se incluyan en el ancho total */
+  height: 550px; /* Altura fija de cada ítem */
+  overflow: hidden; /* Evita el overflow */
+  text-align: center;
+  justify-content: space-around; /* Distribuye el espacio entre los elementos hijos */
+}
+
+.menu-list h3 {
   margin-bottom: 20px;
-  border-bottom: 1px solid #ddd; /* Línea divisoria entre ítems */
-  padding-bottom: 10px;
 }
 
 /* Estilo para la imagen del ítem del menú */
-.menu-item img {
-  width: 100%; /* Imagen ocupa el ancho completo del contenedor */
-  max-width: 400px; /* Limita el ancho máximo para pantallas grandes */
-  height: auto;
-  margin-left: 10px; /* Espacio entre el texto y la imagen */
+.menu-list img {
+  width: 100%;
+  margin: 0;
+  height: 300px; /* Altura fija de la imagen */
+  object-fit: cover; /* Asegura que la imagen cubra el área sin distorsionarse */
+  margin-bottom: 10px; /* Espacio entre la imagen y el texto */
 }
 
-/* Estilo para el nombre del plato */
-.menu-item strong {
-  margin-right: 10px;
+/* Estilo para la descripción del plato */
+.menu-list p {
+
+  text-align: justify;
+  font-size: 14px;
+  font-style: italic;
+  display: flex;
+  align-items: center; /* Centra el texto verticalmente */
+  justify-content: center; /* Centra el texto horizontalmente */
+  height: 100px; /* Altura fija para la descripción */
+  margin: 0;
+  overflow: hidden; /* Evita el overflow */
+  text-overflow: ellipsis; /* Añade puntos suspensivos si el texto es demasiado largo */
 }
 
-/* Diseño para pantallas pequeñas (dispositivos móviles) */
-@media (max-width: 767px) {
-  .menu-list ul {
-      padding: 0;
-      list-style: none; /* Elimina los puntos de la lista */
-  }
-
-  .menu-item {
-      flex: 1 1 100%; /* Muestra 1 ítem por fila */
-      box-sizing: border-box; /* Asegura que el padding y el margen se incluyan en el ancho total */
-  }
+/* Estilo para el precio del plato */
+.menu-item-price {
+  font-size: 1.2em;
+  color: #333;
+  height: 100px;
+  margin: 0;
 }
 
 /* Diseño para pantallas grandes (navegadores de escritorio) */
 @media (min-width: 768px) {
   .menu-list ul {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px; /* Espacio entre los ítems */
-      padding: 0;
-      list-style: none; /* Elimina los puntos de la lista */
+    grid-template-columns: repeat(3, 1fr); /* Tres columnas en pantallas grandes */
   }
+}
 
-  .menu-item {
-      flex: 1 1 calc(33.333% - 20px); /* Muestra 3 ítems por fila */
-      box-sizing: border-box; /* Asegura que el padding y el margen se incluyan en el ancho total */
-  }
+.menu-list button {
+  margin: 0;
 }

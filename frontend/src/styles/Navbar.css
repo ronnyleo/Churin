@@ -50,6 +50,7 @@
     height: 100%; /* Asegúrate de que el a ocupe toda la altura del li */
     display: flex;
     align-items: center;
+    width: 100%;
     justify-content: center; /* Centra el texto dentro del enlace */
 }
 
