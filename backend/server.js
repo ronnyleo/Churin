@@ -5,9 +5,8 @@ const client = require('./db'); // Asegúrate de que el cliente de PostgreSQL es
 const menuRouter = require('./routes/menu');
 const uploadRouter = require('./routes/upload');
 const tiposRouter =  require('./routes/tipos');
+const categoriaRoutes = require('./routes/categoriaRoutes');
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' }); // Directorio temporal para guardar archivos
-const path = require('path');
 
 
 const app = express();
@@ -33,6 +32,7 @@ app.use('/api', menuRouter); // Monta el enrutador del menú bajo /api/menu
 
 app.use('/api', tiposRouter);
 
+app.use(categoriaRoutes);
 // Ruta para subir imágenes
 app.use('/api/upload', uploadRouter);
 //app.use('/api/upload', upload.single('image'), require('./routes/upload'));
