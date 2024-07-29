@@ -119,7 +119,6 @@ function AdminUpload() {
             type="file"
             id='image'
             onChange={handleFileChange}
-            required
           />
         </div>
         <button type="submit">Subir plato</button>
