@@ -1,4 +1,10 @@
-.menu-list h1{
+.menu-list {
+  max-width: 1200px; /* Ancho máximo del contenedor .menu-list */
+  margin: 0 auto; /* Centra el contenedor horizontalmente */
+  padding: 1rem; /* Espacio interno para que no esté pegado a los bordes */
+}
+
+.menu-list h1 {
   text-align: center;
   width: 100%;
 }
@@ -6,56 +12,75 @@
 .menu-categoria-container {
   display: flex;
   flex-direction: column;
-  gap: 1rem; /* Espacio entre categorías */
+  gap: 0.5rem; /* Espacio entre categorías */
   overflow: hidden;
   box-sizing: border-box;
 }
 
 .menu-categoria {
-  border: 1px solid #ddd;
-  padding: 1rem;
+  padding: 0.5rem; /* Espacio interno reducido */
   border-radius: 5px;
 }
 
 .menu-categoria-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
+  position: relative;
   text-align: center;
+  margin-bottom: 1rem; /* Espacio debajo del título */
+}
+
+.menu-categoria-title::after {
+  content: "";
+  flex-grow: 1; /* La línea se expande para llenar el espacio disponible */
+  height: 1px; /* Grosor de la línea */
+  background-color: #ddd; /* Color de la línea */
+  margin-left: 10px; /* Espacio entre el texto y la línea */
+  margin-right: 10px; /* Espacio entre el texto y la línea */
 }
 
 .menu-items-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* Máximo 3 platos por fila */
-  gap: 1rem; /* Espacio entre los platos */
+  gap: 2rem; /* Espacio entre los platos */
 }
 
 .menu-item {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: space-between; /* Asegura que los elementos se distribuyan uniformemente */
+  justify-content: space-around; /* Asegura que los elementos se distribuyan uniformemente */
   box-sizing: border-box;
-  height: 550px; /* Altura fija para uniformidad */
-  padding: 1rem; /* Espacio interno */
+  padding: 1rem; /* Espacio interno reducido */
   border-radius: 5px; /* Esquinas redondeadas */
-  text-align: center; /* Centra el texto */
   overflow: hidden; /* Oculta el contenido que se desborda */
+  background-color: white;
 }
 
 .menu-item-image {
   width: 100%; /* Ajusta la imagen al ancho del contenedor */
-  max-width: 300px; /* Tamaño máximo de la imagen */
+  max-width: 400px; /* Tamaño máximo reducido de la imagen */
   height: auto; /* Mantiene la proporción de la imagen */
-  margin-bottom: 1rem; /* Espacio entre la imagen y la descripción */
 }
 
 .menu-item-descripcion {
   width: 100%; /* Asegura que la descripción ocupe todo el ancho disponible */
-  max-width: 200px; /* Ancho máximo de la descripción */
-  margin: 0 auto; /* Centra la descripción horizontalmente */
-  text-align: center; /* Centra el texto dentro de la descripción */
   overflow: hidden; /* Oculta el texto que se desborda */
   text-overflow: ellipsis; /* Añade puntos suspensivos al final del texto que no cabe */
-  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+  font-style: italic;
+  font-size: 12px;
+  height: 50px;
+}
+
+.menu-item-price {
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.menu-item-button {
+  margin: auto;
+  
 }
 
 /* Estilos responsivos */
@@ -64,8 +89,3 @@
     grid-template-columns: 1fr; /* Un plato por fila en móviles */
   }
 }
-
-
-
-
-

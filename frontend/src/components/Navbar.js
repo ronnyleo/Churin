@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import '../styles/Navbar.css'
 import logo from '../assets/logo.jpg'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 const Navbar = () => {
 
@@ -26,6 +26,11 @@ const Navbar = () => {
                 </li>
                 <li>
                     <Link to='/Login'>Ingresar</Link>
+                </li>
+                <li>
+                    <Link to="/Cart">
+                        <FontAwesomeIcon icon={faShoppingCart} />
+                    </Link>
                 </li>
             </ul>
             </div>
