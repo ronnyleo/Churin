@@ -2,12 +2,11 @@
 const express = require('express');
 const cors = require('cors')
 const client = require('./db'); // Asegúrate de que el cliente de PostgreSQL esté exportado correctamente
-const menuRouter = require('./routes/menu');
+const menuRouter = require('./routes/menuRoutes');
 const uploadRouter = require('./routes/upload');
 const tiposRouter =  require('./routes/tipos');
 const categoriaRoutes = require('./routes/categoriaRoutes');
 const multer = require('multer');
-
 
 const app = express();
 const port = process.env.PORT || 3001;
