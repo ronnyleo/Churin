@@ -10,3 +10,4 @@ const Categoria = sequelize.define('Categoria', {
 });
 
 module.exports = Categoria;
+

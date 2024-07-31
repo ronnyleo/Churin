@@ -1,17 +1,37 @@
 // controllers/menuController.js
-const db = require('../db'); // Asegúrate de que la ruta al archivo sea correcta
+const { getMenu, getPlateById} = require('../models/menuModel');
 
-// Obtener todos los platos
-const getMenu = async (req, res) => {
-  try {
-    const result = await db.any('SELECT * FROM menu');
-    res.json(result);
-  } catch (err) {
-    console.error('Error fetching menu:', err);
-    res.status(500).send('Error al obtener el menú');
+const menuController = {
+  //Función para manejar la solicitud de obtener el menú
+  getMenu: async (req,res) => {
+    try{
+      const menu = await getMenu();
+      res.json(menu);
+      // Envía el menú como respuesta en formato JSON
+    } 
+    catch (error) {
+      console.error("Error al obtener el menú")
+    }
+  },
+
+  getPlateById: async (req, res) => {
+    try{
+      const id = parseInt(req.params.id); // Obtiene el ID del parámetro de la solicitud
+      if (isNaN(id)) {
+        return res.status(400).send("Id inválido");
+      }
+      const plate = await getPlateById(id);
+      if (plate) {
+        res.json(plate);
+      } else {
+        res.status(404).send("Plato no encontrado");
+      }
+    } catch (error) {
+        //comilla invertida en idioma ENG debajo de ESC
+        console.error(`Error en el controlador al obtener el plato con id = ${req.params.id}: `, error)
+        res.status(500).send("Error al obtener plato")
+    }
   }
 };
 
-module.exports = {
-  getMenu,
-};
+module.exports = menuController;
