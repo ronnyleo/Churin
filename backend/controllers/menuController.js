@@ -22,6 +22,8 @@ const menuController = {
       }
       const plate = await getPlateById(id);
       if (plate) {
+        // console.log -> Mensaje en terminal
+        console.log(`Plato con ID ${id} encontrado`); // Mensaje informativo
         res.json(plate);
       } else {
         res.status(404).send("Plato no encontrado");
