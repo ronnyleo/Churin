@@ -1,5 +1,5 @@
 /* Estilo general para el formulario */
-.form-admin {
+.admin-upload {
     max-width: 600px; /* Ajusta el ancho máximo del contenedor del formulario */
     margin: 0 auto; /* Centra el formulario en la página */
     padding: 20px; /* Espacio interior del formulario */
@@ -39,3 +39,7 @@
     margin-top: 1rem; /* Espacio arriba de la imagen */
   }
   
+
+  .tabs button {
+    border: 1px solid black;
+  }

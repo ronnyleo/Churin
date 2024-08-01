@@ -36,13 +36,13 @@ const AdminUpload = () => {
           className={`tab-button ${activeTab === 'upload' ? 'active' : ''}`}
           onClick={() => setActiveTab('upload')}
         >
-          Subir Plato
+          Cargar
         </button>
         <button
           className={`tab-button ${activeTab === 'edit' ? 'active' : ''}`}
           onClick={() => setActiveTab('edit')}
         >
-          Editar Plato
+          Editar 
         </button>
       </div>
 
