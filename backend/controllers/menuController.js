@@ -1,5 +1,5 @@
 // controllers/menuController.js
-const { getMenu, getPlateById} = require('../models/menuModel');
+const { getMenu, getPlateById, searchPlates} = require('../models/menuModel');
 
 const menuController = {
   //Función para manejar la solicitud de obtener el menú
@@ -33,7 +33,20 @@ const menuController = {
         console.error(`Error en el controlador al obtener el plato con id = ${req.params.id}: `, error)
         res.status(500).send("Error al obtener plato")
     }
+  },
+
+// Controlador para buscar en el menú
+  searchPlates : async (req, res) => {
+    const { term } = req.query; // Obtener el término de búsqueda de los parámetros de consulta
+    try {
+      const result = await searchPlates(term);
+      res.json(result);
+    } catch (error) {
+      console.error('Error al buscar en el menú:', error);
+      res.status(500).send('Error al buscar en el menú');
+    }
   }
+
 };
 
 module.exports = menuController;

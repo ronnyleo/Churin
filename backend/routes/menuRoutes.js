@@ -9,4 +9,7 @@ router.get('/menu', menuController.getMenu);
 // Ruta para obtener el plato según el ID
 router.get("/menu/:id", menuController.getPlateById);
 
+// Ruta para obtener plato segun termino de busqueda
+router.get("/search", menuController.searchPlates);
+
 module.exports = router;

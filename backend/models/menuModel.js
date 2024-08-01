@@ -17,10 +17,10 @@ const getMenu = async () => {
     }
 };
 
-
 // Función para obtener un plato específico por ID
 const getPlateById = async (id) => {
     try{
+        // oneOrNone -> Espera un solo registro o ninguno. 
         return await db.oneOrNone("SELECT * FROM menu WHERE id = $1", [id]);
     }
     catch (error) {
@@ -29,7 +29,24 @@ const getPlateById = async (id) => {
     }
 };
 
+// Funcion para buscador 
+const searchPlates = async (searchTerm) => {
+    try{
+        // Ussar comillas invertidas para consultas de multiples lineas
+        const query = `SELECT * FROM menu 
+        WHERE nombre ILIKE $1`;
+        //template literal `${}`para inservar variables dentro de cadenas
+        return await db.any(query, [`%${searchTerm}%`])
+    }
+    catch (error) {
+        console.error("Error al buscar platos");
+        throw new Error("Error al buscar");
+    }
+}
+
 module.exports = {
     getMenu, 
-    getPlateById
+    getPlateById,
+    searchPlates
 };
+

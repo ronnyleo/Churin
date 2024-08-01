@@ -27,7 +27,7 @@ app.get('/', (req, res) => {
 });
 
 // Rutas para el menú del restaurante
-app.use('/api', menuRouter); // Monta el enrutador del menú bajo /api/menu
+app.use('/api', menuRouter);
 
 app.use('/api', tiposRouter);
 
