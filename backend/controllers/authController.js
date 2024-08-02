@@ -1,5 +1,5 @@
 const { createUser, getUserByEmail } = require('../models/userModel');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 const authController = {
     registerUser: async (req, res) => {
