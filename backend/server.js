@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
 });
 
 //Rutas para el registro
-app.use("/api/auth", authRouter);
+app.use('/api', authRouter);
 
 // Rutas para el menú del restaurante
 app.use('/api', menuRouter);

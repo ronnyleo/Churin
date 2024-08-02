@@ -22,13 +22,18 @@ const Login = () => {
       console.log('User signed in:', userCredential.user);
 
       // Llamada al backend para obtener el rol del usuario
-      const response = await fetch('https://churin.onrender.com/api/auth/getUserRole', { // Ajusta la URL del backend
+      const response = await fetch('http://localhost:3001/api/auth/getUserRole' + encodeURIComponent(email), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email })
+        body: JSON.stringify({ email }) // Enviar el email en el cuerpo de la solicitud
       });
+
+
+      if (!response.ok) {
+        throw new Error('Error en la respuesta del servidor');
+      }
 
       const data = await response.json();
       const userRole = data.role; // Asegúrate de que el backend devuelva el rol
@@ -103,6 +108,11 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="*********"
               required
+            />
+            <FontAwesomeIcon
+              icon={showPassword ? faEye : faEyeSlash}
+              onClick={togglePasswordVisibility}
+              className="password-toggle"
             />
           </div>
           <div className="form-group">
