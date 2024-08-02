@@ -22,9 +22,9 @@ const authController = {
             res.status(500).json({ message: 'Error registrando usuario', error });
         }
     },
-    
+
     getUserRole: async (req, res) => {
-        const { email } = req.body;
+        const { email } = req.query;
 
         try {
             // Obtener el usuario por email
