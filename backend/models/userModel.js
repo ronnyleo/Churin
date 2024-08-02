@@ -2,13 +2,14 @@
 
 const client = require('../db'); // Ajusta según la configuración de tu cliente de PostgreSQL
 
-const createUser = async (email, first_name, last_name, password, role) => {
-    const query = `
-        INSERT INTO users (email, first_name, last_name, password, role)
-        VALUES ($1, $2, $3, $4, $5)
-    `;
-    const values = [email, first_name, last_name, password, role];
-    await client.query(query, values);
+// Crear un nuevo usuario
+const registerUser = async (email, first_name, last_name, password, role) => {
+    return client.one(
+        `INSERT INTO users (email, first_name, last_name, password, role) 
+       VALUES ($1, $2, $3, $4, $5) 
+       RETURNING *`,
+        [email, first_name, last_name, password, role]
+    );
 };
 
 // Función para obtener un usuario por correo electrónico
@@ -25,4 +26,4 @@ const getUserByEmail = async (email) => {
     }
 };
 
-module.exports = { createUser, getUserByEmail };
+module.exports = { registerUser, getUserByEmail };

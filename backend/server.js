@@ -14,8 +14,13 @@ const app = express();
 const port = process.env.PORT || 3001;
 
 // Middleware para permitir solicitudes CORS (permite el acceso desde el frontend en otro dominio)
-app.use(cors());
-
+// Configurar CORS
+// Configuración de CORS
+app.use(cors({
+  origin: 'http://localhost:3000', // Cambia esto al origen de tu frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // Middleware para manejar JSON en las solicitudes
 app.use(express.json());

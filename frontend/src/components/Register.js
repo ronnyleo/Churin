@@ -17,31 +17,30 @@ const Register = () => {
         setError(null);
         setSuccess(null);
         try {
-            // Registrar el usuario en Firebase
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            console.log('User registered:', userCredential.user);
-
-            // Enviar la información adicional al backend
-            const userId = userCredential.user.uid;
-            await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/register`, {
-                email,
-                first_name,
-                last_name,
-                password,
-                role: 'user'
-            });
-
-            setSuccess('Usuario registrado exitosamente.');
-            console.log('Usuario registrado exitosamente.');
+          console.log('Enviando datos de registro:', {
+            email,
+            first_name,
+            last_name,
+            password,
+            role: 'user'
+          });
+      
+          const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/register`, {
+            email,
+            first_name,
+            last_name,
+            password,
+            role: 'user'
+          });
+      
+          console.log('Respuesta del servidor:', response.data);
+          setSuccess('Usuario registrado exitosamente.');
         } catch (error) {
-            console.error('Error during registration:', error);
-            if (error.code === 'auth/email-already-in-use') {
-                setError('El correo electrónico ya está en uso. Por favor, inicia sesión.');
-            } else {
-                setError(error.message);
-            }
+          console.error('Error durante el registro:', error.response ? error.response.data : error.message);
+          setError('Error durante el registro: ' + (error.response ? error.response.data.message : error.message));
         }
-    };
+      };
+      
 
     return (
         <div>

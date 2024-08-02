@@ -1,4 +1,5 @@
 //authRoutes.js
+const db = require('../db'); // Ajusta según la configuración de tu cliente de PostgreSQL
 
 const express = require('express');
 const router = express.Router();

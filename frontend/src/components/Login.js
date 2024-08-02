@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { auth } from '../firebaseConfig';
 import '../styles/Login.css';
+import axios from 'axios'; // Asegúrate de instalar axios
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -14,7 +15,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate(); // Hook para la navegación
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -22,20 +23,16 @@ const Login = () => {
       console.log('User signed in:', userCredential.user);
 
       // Llamada al backend para obtener el rol del usuario
-      const response = await fetch('http://localhost:3001/api/auth/getUserRole' + encodeURIComponent(email), {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email }) // Enviar el email en el cuerpo de la solicitud
+      const response = await axios.post('http://localhost:3001/api/auth/getUserRole', {
+        email: email // Enviar el email en el cuerpo de la solicitud
       });
 
-
-      if (!response.ok) {
+      // Asegúrate de que la respuesta sea válida
+      if (response.status !== 200) {
         throw new Error('Error en la respuesta del servidor');
       }
 
-      const data = await response.json();
+      const data = response.data; // Obtener los datos directamente
       const userRole = data.role; // Asegúrate de que el backend devuelva el rol
 
       if (userRole === 'admin') {
