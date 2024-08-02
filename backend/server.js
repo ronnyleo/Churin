@@ -2,17 +2,20 @@
 const express = require('express');
 const cors = require('cors')
 const client = require('./db'); // Asegúrate de que el cliente de PostgreSQL esté exportado correctamente
+const authRouter = require ('./routes/authRoutes');
 const menuRouter = require('./routes/menuRoutes');
 const uploadRouter = require('./routes/upload');
 const tiposRouter =  require('./routes/tipos');
 const categoriaRoutes = require('./routes/categoriaRoutes');
 const multer = require('multer');
 
+
 const app = express();
 const port = process.env.PORT || 3001;
 
 // Middleware para permitir solicitudes CORS (permite el acceso desde el frontend en otro dominio)
 app.use(cors());
+
 
 // Middleware para manejar JSON en las solicitudes
 app.use(express.json());
@@ -25,6 +28,9 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/', (req, res) => {
   res.send('BACKEND DESARROLLO');
 });
+
+//Rutas para el registro
+app.use("/api/auth", authRouter);
 
 // Rutas para el menú del restaurante
 app.use('/api', menuRouter);
