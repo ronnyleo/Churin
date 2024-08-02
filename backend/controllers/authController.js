@@ -21,6 +21,24 @@ const authController = {
             console.error('Error registrando usuario:', error);
             res.status(500).json({ message: 'Error registrando usuario', error });
         }
+    },
+    
+    getUserRole: async (req, res) => {
+        const { email } = req.body;
+
+        try {
+            // Obtener el usuario por email
+            const user = await getUserByEmail(email);
+            if (!user) {
+                return res.status(404).json({ message: 'Usuario no encontrado' });
+            }
+
+            // Devolver el rol del usuario
+            res.status(200).json({ role: user.role });
+        } catch (error) {
+            console.error('Error obteniendo el rol del usuario:', error);
+            res.status(500).json({ message: 'Error obteniendo el rol del usuario', error });
+        }
     }
 };
 
