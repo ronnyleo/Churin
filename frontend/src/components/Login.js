@@ -26,21 +26,28 @@ const Login = () => {
       console.log('User signed in:', userCredential.user);
 
       // Llamada al backend para obtener el rol del usuario
+      // Se envía un objeto
       const response = await axios.post('http://localhost:3001/api/auth/getUserRole', {
         email: email
       });
 
+
+      // response.status devuelve un código numérico (200 es éxito)
       if (response.status !== 200) {
         throw new Error('Error en la respuesta del servidor');
       }
 
+      // res´pmse 
       const data = response.data;
       const userRole = data.role;
 
       if (userRole === 'admin') {
         window.location.href = 'https://churin-fun-flais-admin.onrender.com';
       } else {
-        window.location.href = 'https://churin-fun-flais.onrender.com';
+        //window.location.href = 'https://churin-fun-flais.onrender.com';
+        console.log('Respuesta backend:', response);
+        console.log('Respuesta backend:', response.data);
+        console.log('Respuesta backend:', data.role);
       }
     } catch (error) {
       console.error('Error signing in:', error);

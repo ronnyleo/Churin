@@ -9,8 +9,8 @@ const authController = {
         const { email, first_name, last_name, password, role } = req.body;
 
         try {
-            const existingUser = await getUserByEmail(email);
-            //const existingUser = await client.oneOrNone('SELECT * FROM users WHERE email = $1', [email]);
+            //const existingUser = await getUserByEmail(email);
+            const existingUser = await client.oneOrNone('SELECT * FROM users WHERE email = $1', [email]);
             if (existingUser) {
                 return res.status(400).json({ message: 'El usuario ya existe' });
             }
@@ -39,6 +39,7 @@ const authController = {
             }
 
             // Devolver el rol del usuario
+            console.log('Rol del usuario:', user[0].email)
             res.status(200).json({ role: user[0].role }); // Ajusta según la estructura del usuario obtenido
         } catch (error) {
             console.error('Error obteniendo el rol del usuario:', error);

@@ -1,7 +1,7 @@
 // userModel.js
 
 const client = require('../db'); // Ajusta según la configuración de tu cliente de PostgreSQL
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const saltRounds = 10; // Número de rondas de sal
 
 // Crear un nuevo usuario
@@ -25,7 +25,7 @@ const registerUser = async (email, first_name, last_name, password, role) => {
 const getUserByEmail = async (email) => {
     try {
         const query = 'SELECT * FROM users WHERE email = $1';
-        const result = await client.oneOrNone(query, [email]);
+        const result = await client.any(query, [email]);
         console.log('Resultado de la consulta:', result); // Agrega este log
         return result; // Retorna el primer usuario encontrado o null si no hay ninguno
     } catch (error) {
