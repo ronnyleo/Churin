@@ -9,13 +9,15 @@ const authController = {
         const { email, first_name, last_name, password, role } = req.body;
 
         try {
-            //const existingUser = await getUserByEmail(email);
-            const existingUser = await client.oneOrNone('SELECT * FROM users WHERE email = $1', [email]);
+            const existingUser = await getUserByEmail(email);
+            //const existingUser = await client.oneOrNone('SELECT * FROM users WHERE email = $1', [email]);
             if (existingUser) {
                 return res.status(400).json({ message: 'El usuario ya existe' });
             }
 
             const newUser = registerUser(email, first_name, last_name, password, role);
+
+            
             res.status(201).json(newUser);
         } catch (error) {
             console.error('Error durante el registro:', error);

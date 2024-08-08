@@ -1,22 +1,25 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
+import { sendPasswordResetEmail, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { auth } from '../firebaseConfig';
 import '../styles/Login.css';
-import axios from 'axios'; // Asegúrate de instalar axios
+import axios from 'axios';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [error, setError] = useState('');
   const [showResetForm, setShowResetForm] = useState(false);
+  const [showRegisterForm, setShowRegisterForm] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const navigate = useNavigate(); // Hook para la navegación
+  const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -24,25 +27,51 @@ const Login = () => {
 
       // Llamada al backend para obtener el rol del usuario
       const response = await axios.post('http://localhost:3001/api/auth/getUserRole', {
-        email: email // Enviar el email en el cuerpo de la solicitud
+        email: email
       });
 
-      // Asegúrate de que la respuesta sea válida
       if (response.status !== 200) {
         throw new Error('Error en la respuesta del servidor');
       }
 
-      const data = response.data; // Obtener los datos directamente
-      const userRole = data.role; // Asegúrate de que el backend devuelva el rol
+      const data = response.data;
+      const userRole = data.role;
 
       if (userRole === 'admin') {
-        window.location.href = 'https://churin-fun-flais-admin.onrender.com'; // Redirigir a la interfaz de administración
+        window.location.href = 'https://churin-fun-flais-admin.onrender.com';
       } else {
-        window.location.href = 'https://churin-fun-flais.onrender.com'; // Redirigir a la interfaz de usuario normal
+        window.location.href = 'https://churin-fun-flais.onrender.com';
       }
     } catch (error) {
       console.error('Error signing in:', error);
       setError('Usuario o contraseña incorrectos.');
+    }
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      console.log('User registered:', userCredential.user);
+
+      // Aquí puedes agregar lógica para guardar más detalles en la base de datos si es necesario            
+      const registrationData = {
+        email,
+        first_name: firstName,  // Mapeo de firstName a first_name
+        last_name: lastName,  
+        password,
+        role: 'user'
+    };
+
+      console.log('Enviando datos de registro:', registrationData);
+
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/register`, registrationData);
+      // Redirige o muestra un mensaje de éxito
+      alert('Cuenta creada exitosamente');
+      setShowRegisterForm(false);
+    } catch (error) {
+      console.error('Error during registration:', error);
+      setError('Error al registrar el usuario.');
     }
   };
 
@@ -51,7 +80,7 @@ const Login = () => {
     try {
       await sendPasswordResetEmail(auth, email);
       alert('Enlace de reestablecimiento enviado al correo electrónico');
-      setShowResetForm(false); // Ocultar el formulario
+      setShowResetForm(false);
     } catch (error) {
       setError(error.message);
     }
@@ -63,27 +92,80 @@ const Login = () => {
 
   return (
     <div className="login-page">
-      {showResetForm ? (
-        <form onSubmit={handlePasswordReset} className='login-form'>
-          <h2>Reestablecer contraseña</h2>
-          <div className='form-group'>
-            <label htmlFor='reset-email'>Correo electrónico</label>
+      {showRegisterForm ? (
+        <form onSubmit={handleRegister} className="login-form">
+          <h2>Crear Cuenta</h2>
+          <div className="form-group">
+            <label htmlFor="firstName">Nombre</label>
             <input
-              type='email'
-              placeholder='correo@ejemplo.com'
+              type="text"
+              id="firstName"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              placeholder="Nombre"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="lastName">Apellido</label>
+            <input
+              type="text"
+              id="lastName"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              placeholder="Apellido"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="email">Correo electrónico</label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="correo@ejemplo.com"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Contraseña</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="*********"
+              required
+            />
+          </div>
+          <div className="button-container">
+            <button type="submit">Crear cuenta</button>
+            <button type="button" onClick={() => setShowRegisterForm(false)}>Cancelar</button>
+            {error && <p className="error-message">{error}</p>}
+          </div>
+        </form>
+      ) : showResetForm ? (
+        <form onSubmit={handlePasswordReset} className="login-form">
+          <h2>Reestablecer contraseña</h2>
+          <div className="form-group">
+            <label htmlFor="reset-email">Correo electrónico</label>
+            <input
+              type="email"
+              placeholder="correo@ejemplo.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
-          <div className="button-container">  
+          <div className="button-container">
             <button type="submit">Enviar enlace</button>
             <button type="button" onClick={() => setShowResetForm(false)}>Cancelar</button>
             {error && <p className="error-message">{error}</p>}
           </div>
         </form>
       ) : (
-        <form onSubmit={handleSubmit} className="login-form">
+        <form onSubmit={handleLogin} className="login-form">
           <h2>Iniciar sesión</h2>
           <div className="form-group">
             <label htmlFor="email">Usuario</label>
@@ -116,8 +198,9 @@ const Login = () => {
             <a href="#" onClick={() => setShowResetForm(true)} className="forgot-password">Olvidé mi contraseña</a>
           </div>
           <div className="button-container">
-              <button type="submit">Ingresar</button>
-              {error && <p className="error-message">{error}</p>}
+            <button type="submit">Ingresar</button>
+            <button type="button" onClick={() => setShowRegisterForm(true)}>Crear cuenta</button>
+            {error && <p className="error-message">{error}</p>}
           </div>
         </form>
       )}

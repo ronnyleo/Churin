@@ -12,7 +12,6 @@ const App = () => {
     <Router>
       <div className="App">
         <Navbar />
-          <Register />
           <Login />
         </div>       
     </Router>

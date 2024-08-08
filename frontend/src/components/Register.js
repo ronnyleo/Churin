@@ -16,31 +16,28 @@ const Register = () => {
         e.preventDefault();
         setError(null);
         setSuccess(null);
+        
+        const registrationData = {
+            email,
+            first_name,
+            last_name,
+            password,
+            role: 'user'
+        };
+
         try {
-          console.log('Enviando datos de registro:', {
-            email,
-            first_name,
-            last_name,
-            password,
-            role: 'user'
-          });
-      
-          const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/register`, {
-            email,
-            first_name,
-            last_name,
-            password,
-            role: 'user'
-          });
-      
-          console.log('Respuesta del servidor:', response.data);
-          setSuccess('Usuario registrado exitosamente.');
+            console.log('Enviando datos de registro:', registrationData);
+
+            const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/register`, registrationData);
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            console.log('Respuesta del servidor:', response.data);
+            setSuccess('Usuario registrado exitosamente.');
         } catch (error) {
-          console.error('Error durante el registro:', error.response ? error.response.data : error.message);
-          setError('Error durante el registro: ' + (error.response ? error.response.data.message : error.message));
+            console.error('Error durante el registro:', error.response ? error.response.data : error.message);
+            setError('Error durante el registro: ' + (error.response ? error.response.data.message : error.message));
         }
-      };
-      
+    };
+
 
     return (
         <div>
