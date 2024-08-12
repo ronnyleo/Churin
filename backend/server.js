@@ -16,10 +16,22 @@ const port = process.env.PORT || 3001;
 // Middleware para permitir solicitudes CORS (permite el acceso desde el frontend en otro dominio)
 // Configurar CORS
 // Configuración de CORS
+const allowedOrigins = [
+  'http://localhost:3000', // Desarrollo en localhost
+  'https://churin-fun-flais.onrender.com/' // Producción
+];
+
+
 app.use(cors({
-  origin: 'http://localhost:3000', // Cambia esto al origen de tu frontend
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  origin: (origin, callback) => {
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+          callback(null, true);
+      } else {
+          callback(new Error('Not allowed by CORS'));
+      }
+  },
+  methods: 'GET,POST,PUT,DELETE',
+  allowedHeaders: 'Content-Type,Authorization'
 }));
 
 // Middleware para manejar JSON en las solicitudes
