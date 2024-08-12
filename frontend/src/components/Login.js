@@ -27,7 +27,7 @@ const Login = () => {
 
       // Llamada al backend para obtener el rol del usuario
       // Se envía un objeto
-      const response = await axios.post('http://localhost:3001/api/auth/getUserRole', {
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/getUserRole`, {
         email: email
       });
 
