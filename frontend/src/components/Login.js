@@ -42,9 +42,10 @@ const Login = () => {
       const userRole = data.role;
 
       if (userRole === 'admin') {
-        window.location.href = 'https://churin-fun-flais-admin.onrender.com';
+        navigate('https://churin-fun-flais-admin.onrender.com');
       } else {
-        //window.location.href = 'https://churin-fun-flais.onrender.com';
+        alert('Ingreso exitoso');
+        navigate('/'); // Asegúrate de que '/menuList' coincida con la ruta para MenuList
         console.log('Respuesta backend:', response);
         console.log('Respuesta backend:', response.data);
         console.log('Respuesta backend:', data.role);
@@ -195,11 +196,13 @@ const Login = () => {
               placeholder="*********"
               required
             />
+            {/* 
             <FontAwesomeIcon
               icon={showPassword ? faEye : faEyeSlash}
               onClick={togglePasswordVisibility}
               className="password-toggle"
             />
+            */}
           </div>
           <div className="form-group">
             <a href="#" onClick={() => setShowResetForm(true)} className="forgot-password">Olvidé mi contraseña</a>
