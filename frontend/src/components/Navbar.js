@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Navbar.css';
 import logo from '../assets/logo.jpg'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,6 +8,15 @@ import { useAuth } from '../context/AuthContext'; // Importa el hook useAuth
 
 const Navbar = () => {
     const { currentUser, logout } = useAuth(); // Usa el hook useAuth para acceder a la autenticación
+    const navigate = useNavigate(); // Usa useNavigate para redirigir
+    const handleLogout = async () => {
+        try {
+            await logout();
+            navigate('/'); // Redirige al usuario a la página de inicio después de cerrar sesión
+        } catch (error) {
+            console.error('Error al cerrar sesión:', error);
+        }
+    };
 
     return (
         <nav className='navbar-container'>
@@ -27,7 +36,7 @@ const Navbar = () => {
                                 </Link>
                             </li>
                             <li>
-                                <button onClick={logout}>Salir</button>
+                                <button onClick={handleLogout}>Salir</button>
                             </li>
                         </>
                     ) : (

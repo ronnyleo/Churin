@@ -13,7 +13,14 @@ export const AuthProvider = ({ children }) => {
         return unsubscribe;
     }, []);
 
-    const logout = () => auth.signOut();
+    const logout = async () => {
+        try {
+            await auth.signOut();
+            setCurrentUser(null);
+        } catch (error) {
+            console.error('Error al cerrar sesión:', error);
+        }
+    };
 
     return (
         <AuthContext.Provider value={{ currentUser, logout }}>
