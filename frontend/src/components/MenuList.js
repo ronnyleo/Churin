@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import '../styles/MenuList.css'; // Asegúrate de que el archivo CSS esté en la misma carpeta o ajusta la ruta según sea necesario
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { CartContext } from '../context/CartContext';
 
 function MenuList() {
   const [menuItems, setMenuItems] = useState([]); // Array vacío
   const [categorias, setCategorias] = useState([]); // Array vacío
   const [error, setError] = useState(null);
+  const { addToCart } = useContext(CartContext);
 
   // Hook useEffect para ejecutar fetchMenu cuando el componente se monta  
   useEffect(() => {
@@ -61,7 +63,7 @@ function MenuList() {
                   <img src={item.image_url} alt={item.nombre} className="menu-item-image" />
                   <p className="menu-item-descripcion">{item.descripcion}</p>
                   <span className="menu-item-price">${item.precio}</span>
-                  <button className="menu-item-button">Agregar</button>
+                  <button className="menu-item-button" onClick={() => addToCart(item)}>Agregar</button>
                 </div>
               ))}
             </div>
