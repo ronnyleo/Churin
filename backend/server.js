@@ -7,6 +7,7 @@ const menuRouter = require('./routes/menuRoutes');
 const uploadRouter = require('./routes/upload');
 const tiposRouter =  require('./routes/tipos');
 const categoriaRoutes = require('./routes/categoriaRoutes');
+const ingredientRouter = require('./routes/ingredientRoutes');
 const multer = require('multer');
 
 
@@ -58,6 +59,8 @@ app.use(categoriaRoutes);
 // Ruta para subir imágenes
 app.use('/api/upload', uploadRouter);
 //app.use('/api/upload', upload.single('image'), require('./routes/upload'));
+
+app.use('/api', ingredientRouter);
 
 // Ruta de prueba para verificar la conexión a la base de datos
 app.get('/test-db', async (req, res) => {

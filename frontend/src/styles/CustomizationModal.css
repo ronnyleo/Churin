@@ -1,0 +1,35 @@
+.custom-modal-overlay {
+    position: fixed; /*Se fija en relacion a la ventana del navegador*/
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+}
+
+.custom-modal-content {
+    background-color: white;
+    padding: 20px;
+    max-width: 500px;
+    width: 100%;
+    border-radius: 8px;
+}
+
+.custom-modal-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+.custom-modal-buttons button {
+    margin: 10px 0px;
+}
+
+.ingredients-list {
+    list-style-type: none;
+}
