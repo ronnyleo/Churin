@@ -49,7 +49,7 @@ function MenuList() {
 
   // Función para manejar la personalización y agregar al carrito
   const handleAddToCart = (item) => {
-    if (item.personalizacion) {
+    if (item.tipo_combinacion !== 4) {
       setCustomizingItem(item);
     } else {
       addToCart(item);
@@ -61,39 +61,39 @@ function MenuList() {
   };
 
 
-return (
-  <div className="menu-list">
-    <h1>Menú</h1>
-    {error && <p>{error}</p>}
-    <div className="menu-categoria-container">
-      {categorias.map(categoria => (
-        <div key={categoria.id} className="menu-categoria">
-          <h2 className="menu-categoria-title">{categoria.nombre}</h2>
-          <div className="menu-items-container">
-            {groupedMenuItems[categoria.id] && groupedMenuItems[categoria.id].map(item => (
-              <div key={item.id} className="menu-item">
-                <h3>{item.nombre}</h3>
-                <img src={item.image_url} alt={item.nombre} className="menu-item-image" />
-                <p className="menu-item-descripcion">{item.descripcion}</p>
-                <span className="menu-item-price">${item.precio}</span>
-                <button className="menu-item-button" onClick={() => handleAddToCart(item)}>
-                  Agregar
-                </button>
-              </div>
-            ))}
+  return (
+    <div className="menu-list">
+      <h1>Menú</h1>
+      {error && <p>{error}</p>}
+      <div className="menu-categoria-container">
+        {categorias.map(categoria => (
+          <div key={categoria.id} className="menu-categoria">
+            <h2 className="menu-categoria-title">{categoria.nombre}</h2>
+            <div className="menu-items-container">
+              {groupedMenuItems[categoria.id] && groupedMenuItems[categoria.id].map(item => (
+                <div key={item.id} className="menu-item">
+                  <h3>{item.nombre}</h3>
+                  <img src={item.image_url} alt={item.nombre} className="menu-item-image" />
+                  <p className="menu-item-descripcion">{item.descripcion}</p>
+                  <span className="menu-item-price">${item.precio}</span>
+                  <button className="menu-item-button" onClick={() => handleAddToCart(item)}>
+                    {item.tipo_combinacion !== 4  ? 'Personalizar' : 'Agregar'}
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
-      {customizingItem && (
-        <CustomizationModal
-          item={customizingItem}
-          onClose={handleCloseModal}
-        />
-      )}
-    </div>
+        ))}
+        {customizingItem && (
+          <CustomizationModal
+            item={customizingItem}
+            onClose={handleCloseModal}
+          />
+        )}
+      </div>
 
-  </div>
-);
+    </div>
+  );
 }
 
 export default MenuList;
