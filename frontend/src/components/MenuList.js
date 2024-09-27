@@ -49,7 +49,7 @@ function MenuList() {
 
   // Función para manejar la personalización y agregar al carrito
   const handleAddToCart = (item) => {
-    if (item.tipo_combinacion !== 4) {
+    if (item.tipo_combinacion !== 4 && item.tipo_combinacion !== null) {
       setCustomizingItem(item);
     } else {
       addToCart(item);
@@ -77,7 +77,7 @@ function MenuList() {
                   <p className="menu-item-descripcion">{item.descripcion}</p>
                   <span className="menu-item-price">${item.precio}</span>
                   <button className="menu-item-button" onClick={() => handleAddToCart(item)}>
-                    {item.tipo_combinacion !== 4  ? 'Personalizar' : 'Agregar'}
+                    {item.tipo_combinacion !== 4 && item.tipo_combinacion !== null  ? 'Personalizar' : 'Agregar'}
                   </button>
                 </div>
               ))}

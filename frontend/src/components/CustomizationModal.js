@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import '../styles/CustomizationModal.css';
 import axios from "axios";
+import { CartContext } from '../context/CartContext';
+
 
 function CustomizationModal({ item, onClose }) {
 
     const [ingredients, setIngredients] = useState([]);
     const [selectedIngredients, setSelectedIngredients] = useState([]);
     const [selectedCount, setSelectedCount] = useState(0); // Total de ingredientes seleccionados
+    const { addToCart } = useContext(CartContext);
 
     useEffect(() => {
         async function fetchIngredients() {
@@ -19,6 +22,10 @@ function CustomizationModal({ item, onClose }) {
         }
         fetchIngredients();
     }, []);
+
+    const handleAddToCart = (item) => {
+        addToCart(item);
+    }
 
     // Agrupar ingredientes por tipo
     const groupedIngredients = ingredients.reduce((acc, ingredient) => {
@@ -46,11 +53,6 @@ function CustomizationModal({ item, onClose }) {
                 };
             }
 
-            if (item.tipo_combinacion === 4 || item.tipo_combinacion === null) {
-                // No permite personalización
-                return prevSelected; // Deshabilitar selección si no hay personalización
-            }
-
             // Según el tipo de combinación, controlar la cantidad de selección
             if (item.tipo_combinacion === 1) {
                 // Escoger máximo 2 de cada tipo
@@ -58,8 +60,8 @@ function CustomizationModal({ item, onClose }) {
                     alert('No puedes seleccionar mas ingredientes');
                     return prevSelected;
                 }
-                    
-                   
+
+
                 setSelectedCount(prevCount => prevCount + 1);
                 return {
                     ...prevSelected,
@@ -128,37 +130,32 @@ function CustomizationModal({ item, onClose }) {
             <div className="custom-modal-content">
                 <h2>Personaliza tu {item.nombre}</h2>
 
-                {/* Si tipo_combinacion es 4, no mostrar opciones de ingredientes */}
-                {item.tipo_combinacion !== 4 ? (
-                    <div className="ingredients-section">
-                        <p>Elige tus ingredientes:</p>
-                        {Object.keys(groupedIngredients).map(tipo => (
-                            <div key={tipo} className="ingredients-type-section">
-                                <h3>{tipo}</h3>
-                                <ul className="ingredients-list">
-                                    {groupedIngredients[tipo].map(ingrediente => (
-                                        <li key={ingrediente.id} className="ingredient-item">
-                                            <label>
-                                                <input
-                                                    type="checkbox"
-                                                    value={ingrediente.id}
-                                                    checked={selectedIngredients[tipo]?.includes(ingrediente.id) || false}
-                                                    onChange={() => handleCheckboxChange(ingrediente.id, tipo)}
-                                                />
-                                                {ingrediente.nombre}
-                                            </label>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        ))}
-                    </div>
-                ) : (
-                    <p>Este plato no permite personalización.</p>
-                )}
 
+                <div className="ingredients-section">
+                    <p>Elige tus ingredientes:</p>
+                    {Object.keys(groupedIngredients).map(tipo => (
+                        <div key={tipo} className="ingredients-type-section">
+                            <h3>{tipo}</h3>
+                            <ul className="ingredients-list">
+                                {groupedIngredients[tipo].map(ingrediente => (
+                                    <li key={ingrediente.id} className="ingredient-item">
+                                        <label>
+                                            <input
+                                                type="checkbox"
+                                                value={ingrediente.id}
+                                                checked={selectedIngredients[tipo]?.includes(ingrediente.id) || false}
+                                                onChange={() => handleCheckboxChange(ingrediente.id, tipo)}
+                                            />
+                                            {ingrediente.nombre}
+                                        </label>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
+                </div>
                 <div className="custom-modal-buttons">
-                    <button>Guardar</button>
+                    <button  onClick={() => handleAddToCart(item)}>Agregar</button>
                     <button onClick={onClose}>Cancelar</button>
                 </div>
             </div>

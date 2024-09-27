@@ -7,6 +7,7 @@ const menuRouter = require('./routes/menuRoutes');
 const uploadRouter = require('./routes/upload');
 const tiposRouter =  require('./routes/tipos');
 const categoriaRoutes = require('./routes/categoriaRoutes');
+const pedidosRouter = require('./routes/pedidoRoutes');
 const ingredientRouter = require('./routes/ingredientRoutes');
 const multer = require('multer');
 
@@ -55,6 +56,7 @@ app.use('/api', menuRouter);
 
 app.use('/api', tiposRouter);
 
+app.use('/api', pedidosRouter);
 app.use(categoriaRoutes);
 // Ruta para subir imágenes
 app.use('/api/upload', uploadRouter);
