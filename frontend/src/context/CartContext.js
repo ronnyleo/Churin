@@ -7,6 +7,7 @@ export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
 
   const addToCart = (item) => {
+    //
     setCartItems((prevItems) => {
       // Verifica si el plato ya está en el carrito
       const existingItem = prevItems.find(cartItem => cartItem.id === item.id);

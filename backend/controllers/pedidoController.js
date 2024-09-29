@@ -1,13 +1,14 @@
-const { crearPedido } = require('../models/pedidoModel');
+const { enviarPedido } = require('../models/pedidoModel');
 
 
 const pedidoController = {
-    crearPedido: async (req, res) => {
+    enviarPedido: async (req, res) => {
+        const { cliente, total, delivery, lugar_envio } = req.body;
         try {
-            const pedido = await crearPedido();
+            const pedido = await enviarPedido(cliente, total, delivery, lugar_envio);
             res.json(pedido);
         } catch (error) {
-            console.error('Error al buscar en el menú:', error);
+            console.error('Error al enviar el pedido:', error);
         }
     }
 };

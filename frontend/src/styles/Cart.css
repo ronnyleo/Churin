@@ -58,3 +58,16 @@
     background-color: #c9302c;
   }
   
+  .finalizar-pedido {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .finalizar-pedido__envio, 
+  .finalizar-pedido__cliente {
+    padding: 10px;
+    border-radius: 4px;
+    display: flex;
+  }
+
+ 

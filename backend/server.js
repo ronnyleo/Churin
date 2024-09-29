@@ -9,6 +9,7 @@ const tiposRouter =  require('./routes/tipos');
 const categoriaRoutes = require('./routes/categoriaRoutes');
 const pedidosRouter = require('./routes/pedidoRoutes');
 const ingredientRouter = require('./routes/ingredientRoutes');
+const direccionesRouter = require('./routes/direccionesRoutes');
 const multer = require('multer');
 
 
@@ -50,13 +51,11 @@ app.get('/', (req, res) => {
 
 //Rutas para el registro
 app.use('/api', authRouter);
-
 // Rutas para el menú del restaurante
 app.use('/api', menuRouter);
-
 app.use('/api', tiposRouter);
-
 app.use('/api', pedidosRouter);
+app.use('/api', direccionesRouter);
 app.use(categoriaRoutes);
 // Ruta para subir imágenes
 app.use('/api/upload', uploadRouter);
