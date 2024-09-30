@@ -1,4 +1,9 @@
 /* src/styles/Cart.css */
+
+* {
+  box-sizing: border-box;
+}
+
 .cart-container {
     padding: 0 20px; /* Espacio a los lados del contenedor */
   }
@@ -6,13 +11,12 @@
   .cart-item {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin: 20px 0 20px 0;
     border-bottom: 1px solid #ddd;
     padding-bottom: 10px;
     background-color: #f9f9f9; /* Opcional: color de fondo para separar los elementos */
     border-radius: 4px; /* Opcional: bordes redondeados para un mejor diseño */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Opcional: sombra para dar profundidad */
-    margin: 40px;
   }
   
   .cart-item-content {
@@ -63,11 +67,35 @@
     flex-direction: column;
   }
 
-  .finalizar-pedido__envio, 
-  .finalizar-pedido__cliente {
-    padding: 10px;
-    border-radius: 4px;
-    display: flex;
-  }
+.finalizar-pedido__datos {
+  font-weight: bold;
+  margin: 10px 0 10px 0;
+}
 
- 
+.finalizar-pedido__datos-label {
+  margin-right: 20px;
+}
+
+.finalizar-pedido__datos-value {
+  margin-right: 20px;
+  padding: 5px;
+}
+
+.carrito__button {
+  padding: 0.5rem 1rem;
+  background-color: #ffe600; /* Color de fondo del botón */
+  color: black; /* Color del texto del botón */
+  border: none; /* Quita el borde del botón */
+  border-radius: 4px; /* Bordes redondeados del botón */
+  cursor: pointer; /* Cambia el cursor cuando se pasa sobre el botón */
+  width: 100%;
+  display: block;
+  font-family: 'Roboto', sans-serif; /* Usa la fuente que desees */
+  font-size: 16px; /* Tamaño de fuente uniforme */
+  font-weight: normal; /* O 'bold' si quieres que sean negritas */
+  line-height: 1.5; /* Altura de línea uniforme */
+  margin: 0;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+}

@@ -44,19 +44,27 @@
     transition: background-color 0.3s, color 0.3s;
 }
 
-.navbar-links a {
+
+.navbar-links a, .navbar-links button {
+    font-family: 'Roboto', sans-serif; /* Usa la fuente que desees */
+    font-size: 16px; /* Tamaño de fuente uniforme */
+    font-weight: normal; /* O 'bold' si quieres que sean negritas */
+    line-height: 1.5; /* Altura de línea uniforme */
     text-decoration: none;
     color: black;
-    height: 100%; /* Asegúrate de que el a ocupe toda la altura del li */
+    height: 100%;
     display: flex;
     align-items: center;
     width: 100%;
-    justify-content: center; /* Centra el texto dentro del enlace */
+    justify-content: center;
+    border: none; /* Elimina el borde por defecto en botones */
+    background: none; /* Elimina el fondo por defecto en botones */
+    cursor: pointer; /* Cambia el cursor para botones */
 }
 
-.navbar-links li:hover {
+.navbar-links button:hover, .navbar-links a:hover {
     background-color: #ffd700; /* Color de fondo al pasar el ratón */
-    font-weight: bold;
+    font-weight: bold; /* Cambia el peso de la fuente al pasar el ratón */
 }
 
 /* Media queries para pantallas más pequeñas */

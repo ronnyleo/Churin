@@ -156,7 +156,7 @@ function CustomizationModal({ item, onClose }) {
                 </div>
                 <div className="custom-modal-buttons">
                     <button  onClick={() => handleAddToCart(item)}>Agregar</button>
-                    <button onClick={onClose}>Cancelar</button>
+                    <button onClick={onClose}>Cerrar</button>
                 </div>
             </div>
         </div>

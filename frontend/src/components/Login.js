@@ -7,11 +7,12 @@ import { auth } from '../firebaseConfig';
 import '../styles/Login.css';
 import axios from 'axios';
 
-const Login = () => {
+const Login = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [telefono, setTelefono] = useState('');
   const [error, setError] = useState('');
   const [showResetForm, setShowResetForm] = useState(false);
   const [showRegisterForm, setShowRegisterForm] = useState(false);
@@ -36,20 +37,22 @@ const Login = () => {
       if (response.status !== 200) {
         throw new Error('Error en la respuesta del servidor');
       }
-
-      // res´pmse 
       const data = response.data;
       const userRole = data.role;
 
+      // Actualizamos el rol del usuario en el estado de la aplicación
+      onLoginSuccess(userRole);
+
       if (userRole === 'admin') {
-        navigate('https://churin-fun-flais-admin.onrender.com');
+        alert('Ingreso exitoso como administrador');
+        navigate('/admin'); // Asegúrate de que '/admin' coincida con la ruta para Admin
+
       } else {
         alert('Ingreso exitoso');
-        navigate('/'); // Asegúrate de que '/menuList' coincida con la ruta para MenuList
-        console.log('Respuesta backend:', response);
-        console.log('Respuesta backend:', response.data);
-        console.log('Respuesta backend:', data.role);
+        navigate('/'); // Asegúrate de que '/' coincida con la ruta para MenuList
+
       }
+      
     } catch (error) {
       console.error('Error signing in:', error);
       setError('Usuario o contraseña incorrectos.');
@@ -58,6 +61,7 @@ const Login = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setError(''); // Limpiar el error antes de registrar
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       console.log('User registered:', userCredential.user);
@@ -68,7 +72,8 @@ const Login = () => {
         first_name: firstName,  // Mapeo de firstName a first_name
         last_name: lastName,  
         password,
-        role: 'user'
+        role: 'user',
+        telefono
     };
 
       console.log('Enviando datos de registro:', registrationData);
@@ -77,9 +82,27 @@ const Login = () => {
       // Redirige o muestra un mensaje de éxito
       alert('Cuenta creada exitosamente');
       setShowRegisterForm(false);
+      setError(''); // Limpiar el mensaje de error después del registro
     } catch (error) {
       console.error('Error during registration:', error);
-      setError('Error al registrar el usuario.');
+
+        // Verifica el código de error de Firebase
+        if (error.code === 'auth/email-already-in-use') {
+            setError('Este correo electrónico ya está registrado.');
+        } else {
+            setError('Error al registrar el usuario.');
+        }
+        
+         // Intenta eliminar el usuario de Firebase si fue creado pero el registro en la base de datos falló
+         if (error.code !== 'auth/email-already-in-use') {
+          // Intenta eliminar el usuario de Firebase
+          try {
+              await auth.currentUser.delete();
+              console.log('Usuario eliminado de Firebase debido a error en la base de datos.');
+          } catch (deleteError) {
+              console.error('Error al eliminar el usuario de Firebase:', deleteError);
+          }
+      }
     }
   };
 
@@ -122,6 +145,17 @@ const Login = () => {
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               placeholder="Apellido"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="lastName">Teléfono</label>
+            <input
+              type="text"
+              id="telefono"
+              value={telefono}
+              onChange={(e) => setTelefono(e.target.value)}
+              placeholder="Teléfono"
               required
             />
           </div>

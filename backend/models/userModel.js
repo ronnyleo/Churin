@@ -5,15 +5,15 @@ const bcrypt = require('bcryptjs');
 const saltRounds = 10; // Número de rondas de sal
 
 // Crear un nuevo usuario
-const registerUser = async (email, first_name, last_name, password, role) => {
+const registerUser = async (email, first_name, last_name, password, role, telefono) => {
     try {
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
         return await client.one(
-            `INSERT INTO users (email, first_name, last_name, password, role) 
-            VALUES ($1, $2, $3, $4, $5) 
+            `INSERT INTO users (email, first_name, last_name, password, role, telefono) 
+            VALUES ($1, $2, $3, $4, $5, $6) 
             RETURNING *`,
-            [email, first_name, last_name, hashedPassword, role]
+            [email, first_name, last_name, hashedPassword, role, telefono]
         );
     } catch (error) {
         console.error('Error al registrar el usuario:', error);

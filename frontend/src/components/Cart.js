@@ -1,10 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { CartContext } from '../context/CartContext';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext'; // Importa el hook useAuth
 import axios from 'axios';
 import '../styles/Cart.css';
 
 const Cart = () => {
-    const { cartItems, removeFromCart, clearCart } = useContext(CartContext);
+    const { cartItems, setCartItems, removeFromCart, clearCart } = useContext(CartContext);
+    const { currentUser } = useAuth(); // Usa el hook para acceder al currentUser
     const [isDelivery, setIsDelivery] = useState(false); // Estado para delivery
     const [isPickup, setIsPickup] = useState(false); // Estado para retirar
     const [direcciones, setDirecciones] = useState([]);
@@ -16,9 +19,17 @@ const Cart = () => {
 
     const totalPrice = cartItems.reduce((total, item) => total + item.precio * item.quantity, 0);
 
+    
+
     const finalizarPedido = async () => {
+
+        if (cartItems.length === 0) {
+            alert('Tu carrito está vacío. No se puede realizar el pedido.');
+            return; // Sal de la función si el carrito está vacío
+        }
+        
         const pedido = {
-            cliente: cliente,
+            cliente: cliente.first_name + ' ' + cliente.last_name, // Usar el nombre del usuario logueado
             total: totalPrice + Number(costoEnvio), // Total incluye el costo de envío
             delivery: isDelivery, // Usa el estado de delivery
             lugar_envio: isDelivery ? direccion : '', // Solo establece la dirección si es delivery
@@ -38,7 +49,18 @@ const Cart = () => {
         }
     };
 
+    // Guardar el carrito en localStorage cada vez que cambie
+    useEffect(() => {
+        localStorage.setItem('cart', JSON.stringify(cartItems));
+    }, [cartItems]);
 
+    // Recuperar el carrito desde localStorage cuando se monta el componente
+    useEffect(() => {
+        const savedCart = localStorage.getItem('cart');
+        if (savedCart) {
+            setCartItems(JSON.parse(savedCart)); // Restaurar carrito desde localStorage
+        }
+    }, [setCartItems]);
 
     useEffect(() => {
         const fetchDirecciones = async () => {
@@ -54,6 +76,26 @@ const Cart = () => {
 
         fetchDirecciones();
     }, []);
+
+    // Nuevo useEffect para obtener el nombre del cliente
+    useEffect(() => {
+        const fetchCliente = async () => {
+            if (currentUser) {
+                try {
+                    const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/getUser`, {
+                        email: currentUser.email
+                    });
+                    setCliente(response.data);
+                    console.log('Cliente:', cliente)
+                    console.log('Cliente:', currentUser.email) // Asume que el nombre está en response.data.nombre
+                } catch (error) {
+                    setError('Error al obtener el cliente');
+                }
+            }
+        };
+
+        fetchCliente();
+    }, [currentUser]);
 
     const handleDireccionChange = (e) => {
         const selectedDireccion = direcciones.find(d => d.nombre === e.target.value);
@@ -95,37 +137,45 @@ const Cart = () => {
                                 <button onClick={() => removeFromCart(item.id)} className='cart-button'>Eliminar</button>
                             </div>
                             <div className="cart-item-total">
-                                <p>${item.precio * item.quantity}</p>
+                                <p>${(item.precio * item.quantity).toFixed(2)}</p>
                             </div>
                         </div>
                     </div>
                 ))
             )}
-            <button onClick={clearCart}>Vaciar Carrito</button>
+            <button className='carrito__button' onClick={clearCart}>Vaciar Carrito</button>
 
             <div className='finalizar-pedido'>
-                <div className='finalizar-pedido__cliente'>
-                    <label>Cliente: </label>
+                <div className='finalizar-pedido__datos'>
+                    <label className='finalizar-pedido__datos-label'>Cliente: </label>
+                    {currentUser ? 
                     <input
+                        className='finalizar-pedido__datos-value'
                         type='text'
-                        value={cliente}
-                        onChange={(e) => setCliente(e.target.value)}
-                        placeholder='Ingresa tu nombre y apellido'
-                        required
-                    />
+                        value={`${cliente.first_name} ${cliente.last_name}`}  // Mostrar el nombre del usuario logueado
+                        readOnly // Evita que el usuario edite el campo
+                    /> : <input
+                    className='finalizar-pedido__datos-value'
+                    type='text'
+                    value={''}  // Mostrar el nombre del usuario logueado
+                    readOnly // Evita que el usuario edite el campo
+                /> 
+                    }
                 </div>
 
-                <div className='finalizar-pedido__opciones'>
-                    <label>
+                <div className='finalizar-pedido__datos'>
+                    <label className='finalizar-pedido__datos-label'>
                         <input
+                            className='finalizar-pedido__datos-value'
                             type="checkbox"
                             checked={isDelivery}
                             onChange={handleDeliveryChange}
                         />
                         Delivery
                     </label>
-                    <label>
+                    <label className='finalizar-pedido__datos-label'>
                         <input
+                            className='finalizar-pedido__datos-value'
                             type="checkbox"
                             checked={isPickup}
                             onChange={handlePickupChange}
@@ -135,9 +185,11 @@ const Cart = () => {
                 </div>
 
                 {isDelivery && (
-                    <div className='finalizar-pedido__direccion'>
-                        <label>Envío:</label>
-                        <select value={direccion} onChange={handleDireccionChange}>
+                    <div className='finalizar-pedido__datos'>
+                        <label className='finalizar-pedido__datos-label'>
+                            Envío:
+                        </label>
+                        <select className='finalizar-pedido__datos-value' value={direccion} onChange={handleDireccionChange}>
                             <option value=''>Selecciona una opción</option>
                             {direcciones.map(direccion => (
                                 <option key={direccion.id} value={direccion.nombre}>
@@ -148,10 +200,12 @@ const Cart = () => {
                     </div>
                 )}
             </div>
-            <h3>Subtotal: ${totalPrice}</h3>
+            <h3>Subtotal: ${totalPrice.toFixed(2)}</h3>
             <h3>Envío: ${costoEnvio}</h3>
-            <h3>Total a pagar: ${totalPrice + Number(costoEnvio)}</h3>
-            <button onClick={finalizarPedido}>Finalizar pedido</button>
+            <h3>Total a pagar: ${(totalPrice + Number(costoEnvio)).toFixed(2)}</h3>
+            {currentUser ? <button className='carrito__button' onClick={finalizarPedido}>Finalizar pedido</button>
+            : <Link className='carrito__button' to='/Login'>Inicia sesión para finalizar tu pedido</Link>
+            }
         </div>
     );
 }

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Autocomplete, TextField } from '@mui/material';
-import '../styles/AdminUpload.css';
+import '../styles/CargarPlato.css';
 
 const UploadPlate = ({ tipos, onImageUrlChange }) => {
   const [file, setFile] = useState(null);
@@ -94,7 +94,7 @@ const UploadPlate = ({ tipos, onImageUrlChange }) => {
             onChange={handleFileChange}
           />
         </div>
-        <button type="submit">Subir plato</button>
+        <button type="submit" className='form-group__button'>Subir plato</button>
       </form>
     </div>
   );

@@ -12,6 +12,7 @@ const Navbar = () => {
     const handleLogout = async () => {
         try {
             await logout();
+            localStorage.removeItem('userRole'); // Elimina el rol del usuario del localStorage
             navigate('/'); // Redirige al usuario a la página de inicio después de cerrar sesión
         } catch (error) {
             console.error('Error al cerrar sesión:', error);
@@ -30,11 +31,6 @@ const Navbar = () => {
                     </li>
                     {currentUser ? (
                         <>
-                            <li>
-                                <Link to='/Admin'>
-                                    <FontAwesomeIcon icon={faUser} size="lg" /> {/* Icono de Font Awesome */}
-                                </Link>
-                            </li>
                             <li>
                                 <button onClick={handleLogout}>Salir</button>
                             </li>

@@ -88,10 +88,13 @@
   margin: 10px; /* Fondo transparente */
   color: rgb(8, 8, 8) !important;
   border-radius: 4px !important;
+  border: none;
   cursor: pointer !important;
   font-size: 14px !important;
   text-align: center;
   transition: background-color 0.3s, color 0.3s !important; /* Añade una transición suave */
+  background-color: #ffe600; /* Color de fondo del botón */
+
 }
 
 .button-container .button-link {

@@ -60,9 +60,7 @@ app.use(categoriaRoutes);
 // Ruta para subir imágenes
 app.use('/api/upload', uploadRouter);
 //app.use('/api/upload', upload.single('image'), require('./routes/upload'));
-
 app.use('/api', ingredientRouter);
-
 // Ruta de prueba para verificar la conexión a la base de datos
 app.get('/test-db', async (req, res) => {
   try {
@@ -73,8 +71,6 @@ app.get('/test-db', async (req, res) => {
     res.status(500).send('Error connecting to database');
   }
 });
-
-
 
 // Start the server
 app.listen(port, () => {

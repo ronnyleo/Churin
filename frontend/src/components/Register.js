@@ -7,6 +7,7 @@ import axios from 'axios'; // Asegúrate de instalar axios
 const Register = () => {
     const [first_name, setFirstName] = useState('');
     const [last_name, setLastName] = useState('');
+    const [telefono, setTelefono] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
@@ -58,6 +59,15 @@ const Register = () => {
                         type="text"
                         value={last_name}
                         onChange={(e) => setLastName(e.target.value)}
+                        required
+                    />
+                </div>
+                <div>
+                    <label>Teléfono:</label>
+                    <input
+                        type="text"
+                        value={telefono}
+                        onChange={(e) => setTelefono(e.target.value)}
                         required
                     />
                 </div>

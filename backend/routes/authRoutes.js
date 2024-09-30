@@ -7,8 +7,8 @@ const authController = require('../controllers/authController');
 
 // Ruta para registrar un nuevo usuario 
 router.post('/auth/register', authController.registerUser);
-
-
 router.post('/auth/getUserRole', authController.getUserRole);
+router.post('/auth/getUser', authController.getUser);
+
 
 module.exports = router;

@@ -7,7 +7,6 @@ import EditPlate from './EditPlate';
 import '../styles/AdminUpload.css';
 
 const AdminUpload = () => {
-  const [authenticated, setAuthenticated] = useState(true);
   const [tipos, setTipos] = useState([]);
   const [activeTab, setActiveTab] = useState('upload');
   const [imageUrl, setImageUrl] = useState('');
@@ -25,10 +24,6 @@ const AdminUpload = () => {
     fetchTipos();
   }, []);
 
-  if (!authenticated) {
-    return <h2>No tienes permiso para acceder a esta página.</h2>;
-  }
-
   return (
     <div className='admin-upload'>
       <div className='tabs'>
@@ -42,7 +37,7 @@ const AdminUpload = () => {
           className={`tab-button ${activeTab === 'edit' ? 'active' : ''}`}
           onClick={() => setActiveTab('edit')}
         >
-          Editar 
+          Buscar 
         </button>
       </div>
 

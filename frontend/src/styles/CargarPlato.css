@@ -40,7 +40,7 @@
   }
   
 
-  .tabs button {
+  .form-group__button {
     padding: 0.5rem 1rem;
     background-color: #ffe600; /* Color de fondo del botón */
     color: black; /* Color del texto del botón */
