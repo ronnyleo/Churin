@@ -14,19 +14,17 @@ const enviarPedido = async (cliente, total, delivery, lugar_envio) => {
     }
 };
 
-
-const enviarDetallePedido = async (id_pedido, articulo_id, cantidad, precio, ingredientes) => {
+const enviarDetallePedido = async (pedido_id, menu_id, cantidad, precio, ingredientes) => {
     try {
-        const query = `
-            INSERT INTO detalle_pedido (id_pedido, articulo_id, cantidad, precio, ingredientes) 
-            VALUES ($1, $2, $3, $4, $5) RETURNING *`;
-        const nuevoDetalle = await db.one(query, [id_pedido, articulo_id, cantidad, precio, ingredientes]);
-        return nuevoDetalle;
+        const query = `INSERT INTO detalle_pedidos (pedido_id, menu_id, cantidad, precio, ingredientes)
+        VALUES ($1, $2, $3, $4, $5) RETURNING *`
+        const detallePedido = await db.one(query, [pedido_id, menu_id, cantidad, precio, ingredientes]);
+        return detallePedido;
     } catch (error) {
-        console.error('Error al crear detalle de pedido', error);
-        throw new Error('Error al crear detalle');
+        console.error('Error al enviar el detalle del pedido:', error);
     }
-};
+
+}
 
 
 module.exports = {

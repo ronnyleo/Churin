@@ -24,20 +24,46 @@ const Cart = () => {
     const finalizarPedido = async () => {
 
         if (cartItems.length === 0) {
-            alert('Tu carrito está vacío. No se puede realizar el pedido.');
+            alert('Debe tener al menos un producto en el carrito');
             return; // Sal de la función si el carrito está vacío
         }
-        
+
+        if (!isDelivery && !isPickup) {
+            alert('Debe seleccionar una forma de entrega');
+            return;
+        }
+
         const pedido = {
             cliente: cliente.first_name + ' ' + cliente.last_name, // Usar el nombre del usuario logueado
             total: totalPrice + Number(costoEnvio), // Total incluye el costo de envío
             delivery: isDelivery, // Usa el estado de delivery
             lugar_envio: isDelivery ? direccion : '', // Solo establece la dirección si es delivery
         };
-
+        // Log del pedido antes de enviarlo
+    console.log('Pedido a enviar:', pedido);
         try {
             const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/pedido`, pedido);
-            if (response.status === 200) {
+            console.log('Respuesta de la API al crear el pedido:', response);
+            if (response.status === 201) {
+                const idPedido = response.data.pedido.id;
+                console.log('id:', response.data.pedido.id)
+                const detallesPedido = cartItems.map(item => ({
+                    menu_id: item.id,
+                    cantidad: item.quantity,
+                    precio: item.precio,
+                    ingredientes: {}, 
+                }));
+
+
+                
+                console.log("Detalles Pedido", detallesPedido[0])
+                await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/pedido/detalle-pedido`, 
+                {
+                    idPedido,
+                    ...detallesPedido[0]     
+                }
+                );
+               
                 clearCart();
                 alert('Pedido realizado con éxito');
             } else {
@@ -86,8 +112,6 @@ const Cart = () => {
                         email: currentUser.email
                     });
                     setCliente(response.data);
-                    console.log('Cliente:', cliente)
-                    console.log('Cliente:', currentUser.email) // Asume que el nombre está en response.data.nombre
                 } catch (error) {
                     setError('Error al obtener el cliente');
                 }
