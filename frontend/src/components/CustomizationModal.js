@@ -24,7 +24,11 @@ function CustomizationModal({ item, onClose }) {
     }, []);
 
     const handleAddToCart = (item) => {
-        addToCart(item);
+        const itemWithIngredientes = {
+            ...item,
+            ingredientes: selectedIngredients // Incluye los ingredientes seleccionados
+        };
+        addToCart(itemWithIngredientes);
     }
 
     // Agrupar ingredientes por tipo

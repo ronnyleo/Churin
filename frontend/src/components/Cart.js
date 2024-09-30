@@ -51,18 +51,17 @@ const Cart = () => {
                     menu_id: item.id,
                     cantidad: item.quantity,
                     precio: item.precio,
-                    ingredientes: {}, 
+                    ingredientes: item.ingredientes, 
                 }));
 
-
-                
-                console.log("Detalles Pedido", detallesPedido[0])
-                await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/pedido/detalle-pedido`, 
-                {
-                    idPedido,
-                    ...detallesPedido[0]     
-                }
-                );
+                for (const detalle of detallesPedido) {
+                    console.log('Enviado detalles:', detallesPedido);
+                    await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/pedido/detalle-pedido`, 
+                        {
+                            pedido_id: idPedido,
+                            ...detalle    
+                        });
+                }                       
                
                 clearCart();
                 alert('Pedido realizado con éxito');
