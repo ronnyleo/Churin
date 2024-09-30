@@ -14,10 +14,10 @@ const pedidoController = {
 
     enviarDetallePedido: async (req, res) => {
         console.log('Cuerpo de la solicitud (req.body):', req.body);
-        const { pedido_id, detalles } = req.body;
+        const { pedido_id, menu_id, cantidad, precio, ingredientes } = req.body;
 
         try {
-            const detallePedido = await enviarDetallePedido(pedido_id, detalles);
+            const detallePedido = await enviarDetallePedido(pedido_id, menu_id, cantidad, precio, ingredientes );
             res.status(201).json({
                 message: 'Detalle del pedido enviado exitosamente',
                 detalle_id: detallePedido
