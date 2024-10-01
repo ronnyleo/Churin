@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import UploadPlate from './UploadPlate';
 import EditPlate from './EditPlate';
+import Pedidos from './Pedidos';
 import '../styles/AdminUpload.css';
 
 const AdminUpload = () => {
@@ -29,15 +30,18 @@ const AdminUpload = () => {
       <div className='tabs'>
         <button
           className={`tab-button ${activeTab === 'upload' ? 'active' : ''}`}
-          onClick={() => setActiveTab('upload')}
-        >
+          onClick={() => setActiveTab('upload')}>
           Cargar
         </button>
         <button
           className={`tab-button ${activeTab === 'edit' ? 'active' : ''}`}
-          onClick={() => setActiveTab('edit')}
-        >
-          Buscar 
+          onClick={() => setActiveTab('edit')}>
+          Buscar
+        </button>
+        <button
+          className={`tab-button ${activeTab === 'pedidos' ? 'active' : ''}`}
+          onClick={() => setActiveTab('pedidos')}>
+            Pedidos
         </button>
       </div>
 
@@ -48,6 +52,10 @@ const AdminUpload = () => {
 
         {activeTab === 'edit' && (
           <EditPlate tipos={tipos} />
+        )}
+
+        {activeTab === 'pedidos' && (
+          <Pedidos />
         )}
       </div>
     </div>

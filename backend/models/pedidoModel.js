@@ -1,5 +1,15 @@
 const db = require('../db');
 
+const getPedidos = async () => {
+    try {
+        const query= 'SELECT * FROM pedido';
+        const pedido = await db.any(query);
+        return pedido;
+    } catch (error) {
+        console.log('Error al obtener los pedidos:', error);
+    }
+}
+
 const enviarPedido = async (cliente, total, delivery, lugar_envio) => {
     try {
         const fecha_hora = new Date(); // Esto genera la fecha y hora actual.
@@ -26,8 +36,8 @@ const enviarDetallePedido = async (pedido_id, menu_id, cantidad, precio, ingredi
 
 }
 
-
 module.exports = {
     enviarPedido, 
-    enviarDetallePedido
+    enviarDetallePedido,
+    getPedidos
 }
