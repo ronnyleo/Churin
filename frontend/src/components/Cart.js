@@ -17,9 +17,7 @@ const Cart = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const totalPrice = cartItems.reduce((total, item) => total + item.precio * item.quantity, 0);
-
-    
+    const totalPrice = cartItems.reduce((total, item) => total + item.precio * item.cantidad, 0);
 
     const finalizarPedido = async () => {
 
@@ -30,6 +28,17 @@ const Cart = () => {
 
         if (!isDelivery && !isPickup) {
             alert('Debe seleccionar una forma de entrega');
+            return;
+        }
+
+        
+        if (cartItems.length === 0) {
+            alert('Debe tener al menos un producto en el carrito');
+            return; // Sal de la función si el carrito está vacío
+        }
+
+        if (isDelivery && !direccion) {
+            alert('Debe seleccionar un lugar de envío');
             return;
         }
 
@@ -49,7 +58,7 @@ const Cart = () => {
                 console.log('id:', response.data.pedido.id)
                 const detallesPedido = cartItems.map(item => ({
                     menu_id: item.id,
-                    cantidad: item.quantity,
+                    cantidad: item.cantidad,
                     precio: item.precio,
                     ingredientes: item.ingredientes, 
                 }));
@@ -73,6 +82,14 @@ const Cart = () => {
             alert('Hubo un problema al enviar el pedido');
         }
     };
+
+    useEffect(() => {
+        // Este código se ejecuta cada vez que cartItems cambia
+        if (cartItems.length > 0) {
+          console.log('Último valor de cartItems:', cartItems);
+          // Aquí puedes realizar cualquier operación adicional con cartItems
+        }
+      }, [cartItems]);
 
     // Guardar el carrito en localStorage cada vez que cambie
     useEffect(() => {
@@ -156,11 +173,20 @@ const Cart = () => {
                             <div className="cart-item-details">
                                 <h3>{item.nombre}</h3>
                                 <p>Precio unitario: ${item.precio}</p>
-                                <p>Cantidad: {item.quantity}</p>
+                                <p>Cantidad: {item.cantidad}</p>
+                                {item.ingredientes && item.ingredientes.length > 0 ? (
+                                    item.ingredientes.map(ingrediente => (
+                                        <li key={ingrediente.id}>{ingrediente.nombre}</li>
+                                    ))
+                                ) : (
+                                    ''
+                                )}
+                            
+
                                 <button onClick={() => removeFromCart(item.id)} className='cart-button'>Eliminar</button>
                             </div>
                             <div className="cart-item-total">
-                                <p>${(item.precio * item.quantity).toFixed(2)}</p>
+                                <p>${(item.precio * item.cantidad).toFixed(2)}</p>
                             </div>
                         </div>
                     </div>

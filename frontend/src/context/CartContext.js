@@ -17,14 +17,20 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = (item) => {
     setCartItems((prevItems) => {
-      const existingItem = prevItems.find(cartItem => cartItem.id === item.id);
+      // Verifica si ya existe un plato con la misma ID y combinación de ingredientes
+      const existingItem = prevItems.find(cartItem =>
+        cartItem.id === item.id && 
+        JSON.stringify(cartItem.ingredientes) === JSON.stringify(item.ingredientes) // Compara las combinaciones de ingredientes
+      );
 
       if (existingItem) {
+        // Si el plato con la misma combinación ya existe, actualiza la cantidad
         return prevItems.map(cartItem =>
-          cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
+          cartItem.id === existingItem.id ? { ...cartItem, cantidad: cartItem.cantidad + 1 } : cartItem
         );
       } else {
-        return [...prevItems, { ...item, quantity: 1 }];
+        // Si no existe, agrega el nuevo plato al carrito
+        return [...prevItems, { ...item, cantidad: 1 }];
       }
     });
     alert('Producto agregado');

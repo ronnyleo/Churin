@@ -24,11 +24,14 @@ function CustomizationModal({ item, onClose }) {
     }, []);
 
     const handleAddToCart = (item) => {
+        const ingredientesSeleccionados = Object.values(selectedIngredients).flat();
+        console.log("Itemwi:", ingredientesSeleccionados)
         const itemWithIngredientes = {
             ...item,
-            ingredientes: selectedIngredients // Incluye los ingredientes seleccionados
+            ingredientes: ingredientesSeleccionados
         };
         addToCart(itemWithIngredientes);
+        onClose();  // Cierra el modal después de agregar al carrito
     }
 
     // Agrupar ingredientes por tipo
@@ -41,100 +44,55 @@ function CustomizationModal({ item, onClose }) {
     }, {});
 
     // Manejo de selección de ingredientes
-    const handleCheckboxChange = (ingredientId, tipo) => {
-        console.log('item:', item); // Asegúrate de que item esté definido
+   // Manejo de selección de ingredientes
+   const handleCheckboxChange = (ingredient, tipo) => {
+    setSelectedIngredients(prevSelected => {
+        const currentSelected = prevSelected[tipo] || [];
+        const isSelected = currentSelected.some(item => item.id === ingredient.id);
 
-        setSelectedIngredients(prevSelected => {
-            const currentSelected = prevSelected[tipo] || [];
-            const isSelected = currentSelected.includes(ingredientId);
-            console.log('tipo_combinacion:', tipo);
-            // Si el ingrediente ya está seleccionado, se desmarca
-            if (currentSelected.includes(ingredientId)) {
-                setSelectedCount(prevCount => prevCount - 1);
-                return {
-                    ...prevSelected,
-                    [tipo]: currentSelected.filter(id => id !== ingredientId)
-                };
-            }
+        if (isSelected) {
+            setSelectedCount(prevCount => prevCount - 1);
+            return {
+                ...prevSelected,
+                [tipo]: currentSelected.filter(item => item.id !== ingredient.id)
+            };
+        }
 
-            // Según el tipo de combinación, controlar la cantidad de selección
-            if (item.tipo_combinacion === 1) {
-                // Escoger máximo 2 de cada tipo
-                if (currentSelected.length >= 2) {
-                    alert('No puedes seleccionar mas ingredientes');
-                    return prevSelected;
-                }
-
-
-                setSelectedCount(prevCount => prevCount + 1);
-                return {
-                    ...prevSelected,
-                    [tipo]: [...currentSelected, ingredientId]
-                };
-            }
-
-
-            // Manejando el tipo de combinación 2
-            if (item.tipo_combinacion === 2) {
-                if (isSelected) {
-                    // Si ya está seleccionado, eliminar el ingrediente y decrementar el contador
-                    setSelectedCount(prevCount => prevCount - 1);
-                    return {
-                        ...prevSelected,
-                        [tipo]: currentSelected.filter(id => id !== ingredientId),
-                    };
-                } else {
-                    // Verificar si el total de ingredientes seleccionados es menor que 2
-                    const totalSelected = Object.values(prevSelected).flat().length; // Contamos todos los ingredientes seleccionados
-                    if (totalSelected >= 2) {
-                        alert('Solo puedes seleccionar 2 ingredientes en total.');
-                        return prevSelected; // Retorna el estado anterior si se alcanza el límite
-                    }
-
-                    // Si no ha alcanzado el límite, agregar el ingrediente
-                    setSelectedCount(prevCount => prevCount + 1);
-                    return {
-                        ...prevSelected,
-                        [tipo]: [...currentSelected, ingredientId],
-                    };
-                }
-            }
-
-            if (item.tipo_combinacion === 3) {
-                // Escoger máximo 3 en total, independientemente del tipo
-                const totalSelected = Object.values(prevSelected).flat().length; // Contamos todos los ingredientes seleccionados
-
-                // Verificamos si ya se ha alcanzado el límite
-                if (totalSelected >= 3) {
-                    alert('Solo puedes seleccionar 3 ingredientes en total.');
-                    return prevSelected; // Si se ha alcanzado, no hacemos nada
-                }
-                // Si el ingrediente ya está seleccionado, lo desmarcamos
-                if (currentSelected.includes(ingredientId)) {
-                    return {
-                        ...prevSelected,
-                        [tipo]: currentSelected.filter(id => id !== ingredientId) // Deseleccionamos el ingrediente
-                    };
-                }
-
-                // Si el ingrediente no está seleccionado y hay espacio
-                return {
-                    ...prevSelected,
-                    [tipo]: [...currentSelected, ingredientId] // Añadimos el nuevo ingrediente
-                };
-            }
-
-
+        if (item.tipo_combinacion === 1 && currentSelected.length >= 2) {
+            alert('No puedes seleccionar más ingredientes de este tipo.');
             return prevSelected;
-        });
-    };
+        }
+
+        if (item.tipo_combinacion === 2) {
+            const totalSelected = Object.values(prevSelected).flat().length;
+            if (totalSelected >= 2) {
+                alert('Solo puedes seleccionar 2 ingredientes en total.');
+                return prevSelected;
+            }
+        }
+
+        if (item.tipo_combinacion === 3) {
+            const totalSelected = Object.values(prevSelected).flat().length;
+            if (totalSelected >= 3) {
+                alert('Solo puedes seleccionar 3 ingredientes en total.');
+                return prevSelected;
+            }
+        }
+
+        setSelectedCount(prevCount => prevCount + 1);
+        return {
+            ...prevSelected,
+            [tipo]: [...currentSelected, ingredient]
+        };
+    });
+};
+
+
 
     return (
         <div className="custom-modal-overlay">
             <div className="custom-modal-content">
                 <h2>Personaliza tu {item.nombre}</h2>
-
-
                 <div className="ingredients-section">
                     <p>Elige tus ingredientes:</p>
                     {Object.keys(groupedIngredients).map(tipo => (
@@ -147,8 +105,8 @@ function CustomizationModal({ item, onClose }) {
                                             <input
                                                 type="checkbox"
                                                 value={ingrediente.id}
-                                                checked={selectedIngredients[tipo]?.includes(ingrediente.id) || false}
-                                                onChange={() => handleCheckboxChange(ingrediente.id, tipo)}
+                                                checked={selectedIngredients[tipo]?.some(item => item.id === ingrediente.id) || false}
+                                                onChange={() => handleCheckboxChange(ingrediente, tipo)}
                                             />
                                             {ingrediente.nombre}
                                         </label>
