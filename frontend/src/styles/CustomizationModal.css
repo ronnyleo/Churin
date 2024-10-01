@@ -30,6 +30,10 @@
     margin: 10px 0px;
 }
 
-.ingredients-list {
+.item__ingredients-list {
     list-style-type: none;
+}
+
+.item__descripcion {
+    font-size: small;
 }

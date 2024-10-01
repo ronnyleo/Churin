@@ -92,8 +92,9 @@ function CustomizationModal({ item, onClose }) {
     return (
         <div className="custom-modal-overlay">
             <div className="custom-modal-content">
-                <h2>Personaliza tu {item.nombre}</h2>
-                <div className="ingredients-section">
+                <h2 className='item__titulo'>Personaliza tu {item.nombre}</h2>
+                <p className='item__descripcion'>{item.descripcion}</p>
+                <div className="item__ingredients-section">
                     <p>Elige tus ingredientes:</p>
                     {Object.keys(groupedIngredients).map(tipo => (
                         <div key={tipo} className="ingredients-type-section">

@@ -10,6 +10,9 @@ function Pedidos() {
             try {
                 const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/pedido`);
                 setPedidos(response.data);
+
+                //responseOrdenada = response.sort(a, b) =>
+
             } catch (error) {
                 console.log('Error al obtener los pedidos:', error);
             }
