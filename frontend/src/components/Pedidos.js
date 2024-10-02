@@ -9,10 +9,10 @@ function Pedidos() {
         const fetchPedidos = async () => {
             try {
                 const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/pedido`);
-                setPedidos(response.data);
-
+                const pedidos = response.data;
                 // Ordenar por fecha
-                //responseOrdenada = [...response].sort(a, b) => {}
+                pedidosOrdenados = [...pedidos].sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+                setPedidos(pedidosOrdenados);
 
             } catch (error) {
                 console.log('Error al obtener los pedidos:', error);
