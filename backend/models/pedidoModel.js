@@ -2,9 +2,22 @@ const db = require('../db');
 
 const getPedidos = async () => {
     try {
-        const query= 'SELECT * FROM pedido';
-        const pedido = await db.any(query);
-        return pedido;
+        const query = 'SELECT * FROM pedido';
+        const pedidos = await db.any(query);
+
+        const pedidosConFechayHora = pedidos.map(pedido => {
+            const fechaCompleta = new Date(pedido.fecha_hora);
+            const fecha = fechaCompleta.toISOString().split('T')[0];
+            const hora = fechaCompleta.toTimeString().split('')[0];
+
+
+            return {
+                ...pedido,
+                fecha: fecha,
+                hora: hora,
+            };
+        });
+        return pedidosConFechayHora;
     } catch (error) {
         console.log('Error al obtener los pedidos:', error);
     }
@@ -37,7 +50,7 @@ const enviarDetallePedido = async (pedido_id, menu_id, cantidad, precio, ingredi
 }
 
 module.exports = {
-    enviarPedido, 
+    enviarPedido,
     enviarDetallePedido,
     getPedidos
 }
