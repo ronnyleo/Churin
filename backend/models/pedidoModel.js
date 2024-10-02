@@ -25,10 +25,9 @@ const getPedidos = async () => {
 
 const enviarPedido = async (cliente, total, delivery, lugar_envio) => {
     try {
-        //const fecha_hora = new Date(); // Esto genera la fecha y hora actual.
         const query = `
             INSERT INTO pedido (cliente, total, fecha_hora, delivery, lugar_envio) 
-            VALUES ($1, $2, $3, $4, $5) RETURNING *`;
+            VALUES ($1, $2, CURRENT_TIMESTAMP, $4, $5) RETURNING *`;
         const nuevoPedido = await db.one(query, [cliente, total, delivery, lugar_envio]);
         return nuevoPedido;
     } catch (error) {
