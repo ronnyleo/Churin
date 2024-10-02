@@ -27,7 +27,7 @@ const enviarPedido = async (cliente, total, delivery, lugar_envio) => {
     try {
         const query = `
             INSERT INTO pedido (cliente, total, fecha_hora, delivery, lugar_envio) 
-            VALUES ($1, $2, CURRENT_TIMESTAMP, $4, $5) RETURNING *`;
+            VALUES ($1, $2, CURRENT_TIMESTAMP, $3, $4) RETURNING *`;
         const nuevoPedido = await db.one(query, [cliente, total, delivery, lugar_envio]);
         return nuevoPedido;
     } catch (error) {
