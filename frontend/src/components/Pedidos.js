@@ -11,7 +11,7 @@ function Pedidos() {
                 const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/pedido`);
                 const pedidos = response.data;
                 // Ordenar por fecha
-                pedidosOrdenados = [...pedidos].sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+                const pedidosOrdenados = [...pedidos].sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
                 setPedidos(pedidosOrdenados);
 
             } catch (error) {
