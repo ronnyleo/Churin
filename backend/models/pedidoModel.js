@@ -8,7 +8,7 @@ const getPedidos = async () => {
         const pedidosConFechayHora = pedidos.map(pedido => {
             const fechaCompleta = new Date(pedido.fecha_hora);
             const fecha = fechaCompleta.toISOString().split('T')[0];
-            const hora = fechaCompleta.toTimeString().split('')[0];
+            const hora = fechaCompleta.toTimeString().split(' ')[0];
 
 
             return {
@@ -25,11 +25,11 @@ const getPedidos = async () => {
 
 const enviarPedido = async (cliente, total, delivery, lugar_envio) => {
     try {
-        const fecha_hora = new Date(); // Esto genera la fecha y hora actual.
+        //const fecha_hora = new Date(); // Esto genera la fecha y hora actual.
         const query = `
             INSERT INTO pedido (cliente, total, fecha_hora, delivery, lugar_envio) 
             VALUES ($1, $2, $3, $4, $5) RETURNING *`;
-        const nuevoPedido = await db.one(query, [cliente, total, fecha_hora, delivery, lugar_envio]);
+        const nuevoPedido = await db.one(query, [cliente, total, delivery, lugar_envio]);
         return nuevoPedido;
     } catch (error) {
         console.error('Error al crear pedido', error);
