@@ -11,8 +11,22 @@ function Pedidos() {
                 const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/pedido`);
                 const pedidos = response.data;
                 // Ordenar por fecha
-                const pedidosOrdenados = [...pedidos].sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-                setPedidos(pedidosOrdenados);
+                //const pedidosOrdenados = [...pedidos].sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+                //setPedidos(pedidosOrdenados);
+
+                const pedidosAgrupados = [...pedidos].reduce((acc, pedido) => {
+                    const fecha = pedido.fecha;
+                    if (!acc[fecha]) {
+                        acc[fecha] = [];
+                    };
+
+                    acc[fecha].push(pedido)
+                    return acc;
+                }, {})
+
+                setPedidos(Object.entries(pedidosAgrupados));
+
+
 
             } catch (error) {
                 console.log('Error al obtener los pedidos:', error);
@@ -24,32 +38,19 @@ function Pedidos() {
 
     return (
         <div>
-            <h2>Pedidos recibidos</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>No.</th>
-                        <th>Cliente</th>
-                        <th>Fecha</th>
-                        <th>Hora</th>
-                        <th>Total</th>
-                        <th>Delivery</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {pedidos.map(pedido => (
-                        <tr key={pedido.id}>
-                            <td>{pedido.id}</td>
-                            <td>{pedido.cliente}</td>
-                            <td>{pedido.fecha}</td>
-                            <td>{pedido.hora}</td>
-                            <td>{pedido.total}</td>
-                            <td>{pedido.delivery ? 'Si' : 'No'}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-
+            <h2>Pedidos recibidos en {fecha}</h2>
+            {pedidosAgrupados.map(([fecha, pedidos]) => (
+                <div key={fecha}>
+                    <h3>Pedidos para {fecha}</h3>
+                    <ul>
+                        {pedidos.map(pedido => (
+                            <li key={pedido.id}>
+                                Cliente: {pedido.cliente}, Total: {pedido.total}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            ))}
         </div>
     );
 }
