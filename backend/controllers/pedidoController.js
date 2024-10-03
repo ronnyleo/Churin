@@ -1,4 +1,4 @@
-const { getPedidos, enviarPedido, enviarDetallePedido } = require('../models/pedidoModel');
+const { getPedidos, enviarPedido, enviarDetallePedido, getDetallePedidos } = require('../models/pedidoModel');
 
 
 const pedidoController = {
@@ -11,6 +11,14 @@ const pedidoController = {
         }
     },
 
+    getDetallePedidos: async (req, res) => {
+        try {
+            const detallePedido = await getDetallePedidos();
+            res.json(detallePedido);
+        } catch (error) {
+            console.error('Error al obtener pedidos:', error)
+        }
+    },
 
     enviarPedido: async (req, res) => {
         const { cliente, total, delivery, lugar_envio } = req.body;

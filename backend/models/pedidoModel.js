@@ -23,6 +23,19 @@ const getPedidos = async () => {
     }
 }
 
+
+const getDetallePedidos = async (id) => {
+    try {
+        const query = 'SELECT * FROM detalle_pedidos WHERE pedido_id = $1';
+        const detallePedido = await db.oneOrNone(query, [id]);
+        return detallePedido;
+
+    } catch (error) {
+        console.log('Error al obtener los pedidos:', error);
+    }
+}
+
+
 const enviarPedido = async (cliente, total, delivery, lugar_envio) => {
     try {
         const query = `
@@ -51,5 +64,6 @@ const enviarDetallePedido = async (pedido_id, menu_id, cantidad, precio, ingredi
 module.exports = {
     enviarPedido,
     enviarDetallePedido,
-    getPedidos
+    getPedidos,
+    getDetallePedidos
 }

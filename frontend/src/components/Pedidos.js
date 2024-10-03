@@ -3,16 +3,19 @@ import axios from 'axios';
 
 function Pedidos() {
 
-    const [pedidos, setPedidos] = useState([]);
+    const [pedidosAgrupados, setPedidosAgrupados] = useState([]);
+    const [detallesPedidos, setDetallesPedidos] = useState({}); // Objeto para almacenar detalles de cada pedido
+
 
     useEffect(() => {
         const fetchPedidos = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/pedido`);
-                const pedidos = response.data;
-                // Ordenar por fecha
-                //const pedidosOrdenados = [...pedidos].sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-                //setPedidos(pedidosOrdenados);
+                const responsePedidos = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/pedido`);
+                const pedidos = responsePedidos.data;
+
+
+
+
 
                 const pedidosAgrupados = [...pedidos].reduce((acc, pedido) => {
                     const fecha = pedido.fecha;
@@ -24,8 +27,20 @@ function Pedidos() {
                     return acc;
                 }, {})
 
-                setPedidos(Object.entries(pedidosAgrupados));
+                // Ordenar por fecha
+                //const pedidosOrdenados = [...pedidosAgrupados].sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
 
+                // Convertir a array de [fecha, pedidos] y ordenar por fecha
+                setPedidosAgrupados(Object.entries(pedidosAgrupados).sort((a, b) => new Date(b[0]) - new Date(a[0])));
+
+                // Llamar a la API de detalles por cada pedido
+                pedidos.forEach(async (pedido) => {
+                    const responseDetPedido = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/detalle-pedido/${pedido.id}`);
+                    setDetallesPedidos(prev => ({
+                        ...prev,
+                        [pedido.id]: responseDetPedido.data // Guardar los detalles del pedido en un objeto
+                    }));
+                });
 
 
             } catch (error) {
@@ -38,17 +53,37 @@ function Pedidos() {
 
     return (
         <div>
-            <h2>Pedidos recibidos en {fecha}</h2>
+            <h2>Pedidos recibidos</h2>
             {pedidosAgrupados.map(([fecha, pedidos]) => (
                 <div key={fecha}>
                     <h3>Pedidos para {fecha}</h3>
-                    <ul>
-                        {pedidos.map(pedido => (
-                            <li key={pedido.id}>
-                                Cliente: {pedido.cliente}, Total: {pedido.total}
-                            </li>
-                        ))}
-                    </ul>
+                    <table>
+                        <thead>
+                            <th>Nro.</th>
+                            <th>Cliente</th>
+                            <th>Total</th>
+                            <th>Ubicación</th>
+                        </thead>
+                        <tbody>
+                            {pedidos.map(pedido => (
+                                <tr key={pedido.id}>
+                                    <td>{pedido.id}</td>
+                                    <td>{pedido.cliente}</td>
+                                    <td>{pedido.total}</td>
+                                    <td>{pedido.lugar_envio}</td>
+                                    <td>
+                                        {detallesPedidos[pedido.id] 
+                                            ? <ul>
+                                                {detallesPedidos[pedido.id].map(detalle => (
+                                                    <li key={detalle.id}>{detalle.descripcion}</li>
+                                                ))}
+                                              </ul>
+                                            : "Cargando detalles..."}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             ))}
         </div>
