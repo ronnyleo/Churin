@@ -44,9 +44,24 @@ const searchPlates = async (searchTerm) => {
     }
 }
 
+const subirPlato = async (nombre, descripcion, precio, tipo_id, image_url, tipo_combinacion) => {
+    try {
+        const query = 
+        `INSERT INTO menu 
+        (nombre, descripcion, precio, tipo_id, image_url, tipo_combinacion)
+        VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`
+        const plato = await db.one(query, [nombre, descripcion, precio, tipo_id, image_url, tipo_combinacion])
+        return plato;
+    } catch (error) {
+        console.error('Error al subir plato');
+        throw new Error('Error al subir plato');
+    }
+}
+
 module.exports = {
     getMenu, 
     getPlateById,
-    searchPlates
+    searchPlates,
+    subirPlato
 };
 

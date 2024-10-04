@@ -1,5 +1,5 @@
 // controllers/menuController.js
-const { getMenu, getPlateById, searchPlates} = require('../models/menuModel');
+const { getMenu, getPlateById, searchPlates, subirPlato} = require('../models/menuModel');
 
 const menuController = {
   //Función para manejar la solicitud de obtener el menú
@@ -45,8 +45,20 @@ const menuController = {
       console.error('Error al buscar en el menú:', error);
       res.status(500).send('Error al buscar en el menú');
     }
-  }
+  },
 
+  // Controlador para subir plato
+  subirPlato : async (req, res) => {
+    console.log('Cuerpo de la solicitud (req.body):', req.body);
+    const { nombre, descripcion, precio, tipo_id, image_url, tipo_combinacion } = req.body;
+    try {
+      const plato = await subirPlato(nombre, descripcion, precio, tipo_id, image_url, tipo_combinacion);
+      res.status(201).json({ plato: plato });
+    } catch (error) {
+      console.error('Error al subir plato en controller: ', error);
+      res.status(500).send('Error al subir plato controller');
+    }
+  }
 };
 
 module.exports = menuController;

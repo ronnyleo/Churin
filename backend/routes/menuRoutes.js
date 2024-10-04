@@ -12,4 +12,6 @@ router.get("/menu/:id", menuController.getPlateById);
 // Ruta para obtener plato segun termino de busqueda
 router.get("/search", menuController.searchPlates);
 
+router.post('/menu/plato', menuController.subirPlato);
+
 module.exports = router;

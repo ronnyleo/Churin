@@ -11,6 +11,7 @@ const pedidosRouter = require('./routes/pedidoRoutes');
 const ingredientRouter = require('./routes/ingredientRoutes');
 const direccionesRouter = require('./routes/direccionesRoutes');
 const multer = require('multer');
+const bodyParser = require('body-parser');
 
 
 const app = express();
@@ -39,6 +40,7 @@ app.use(cors({
 
 // Middleware para manejar JSON en las solicitudes
 app.use(express.json());
+app.use(bodyParser.json()); // Asegúrate de que estás usando esto
 
 // Rutas principales
 
