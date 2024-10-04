@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function UploadPlate() {
+function SubirPlato() {
   const [nombre, setNombre] = useState('');
   const [descripcion, setDescripcion] = useState('');
   const [precio, setPrecio] = useState('');
@@ -13,7 +13,7 @@ function UploadPlate() {
     event.preventDefault();
     
     // Aquí simplemente envías un objeto con los datos
-    const plateData = {
+    const plato = {
       nombre,
       descripcion,
       precio,
@@ -23,7 +23,7 @@ function UploadPlate() {
     };
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/menu/plato`, plateData, {
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/menu/plato`, plato, {
         headers: {
           'Content-Type': 'application/json' // Cambiado a 'application/json'
         }
@@ -86,4 +86,4 @@ function UploadPlate() {
   );
 }
 
-export default UploadPlate;
+export default SubirPlato;
