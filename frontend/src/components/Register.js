@@ -68,6 +68,8 @@ const Register = () => {
                         type="text"
                         value={telefono}
                         onChange={(e) => setTelefono(e.target.value)}
+                        pattern="09\d{8}"  // Asegura que el teléfono comience con 09 y tenga 10 dígitos
+                        maxLength="10" 
                         required
                     />
                 </div>

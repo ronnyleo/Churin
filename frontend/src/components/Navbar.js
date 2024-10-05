@@ -8,12 +8,14 @@ import { useAuth } from '../context/AuthContext'; // Importa el hook useAuth
 
 const Navbar = () => {
     const { currentUser, logout } = useAuth(); // Usa el hook useAuth para acceder a la autenticación
-    const navigate = useNavigate(); // Usa useNavigate para redirigir
+    const navigate = useNavigate(); 
+    const userRole = localStorage.getItem('userRole'); // Obtén el rol del usuario desde el localStorage
+
     const handleLogout = async () => {
         try {
             await logout();
             localStorage.removeItem('userRole'); // Elimina el rol del usuario del localStorage
-            navigate('/'); // Redirige al usuario a la página de inicio después de cerrar sesión
+            navigate('/'); 
         } catch (error) {
             console.error('Error al cerrar sesión:', error);
         }
@@ -29,9 +31,11 @@ const Navbar = () => {
                     <li>
                         <Link to='/'>Inicio</Link>
                     </li>
-                    <li>
-                        <Link to='/admin'>Administrador</Link>
-                    </li>
+                    {currentUser && userRole === 'admin' && ( // Solo muestra si el usuario es administrador
+                        <li>
+                            <Link to='/admin'>Administrador</Link>
+                        </li>
+                    )}
                     {currentUser ? (
                         <>
                             <li>

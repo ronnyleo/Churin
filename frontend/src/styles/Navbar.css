@@ -39,7 +39,6 @@
     display: flex;
     align-items: center;
     justify-content: center; /* Centra el contenido dentro del li */
-    width: 100px;
     height: 100%; /* Asegúrate de que los li ocupen toda la altura del navbar */
     transition: background-color 0.3s, color 0.3s;
 }
@@ -60,6 +59,7 @@
     border: none; /* Elimina el borde por defecto en botones */
     background: none; /* Elimina el fondo por defecto en botones */
     cursor: pointer; /* Cambia el cursor para botones */
+    padding: 20px;
 }
 
 .navbar-links button:hover, .navbar-links a:hover {

@@ -1,6 +1,6 @@
 const db = require('../db');
 
-const getPedidos = async () => {
+const obtenerPedidos = async () => {
     try {
         const query = 'SELECT * FROM pedido';
         const pedidos = await db.any(query);
@@ -24,9 +24,13 @@ const getPedidos = async () => {
 }
 
 
-const getDetallePedidos = async (id) => {
+const obtenerDetallePedidos = async (id) => {
     try {
-        const query = 'SELECT * FROM detalle_pedidos WHERE pedido_id = $1';
+        const query = `SELECT detalle_pedidos.*, menu.nombre 
+            FROM  detalle_pedidos 
+            INNER JOIN menu
+            ON menu.id = detalle_pedidos.menu_id
+            WHERE pedido_id = $1`;
         const detallePedido = await db.any(query, [id]);
         return detallePedido;
 
@@ -64,6 +68,6 @@ const enviarDetallePedido = async (pedido_id, menu_id, cantidad, precio, ingredi
 module.exports = {
     enviarPedido,
     enviarDetallePedido,
-    getPedidos,
-    getDetallePedidos
+    obtenerPedidos,
+    obtenerDetallePedidos
 }

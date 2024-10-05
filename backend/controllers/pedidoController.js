@@ -1,20 +1,20 @@
-const { getPedidos, enviarPedido, enviarDetallePedido, getDetallePedidos } = require('../models/pedidoModel');
+const { obtenerPedidos, enviarPedido, enviarDetallePedido, obtenerDetallePedidos } = require('../models/pedidoModel');
 
 
 const pedidoController = {
-    getPedidos: async (req, res) => {
+    obtenerPedidos: async (req, res) => {
         try {
-            const pedidos = await getPedidos();
+            const pedidos = await obtenerPedidos();
             res.json(pedidos);
         } catch (error) {
             console.error('Error al obtener pedidos:', error)
         }
     },
 
-    getDetallePedidos: async (req, res) => {
+    obtenerDetallePedidos: async (req, res) => {
         const pedidoId = parseInt(req.params.id)
         try {
-            const detallePedido = await getDetallePedidos(pedidoId);
+            const detallePedido = await obtenerDetallePedidos(pedidoId);
             res.json(detallePedido);
         } catch (error) {
             console.error('Error al obtener pedidos:', error)

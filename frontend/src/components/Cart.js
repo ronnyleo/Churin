@@ -59,7 +59,7 @@ const Cart = () => {
                 const detallesPedido = cartItems.map(item => ({
                     menu_id: item.id,
                     cantidad: item.cantidad,
-                    precio: item.precio,
+                    precio: item.precio * item.cantidad,
                     ingredientes: item.ingredientes, 
                 }));
 
@@ -181,8 +181,6 @@ const Cart = () => {
                                 ) : (
                                     ''
                                 )}
-                            
-
                                 <button onClick={() => removeFromCart(item.id)} className='cart-button'>Eliminar</button>
                             </div>
                             <div className="cart-item-total">

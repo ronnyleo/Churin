@@ -1,0 +1,36 @@
+.pedidos__tabla {
+    border-collapse: collapse;
+    width: 600px;
+}
+
+.pedidos__fila {
+    border: 1px solid #AAAAAA;
+    padding: 5px;
+    text-align: left;
+}
+
+.detalle-pedido {
+    margin-bottom: 8px; /* Reducir el espacio entre cada pedido */
+}
+
+.producto-nombre {
+    margin: 0; /* Eliminar márgenes adicionales del h4 */
+    font-size: 16px; /* Ajustar el tamaño para que no sea muy grande */
+}
+
+.detalle-lista {
+    list-style-type: none; /* Eliminar viñetas de la lista */
+    padding: 0;
+    margin: 4px 0; /* Reducir el margen superior e inferior */
+}
+
+.ingrediente {
+    display: inline-block;
+    margin-right: 8px; /* Espacio entre los ingredientes */
+    font-size: 14px; /* Ajustar tamaño de fuente para ingredientes */
+}
+
+.detalle-lista li {
+    margin: 2px 0; /* Reducir el margen entre los elementos de la lista */
+    font-size: 14px; /* Ajustar el tamaño de fuente */
+}

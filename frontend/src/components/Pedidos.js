@@ -9,7 +9,7 @@ function Pedidos() {
     const [visibilidadDetalles, setVisibilidadDetalles] = useState({}); // Estado para controlar visibilidad
 
     const handleDetallesClick = async (pedidoId) => {
-        const detallePedido = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/detalle-pedido/${pedidoId}`);
+        const detallePedido = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/pedido/detalle-pedido/${pedidoId}`);
         setDetallesPedidos(prev => (
             {
                 ...prev,
@@ -17,7 +17,10 @@ function Pedidos() {
             }
         ));
 
-
+        setVisibilidadDetalles(prev => ({
+            ...prev,
+            [pedidoId]: !prev[pedidoId]
+        }));
     }
 
     useEffect(() => {
@@ -53,38 +56,58 @@ function Pedidos() {
             {pedidosAgrupados.map(([fecha, pedidos]) => (
                 <div key={fecha}>
                     <h3>Pedidos {fecha}</h3>
-                    <table>
+                    <table className='pedidos__tabla'>
                         <thead>
-                            <th>Nro.</th>
-                            <th>Cliente</th>
-                            <th>Total</th>
-                            <th>Ubicación</th>
+                            <th className='pedidos__fila'>Nro.</th>
+                            <th className='pedidos__fila'>Cliente</th>
+                            <th className='pedidos__fila'>Total</th>
+                            <th className='pedidos__fila'>Entrega/Retiro</th>
                         </thead>
                         <tbody>
                             {pedidos.map(pedido => (
                                 <React.Fragment key={pedido.id}>
-
                                     <tr key={pedido.id}>
-                                        <td>{pedido.id}</td>
-                                        <td>{pedido.cliente}</td>
-                                        <td>{pedido.total}</td>
-                                        <td>{pedido.lugar_envio}</td>
-                                        <td>
-                                            
-                                            <button onClick={() => handleDetallesClick(pedido.id)}>+</button>
+                                        <td className='pedidos__fila'>{pedido.id}</td>
+                                        <td className='pedidos__fila'>{pedido.cliente}</td>
+                                        <td className='pedidos__fila'>{pedido.total}</td>
+                                        <td className='pedidos__fila'>
+                                            {pedido.delivery ? pedido.lugar_envio : 'Retiro'}
+                                        </td>
+                                        <td className='pedidos__fila'>
+                                            <button onClick={() => handleDetallesClick(pedido.id)}>
+                                                {visibilidadDetalles[pedido.id] ? '-' : '+'}
+                                            </button>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td colSpan="5">
-                                            {(detallesPedidos[pedido.id] || []).map(detallePedido => (
-                                                <ul>
-                                                    <li key={detallePedido.id}>Precio {detallePedido.precio} - Cantidad: {detallePedido.cantidad}</li>
-                                                </ul>
-                                            ))}
-                                        </td>
-                                    </tr>
-                                </React.Fragment>
+                                    {visibilidadDetalles[pedido.id] && (
+                                        <tr>
+                                            <td className='pedidos__fila' colSpan="5">
+                                                <h3>Detalle: </h3>
+                                                {(detallesPedidos[pedido.id] || []).map(detallePedido => (
+                                                    <div key={detallePedido.id} className="detalle-pedido">
+                                                        {/* Mostrar el nombre del producto */}
+                                                        <h4 className="producto-nombre">{detallePedido.nombre}</h4>
+                                                        {/* Lista de ingredientes y otros detalles */}
+                                                        <ul className="detalle-lista">
+                                                            {detallePedido.ingredientes && (
+                                                                <li>
+                                                                    Ingredientes: {detallePedido.ingredientes.map((detalle, index) => (
+                                                                        <span key={detalle.id} className="ingrediente">
+                                                                            {detalle.nombre}{index < detallePedido.ingredientes.length - 1 && ','} 
+                                                                        </span>
+                                                                    ))}
+                                                                </li>
+                                                            )}
+                                                            <li>Cantidad: {detallePedido.cantidad}</li>
+                                                            <li>Total: {detallePedido.precio}</li>
+                                                        </ul>
+                                                    </div>
+                                                ))}
 
+                                            </td>
+                                        </tr>
+                                    )}
+                                </React.Fragment>
                             ))}
                         </tbody>
                     </table>
