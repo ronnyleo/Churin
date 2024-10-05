@@ -2,6 +2,10 @@
 const express = require('express');
 const router = express.Router();
 const menuController = require('../controllers/menuController');
+const cloudinary = require('../cloudinary');
+const multer = require('multer');
+const storage = multer.memoryStorage();
+const upload = multer({ storage }); // Multer configurado para guardar archivos temporalmente
 
 // Ruta para obtener todos los platos
 router.get('/menu', menuController.getMenu);
@@ -12,6 +16,8 @@ router.get("/menu/:id", menuController.getPlateById);
 // Ruta para obtener plato segun termino de busqueda
 router.get("/search", menuController.searchPlates);
 
-router.post('/menu/plato', menuController.subirPlato);
+// Ruta para subir un plato
+router.post('/menu/plato', upload.single('image_url'), menuController.subirPlato);
+
 
 module.exports = router;

@@ -12,8 +12,9 @@ const pedidoController = {
     },
 
     getDetallePedidos: async (req, res) => {
+        const pedidoId = parseInt(req.params.id)
         try {
-            const detallePedido = await getDetallePedidos();
+            const detallePedido = await getDetallePedidos(pedidoId);
             res.json(detallePedido);
         } catch (error) {
             console.error('Error al obtener pedidos:', error)

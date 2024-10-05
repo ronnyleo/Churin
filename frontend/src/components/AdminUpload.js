@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import UploadPlate from './UploadPlate';
+import SubirPlato from './SubirPlato';
 import EditPlate from './EditPlate';
 import Pedidos from './Pedidos';
 import '../styles/AdminUpload.css';
@@ -47,7 +47,7 @@ const AdminUpload = () => {
 
       <div className='tab-content'>
         {activeTab === 'upload' && (
-          <UploadPlate tipos={tipos} onImageUrlChange={setImageUrl} />
+          <SubirPlato tipos={tipos} onImageUrlChange={setImageUrl} />
         )}
 
         {activeTab === 'edit' && (

@@ -27,7 +27,7 @@ const getPedidos = async () => {
 const getDetallePedidos = async (id) => {
     try {
         const query = 'SELECT * FROM detalle_pedidos WHERE pedido_id = $1';
-        const detallePedido = await db.oneOrNone(query, [id]);
+        const detallePedido = await db.any(query, [id]);
         return detallePedido;
 
     } catch (error) {
