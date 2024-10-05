@@ -156,6 +156,9 @@ const Login = ({ onLoginSuccess }) => {
               value={telefono}
               onChange={(e) => setTelefono(e.target.value)}
               placeholder="Teléfono"
+              pattern = '09[0-9]{8}
+              maxLength = '10'
+              title = 'El número debe empezar con '09' y contener máximo 10 dígitos'
               required
             />
           </div>
