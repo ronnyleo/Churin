@@ -63,7 +63,7 @@ const Cart = () => {
                 const message = 'Hola, me interesa su producto'; // Mensaje predeterminado
             
                 const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-                window.open(whatsappURL, '_blank'); // Abre WhatsApp en una nueva pestaña
+                window.location.href = whatsappURL; // Redirige a la URL de WhatsApp
 
 
                 //clearCart();
