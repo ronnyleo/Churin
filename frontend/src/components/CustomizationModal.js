@@ -16,6 +16,8 @@ function CustomizationModal({ item, onClose }) {
             try {
                 const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/ingredients`);
                 setIngredients(response.data);
+                const sauceIngredients = ingredients.filter(ingredient => ingredient.tipo === 'salsa');
+                setIngredients(sauceIngredients);
             } catch (error) {
                 console.error('Error al obtener los ingredientes:', error);
             }
@@ -48,6 +50,8 @@ function CustomizationModal({ item, onClose }) {
         const currentSelected = prevSelected[tipo] || [];
         const isSelected = currentSelected.some(item => item.id === ingredient.id);
 
+
+
         if (isSelected) {
             setSelectedCount(prevCount => prevCount - 1);
             return {
@@ -77,6 +81,7 @@ function CustomizationModal({ item, onClose }) {
             }
         }
 
+
         setSelectedCount(prevCount => prevCount + 1);
         return {
             ...prevSelected,
@@ -85,13 +90,12 @@ function CustomizationModal({ item, onClose }) {
     });
 };
 
-
-
     return (
         <div className="custom-modal-overlay">
             <div className="custom-modal-content">
                 <h2 className='item__titulo'>Personaliza tu {item.nombre}</h2>
                 <p className='item__descripcion'>{item.descripcion}</p>
+                {item.tipo_combinacion != 4 || item.tipo_combinacion === null}
                 <p>Nota: Si seleccionas menos ingredientes de los indicados, se considerará como doble porción al ingrediente elegido.</p>
                 <div className="item__ingredients-section">
                     <p>Elige tus ingredientes:</p>
