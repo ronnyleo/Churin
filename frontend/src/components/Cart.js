@@ -18,7 +18,7 @@ const Cart = () => {
     const [error, setError] = useState(null);
     const isMobileDevice = () => {
         return /Mobi|Android/i.test(navigator.userAgent);
-      };
+    };
     const totalPrice = cartItems.reduce((total, item) => total + item.precio * item.cantidad, 0);
 
     const finalizarPedido = async () => {
@@ -58,11 +58,47 @@ const Cart = () => {
                 const detallePedido = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/pedido/detalle-pedido/${idPedido}`);
                 console.log('detalle: ', detallePedido.data);
 
-               
+                // Verifica si detallePedido.data es null o un array
+                let items = [];
+                if (Array.isArray(detallePedido.data)) {
+                    items = detallePedido.data; // Si es un array, lo usamos directamente
+                } else if (detallePedido.data === null) {
+                    console.error('Error: La respuesta de la API es null');
+                } else {
+                    console.error('Error: La respuesta de la API no es un array');
+                }
                 const phoneNumber = '593996995441'; // Reemplaza con el número deseado
-                const message = 'Hola, me interesa su producto'; // Mensaje predeterminado
-            
-                const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+                let mensaje = `Hola, soy ${cliente.first_name} ${cliente.last_name}. Hice el siguiente pedido `;
+
+                if (isDelivery) {
+                    mensaje += `para entregar en ${direccion}.\n\n`;
+                } else {
+                    mensaje += `para retirar.\n\n`;
+                }
+                if (items.length > 0) {
+                    mensaje += items.map(item => {
+                        // Manejo de ingredientes
+                        let ingredientesLista;
+                        if (Array.isArray(item.ingredientes) && item.ingredientes.length > 0) {
+                            // Si es un array y tiene elementos, los mapeamos
+                            ingredientesLista = item.ingredientes.map(ingrediente => `${ingrediente.nombre}`).join(', ');
+                        } else if (item.ingredientes === null) {
+                            // Si ingredientes es null
+                            ingredientesLista = 'N/A';
+                        } else {
+                            // Si es un array vacío
+                            ingredientesLista = 'N/A';
+                        }
+
+                        return `${item.nombre} (Cantidad: ${item.cantidad}, Precio: $${(Number(item.precio) * item.cantidad).toFixed(2)})\n` +
+                            ` - Ingredientes: ${ingredientesLista}\n`;
+                    }).join('\n');
+                } else {
+                    mensaje += 'No se encontraron detalles de pedido.';
+                }
+                mensaje += `\nEl total es de $${(totalPrice + Number(costoEnvio)).toFixed(2)}. Gracias!`;
+
+                const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(mensaje)}`;
                 window.location.href = whatsappURL; // Redirige a la URL de WhatsApp
 
 
