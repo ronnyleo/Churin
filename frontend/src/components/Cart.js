@@ -59,9 +59,14 @@ const Cart = () => {
                 console.log('detalle: ', detallePedido.data);
 
                
+                const phoneNumber = '593996995441'; // Reemplaza con el número deseado
+                const message = 'Hola, me interesa su producto'; // Mensaje predeterminado
+            
+                const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+                window.open(whatsappURL, '_blank'); // Abre WhatsApp en una nueva pestaña
 
-                alert('Pedido realizado con éxito');
-            //clearCart();
+
+                //clearCart();
             } else {
                 alert('Error al realizar el pedido');
             }
@@ -94,7 +99,7 @@ const Cart = () => {
     };
 
     const enviarPedidoWhatsApp = async () => {
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/pedido/detalle-pedido`);
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/pedido/detalle-pedido/`);
         const items = response.data || [];
 
         let mensaje = `Hola, soy ${cliente.first_name} ${cliente.last_name}. Hice el siguiente pedido `;
@@ -286,7 +291,6 @@ const Cart = () => {
             {currentUser ?
                 <>
                     <button className='carrito__button' onClick={finalizarPedido}>Finalizar pedido</button>
-                    <button className='carrito__button' onClick={enviarPedidoWhatsApp}>Enviar pedido por WhatsApp</button>
                     <Link className='carrito__button' to='/'>Volver al menú</Link></>
                 :
                 <Link className='carrito__button' to='/Login'>Inicia sesión para finalizar tu pedido</Link>
