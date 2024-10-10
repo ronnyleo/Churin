@@ -61,7 +61,7 @@ const Cart = () => {
                
 
                 alert('Pedido realizado con éxito');
-                clearCart();
+            //clearCart();
             } else {
                 alert('Error al realizar el pedido');
             }
