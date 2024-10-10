@@ -16,9 +16,6 @@ const Cart = () => {
     const [costoEnvio, setCostoEnvio] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const isMobileDevice = () => {
-        return /Mobi|Android/i.test(navigator.userAgent);
-    };
     const totalPrice = cartItems.reduce((total, item) => total + item.precio * item.cantidad, 0);
 
     const finalizarPedido = async () => {
@@ -115,7 +112,7 @@ const Cart = () => {
                     window.location.href = whatsappURL;
                 }
               
-                //clearCart();
+                clearCart();
             } else {
                 alert('Error al realizar el pedido');
             }
@@ -146,44 +143,6 @@ const Cart = () => {
             }
         }
     };
-
-    const enviarPedidoWhatsApp = async () => {
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/pedido/detalle-pedido/`);
-        const items = response.data || [];
-
-        let mensaje = `Hola, soy ${cliente.first_name} ${cliente.last_name}. Hice el siguiente pedido `;
-
-        if (isDelivery) {
-            mensaje += `para entregar en ${direccion}.\n\n`;
-        } else {
-            mensaje += `para retirar.\n\n`;
-        }
-
-        if (items.length > 0) {
-            mensaje += items.map(item => {
-                let ingredientesLista = 'N/A';
-                if (Array.isArray(item.ingredientes) && item.ingredientes.length > 0) {
-                    ingredientesLista = item.ingredientes.map(ingrediente => ingrediente.nombre).join(', ');
-                }
-
-                return `${item.nombre} (Cantidad: ${item.cantidad}, Precio: $${(item.precio * item.cantidad).toFixed(2)})\n` +
-                    ` - Ingredientes: ${ingredientesLista}\n`;
-            }).join('\n');
-        }
-
-        mensaje += `\nEl total es de $${(totalPrice + Number(costoEnvio)).toFixed(2)}. Gracias!`;
-
-        const mensajeCodificado = encodeURIComponent(mensaje);
-        const numeroWhatsApp = '593996995441';
-        const isMobile = isMobileDevice();
-
-        const enlaceWhatsApp = isMobile
-            ? `whatsapp://send?phone=${numeroWhatsApp}&text=${mensajeCodificado}` // Para móviles
-            : `https://wa.me/${numeroWhatsApp}?text=${mensajeCodificado}`; // Para computadoras
-
-        window.open(enlaceWhatsApp, '_blank');
-    };
-
 
     useEffect(() => {
         if (cartItems.length > 0) {
