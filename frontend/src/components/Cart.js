@@ -52,10 +52,10 @@ const Cart = () => {
                 // Envía los detalles del pedido
                 await enviarDetallesPedido(idPedido);
 
-                
+
                 const detallePedido = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/pedido/detalle-pedido/${idPedido}`);
                 console.log('detalle: ', detallePedido.data);
-                
+
                 // Verifica si detallePedido.data es null o un array
                 let items = [];
                 if (Array.isArray(detallePedido.data)) {
@@ -65,16 +65,16 @@ const Cart = () => {
                 } else {
                     console.error('Error: La respuesta de la API no es un array');
                 }
-                
+
                 // Crea el mensaje solo si hay items
                 let mensaje = `Hola, soy ${cliente.first_name} ${cliente.last_name}. Hice el siguiente pedido `;
-                
+
                 if (isDelivery) {
-                    mensaje +=  `para entregar en ${direccion}.\n\n`
+                    mensaje += `para entregar en ${direccion}.\n\n`
                 } else {
                     mensaje += `para retirar.\n\n`
                 }
-                
+
                 if (items.length > 0) {
                     mensaje += items.map(item => {
                         // Manejo de ingredientes
@@ -89,20 +89,24 @@ const Cart = () => {
                             // Si es un array vacío
                             ingredientesLista = 'N/A';
                         }
-                
+
                         return `${item.nombre} (Cantidad: ${item.cantidad}, Precio: $${(Number(item.precio) * item.cantidad).toFixed(2)})\n` +
-                               ` - Ingredientes: ${ingredientesLista}\n`;
+                            ` - Ingredientes: ${ingredientesLista}\n`;
                     }).join('\n');
                 } else {
                     mensaje += 'No se encontraron detalles de pedido.';
                 }
-               
+
                 mensaje += `\nEl total es de $${(totalPrice + Number(costoEnvio)).toFixed(2)}. Gracias!`;
-                
+
                 const mensajeCodificado = encodeURIComponent(mensaje);
                 const numeroWhatsApp = '593996995441';
-                const enlaceWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensajeCodificado}`;
-                
+
+                // Detectar si es un dispositivo móvil
+                const isMobile = isMobileDevice();
+                const enlaceWhatsApp = isMobile
+                    ? `whatsapp://send?phone=${numeroWhatsApp}&text=${mensajeCodificado}` // Para móviles
+                    : `https://wa.me/${numeroWhatsApp}?text=${mensajeCodificado}`; // Para computadoras
 
                 alert('Pedido realizado con éxito');
                 window.open(enlaceWhatsApp, '_blank');
@@ -290,16 +294,15 @@ const Cart = () => {
             <h3>Subtotal: ${totalPrice.toFixed(2)}</h3>
             <h3>Envío: ${costoEnvio}</h3>
             <h3>Total a pagar: ${(totalPrice + Number(costoEnvio)).toFixed(2)}</h3>
-            {currentUser ? 
-            <>
-            <button className='carrito__button' onClick={finalizarPedido}>Finalizar pedido</button>
-            <Link className='carrito__button' to='/'>Volver al menú</Link></>
-            : 
-            <Link className='carrito__button' to='/Login'>Inicia sesión para finalizar tu pedido</Link>
+            {currentUser ?
+                <>
+                    <button className='carrito__button' onClick={finalizarPedido}>Finalizar pedido</button>
+                    <Link className='carrito__button' to='/'>Volver al menú</Link></>
+                :
+                <Link className='carrito__button' to='/Login'>Inicia sesión para finalizar tu pedido</Link>
             }
         </div>
     );
 };
 
 export default Cart;
-  
