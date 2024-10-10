@@ -16,7 +16,9 @@ const Cart = () => {
     const [costoEnvio, setCostoEnvio] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
+    const isMobileDevice = () => {
+        return /Mobi|Android/i.test(navigator.userAgent);
+      };
     const totalPrice = cartItems.reduce((total, item) => total + item.precio * item.cantidad, 0);
 
     const finalizarPedido = async () => {
