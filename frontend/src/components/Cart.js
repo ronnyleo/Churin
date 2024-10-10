@@ -67,6 +67,7 @@ const Cart = () => {
                 } else {
                     console.error('Error: La respuesta de la API no es un array');
                 }
+                const isDesktop = /Mobi|Android/i.test(navigator.userAgent) === false;
                 const phoneNumber = '593996995441'; // Reemplaza con el número deseado
                 let mensaje = `Hola, soy ${cliente.first_name} ${cliente.last_name}. Hice el siguiente pedido `;
 
@@ -100,9 +101,20 @@ const Cart = () => {
 
                 const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(mensaje)}`;
                 alert('Serás redirigido a Whatsapp para completar tu pedido');
-                window.location.href = whatsappURL; // Redirige a la URL de WhatsApp
-
-
+                
+                if (isDesktop) {
+                    // Usar window.open si está en escritorio
+                    const newWindow = window.open(whatsappURL, '_blank');
+        
+                    // Verifica si se bloqueó la ventana emergente
+                    if (!newWindow) {
+                        alert('Por favor, permite las ventanas emergentes para este sitio.');
+                    }
+                } else {
+                    // Usar window.location.href si está en móvil
+                    window.location.href = whatsappURL;
+                }
+              
                 //clearCart();
             } else {
                 alert('Error al realizar el pedido');
