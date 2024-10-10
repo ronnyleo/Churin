@@ -111,7 +111,7 @@ const Cart = () => {
                     : `https://wa.me/${numeroWhatsApp}?text=${mensajeCodificado}`; // Para computadoras
 
                 alert('Pedido realizado con éxito');
-                window.open(enlaceWhatsApp, '_blank');
+                window.location.href(enlaceWhatsApp);
                 clearCart();
             } else {
                 alert('Error al realizar el pedido');
