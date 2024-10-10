@@ -92,8 +92,7 @@ function CustomizationModal({ item, onClose }) {
             <div className="custom-modal-content">
                 <h2 className='item__titulo'>Personaliza tu {item.nombre}</h2>
                 <p className='item__descripcion'>{item.descripcion}</p>
-                <p>Nota: Si seleccionas menos ingredientes de los indicados, se considerará como una porción 
-                    doble del ingrediente elegido.</p>
+                <p>Nota: Si seleccionas menos ingredientes de los indicados, se considerará como doble porción al ingrediente elegido.</p>
                 <div className="item__ingredients-section">
                     <p>Elige tus ingredientes:</p>
                     {Object.keys(groupedIngredients).map(tipo => (
