@@ -99,6 +99,7 @@ const Cart = () => {
                 mensaje += `\nEl total es de $${(totalPrice + Number(costoEnvio)).toFixed(2)}. Gracias!`;
 
                 const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(mensaje)}`;
+                alert('Serás redirigido a Whatsapp para completar tu pedido');
                 window.location.href = whatsappURL; // Redirige a la URL de WhatsApp
 
 
