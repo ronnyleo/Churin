@@ -27,12 +27,29 @@
 }
 
 .custom-modal-buttons button {
-    margin: 10px 0px;
+    padding: 0.5rem 1rem;
+    background-color: #ffe600; /* Color de fondo del botón */
+    color: black; /* Color del texto del botón */
+    border: none; /* Quita el borde del botón */
+    border-radius: 4px; /* Bordes redondeados del botón */
+    cursor: pointer; /* Cambia el cursor cuando se pasa sobre el botón */
+    width: 50%;
+    display: block;
+    font-family: 'Roboto', sans-serif; /* Usa la fuente que desees */
+    font-size: 16px; /* Tamaño de fuente uniforme */
+    font-weight: normal; /* O 'bold' si quieres que sean negritas */
+    line-height: 1.5; /* Altura de línea uniforme */
+    margin: 10px;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
 }
 
-.item__ingredients-list {
+.ingredients-list {
     list-style-type: none;
 }
+
+
 
 .item__descripcion {
     font-size: small;

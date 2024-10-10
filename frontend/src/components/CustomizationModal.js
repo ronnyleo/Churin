@@ -101,7 +101,7 @@ function CustomizationModal({ item, onClose }) {
                             <h3>{tipo}</h3>
                             <ul className="ingredients-list">
                                 {groupedIngredients[tipo].map(ingrediente => (
-                                    <li key={ingrediente.id} className="ingredient-item">
+                                    <li key={ingrediente.id} className="ingredient-list__item">
                                         <label>
                                             <input
                                                 type="checkbox"

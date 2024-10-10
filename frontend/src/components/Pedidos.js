@@ -60,6 +60,7 @@ function Pedidos() {
                         <thead>
                             <th className='pedidos__fila'>Nro.</th>
                             <th className='pedidos__fila'>Cliente</th>
+                            <th className='pedidos__fila'>Hora</th>
                             <th className='pedidos__fila'>Total</th>
                             <th className='pedidos__fila'>Entrega/Retiro</th>
                         </thead>
@@ -69,6 +70,7 @@ function Pedidos() {
                                     <tr key={pedido.id}>
                                         <td className='pedidos__fila'>{pedido.id}</td>
                                         <td className='pedidos__fila'>{pedido.cliente}</td>
+                                        <td className='pedidos__fila'>{pedido.hora}</td>
                                         <td className='pedidos__fila'>{pedido.total}</td>
                                         <td className='pedidos__fila'>
                                             {pedido.delivery ? pedido.lugar_envio : 'Retiro'}

@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { CartContext } from '../context/CartContext';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; // Importa el hook useAuth
+import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import '../styles/Cart.css';
 
 const Cart = () => {
     const { cartItems, setCartItems, removeFromCart, clearCart } = useContext(CartContext);
-    const { currentUser } = useAuth(); // Usa el hook para acceder al currentUser
-    const [isDelivery, setIsDelivery] = useState(false); // Estado para delivery
-    const [isPickup, setIsPickup] = useState(false); // Estado para retirar
+    const { currentUser } = useAuth();
+    const [isDelivery, setIsDelivery] = useState(false);
+    const [isPickup, setIsPickup] = useState(false);
     const [direcciones, setDirecciones] = useState([]);
     const [cliente, setCliente] = useState('');
     const [direccion, setDireccion] = useState('');
@@ -20,21 +20,14 @@ const Cart = () => {
     const totalPrice = cartItems.reduce((total, item) => total + item.precio * item.cantidad, 0);
 
     const finalizarPedido = async () => {
-
         if (cartItems.length === 0) {
             alert('Debe tener al menos un producto en el carrito');
-            return; // Sal de la función si el carrito está vacío
+            return;
         }
 
         if (!isDelivery && !isPickup) {
             alert('Debe seleccionar una forma de entrega');
             return;
-        }
-
-        
-        if (cartItems.length === 0) {
-            alert('Debe tener al menos un producto en el carrito');
-            return; // Sal de la función si el carrito está vacío
         }
 
         if (isDelivery && !direccion) {
@@ -43,37 +36,77 @@ const Cart = () => {
         }
 
         const pedido = {
-            cliente: cliente.first_name + ' ' + cliente.last_name, // Usar el nombre del usuario logueado
-            total: totalPrice + Number(costoEnvio), // Total incluye el costo de envío
-            delivery: isDelivery, // Usa el estado de delivery
-            lugar_envio: isDelivery ? direccion : '', // Solo establece la dirección si es delivery
+            cliente: `${cliente.first_name} ${cliente.last_name}`,
+            total: totalPrice + Number(costoEnvio),
+            delivery: isDelivery,
+            lugar_envio: isDelivery ? direccion : '',
         };
-        // Log del pedido antes de enviarlo
-    console.log('Pedido a enviar:', pedido);
+
+        console.log('Pedido a enviar:', pedido);
         try {
             const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/pedido`, pedido);
             console.log('Respuesta de la API al crear el pedido:', response);
             if (response.status === 201) {
                 const idPedido = response.data.pedido.id;
-                console.log('id:', response.data.pedido.id)
-                const detallesPedido = cartItems.map(item => ({
-                    menu_id: item.id,
-                    cantidad: item.cantidad,
-                    precio: item.precio * item.cantidad,
-                    ingredientes: item.ingredientes, 
-                }));
 
-                for (const detalle of detallesPedido) {
-                    console.log('Enviado detalles:', detallesPedido);
-                    await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/pedido/detalle-pedido`, 
-                        {
-                            pedido_id: idPedido,
-                            ...detalle    
-                        });
-                }                       
+                // Envía los detalles del pedido
+                await enviarDetallesPedido(idPedido);
+
+                
+                const detallePedido = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/pedido/detalle-pedido/${idPedido}`);
+                console.log('detalle: ', detallePedido.data);
+                
+                // Verifica si detallePedido.data es null o un array
+                let items = [];
+                if (Array.isArray(detallePedido.data)) {
+                    items = detallePedido.data; // Si es un array, lo usamos directamente
+                } else if (detallePedido.data === null) {
+                    console.error('Error: La respuesta de la API es null');
+                } else {
+                    console.error('Error: La respuesta de la API no es un array');
+                }
+                
+                // Crea el mensaje solo si hay items
+                let mensaje = `Hola, soy ${cliente.first_name} ${cliente.last_name}. Hice el siguiente pedido `;
+                
+                if (isDelivery) {
+                    mensaje +=  `para entregar en ${direccion}.\n\n`
+                } else {
+                    mensaje += `para retirar.\n\n`
+                }
+                
+                if (items.length > 0) {
+                    mensaje += items.map(item => {
+                        // Manejo de ingredientes
+                        let ingredientesLista;
+                        if (Array.isArray(item.ingredientes) && item.ingredientes.length > 0) {
+                            // Si es un array y tiene elementos, los mapeamos
+                            ingredientesLista = item.ingredientes.map(ingrediente => `${ingrediente.nombre}`).join(', ');
+                        } else if (item.ingredientes === null) {
+                            // Si ingredientes es null
+                            ingredientesLista = 'N/A';
+                        } else {
+                            // Si es un array vacío
+                            ingredientesLista = 'N/A';
+                        }
+                
+                        return `${item.nombre} (Cantidad: ${item.cantidad}, Precio: $${(Number(item.precio) * item.cantidad).toFixed(2)})\n` +
+                               ` - Ingredientes: ${ingredientesLista}\n`;
+                    }).join('\n');
+                } else {
+                    mensaje += 'No se encontraron detalles de pedido.';
+                }
                
-                clearCart();
+                mensaje += `\nEl total es de $${(totalPrice + Number(costoEnvio)).toFixed(2)}. Gracias!`;
+                
+                const mensajeCodificado = encodeURIComponent(mensaje);
+                const numeroWhatsApp = '593996995441';
+                const enlaceWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensajeCodificado}`;
+                
+
                 alert('Pedido realizado con éxito');
+                window.open(enlaceWhatsApp, '_blank');
+                clearCart();
             } else {
                 alert('Error al realizar el pedido');
             }
@@ -83,32 +116,50 @@ const Cart = () => {
         }
     };
 
-    useEffect(() => {
-        // Este código se ejecuta cada vez que cartItems cambia
-        if (cartItems.length > 0) {
-          console.log('Último valor de cartItems:', cartItems);
-          // Aquí puedes realizar cualquier operación adicional con cartItems
-        }
-      }, [cartItems]);
+    const enviarDetallesPedido = async (idPedido) => {
+        const detallesPedido = cartItems.map(item => ({
+            menu_id: item.id,
+            cantidad: item.cantidad,
+            precio: item.precio * item.cantidad,
+            ingredientes: item.ingredientes,
+        }));
 
-    // Guardar el carrito en localStorage cada vez que cambie
+        for (const detalle of detallesPedido) {
+            try {
+                console.log('Enviado detalles:', detalle);
+                await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/pedido/detalle-pedido`, {
+                    pedido_id: idPedido,
+                    ...detalle,
+                });
+            } catch (error) {
+                console.error('Error al enviar el detalle del pedido:', error);
+                alert('Hubo un problema al enviar los detalles del pedido');
+            }
+        }
+    };
+
+    useEffect(() => {
+        if (cartItems.length > 0) {
+            console.log('Último valor de cartItems:', cartItems);
+        }
+    }, [cartItems]);
+
     useEffect(() => {
         localStorage.setItem('cart', JSON.stringify(cartItems));
     }, [cartItems]);
 
-    // Recuperar el carrito desde localStorage cuando se monta el componente
     useEffect(() => {
         const savedCart = localStorage.getItem('cart');
         if (savedCart) {
-            setCartItems(JSON.parse(savedCart)); // Restaurar carrito desde localStorage
+            setCartItems(JSON.parse(savedCart));
         }
     }, [setCartItems]);
 
     useEffect(() => {
         const fetchDirecciones = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/direcciones`); // Reemplaza con tu URL
-                setDirecciones(response.data); // Asume que los datos están en response.data
+                const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/direcciones`);
+                setDirecciones(response.data);
             } catch (error) {
                 setError('Error al obtener las direcciones');
             } finally {
@@ -119,7 +170,6 @@ const Cart = () => {
         fetchDirecciones();
     }, []);
 
-    // Nuevo useEffect para obtener el nombre del cliente
     useEffect(() => {
         const fetchCliente = async () => {
             if (currentUser) {
@@ -140,25 +190,25 @@ const Cart = () => {
     const handleDireccionChange = (e) => {
         const selectedDireccion = direcciones.find(d => d.nombre === e.target.value);
         setDireccion(e.target.value);
-        setCostoEnvio(selectedDireccion ? selectedDireccion.costo_envio : 0); // Actualiza el costo de envío
+        setCostoEnvio(selectedDireccion ? selectedDireccion.costo_envio : 0);
     };
+
     const handleDeliveryChange = (e) => {
         const selectedDireccion = direcciones.find(d => d.nombre === e.target.value);
         setIsDelivery(e.target.checked);
-        setIsPickup(false); // Desactiva la opción de retirar
-        setDireccion(''); // Reinicia la dirección
-        setCostoEnvio(selectedDireccion ? selectedDireccion.costo_envio : 0); // Reinicia el costo de envío
+        setIsPickup(false);
+        setDireccion('');
+        setCostoEnvio(selectedDireccion ? selectedDireccion.costo_envio : 0);
     };
 
     const handlePickupChange = (e) => {
         setIsPickup(e.target.checked);
-        setIsDelivery(false); // Desactiva la opción de delivery
-        setDireccion(''); // Reinicia la dirección
-        setCostoEnvio(0); // El costo de envío es 0 para recoger
+        setIsDelivery(false);
+        setDireccion('');
+        setCostoEnvio(0);
     };
 
-    // Manejo del loading y error
-    if (loading) return <p>Cargando direcciones...</p>;
+    if (loading) return <p>Cargando...</p>;
     if (error) return <p>{error}</p>;
 
     return (
@@ -178,9 +228,7 @@ const Cart = () => {
                                     item.ingredientes.map(ingrediente => (
                                         <li key={ingrediente.id}>{ingrediente.nombre}</li>
                                     ))
-                                ) : (
-                                    ''
-                                )}
+                                ) : null}
                                 <button onClick={() => removeFromCart(item.id)} className='cart-button'>Eliminar</button>
                             </div>
                             <div className="cart-item-total">
@@ -195,19 +243,12 @@ const Cart = () => {
             <div className='finalizar-pedido'>
                 <div className='finalizar-pedido__datos'>
                     <label className='finalizar-pedido__datos-label'>Cliente: </label>
-                    {currentUser ? 
                     <input
                         className='finalizar-pedido__datos-value'
                         type='text'
-                        value={`${cliente.first_name} ${cliente.last_name}`}  // Mostrar el nombre del usuario logueado
-                        readOnly // Evita que el usuario edite el campo
-                    /> : <input
-                    className='finalizar-pedido__datos-value'
-                    type='text'
-                    value={''}  // Mostrar el nombre del usuario logueado
-                    readOnly // Evita que el usuario edite el campo
-                /> 
-                    }
+                        value={currentUser ? `${cliente.first_name} ${cliente.last_name}` : ''}
+                        readOnly
+                    />
                 </div>
 
                 <div className='finalizar-pedido__datos'>
@@ -233,9 +274,7 @@ const Cart = () => {
 
                 {isDelivery && (
                     <div className='finalizar-pedido__datos'>
-                        <label className='finalizar-pedido__datos-label'>
-                            Envío:
-                        </label>
+                        <label className='finalizar-pedido__datos-label'>Envío:</label>
                         <select className='finalizar-pedido__datos-value' value={direccion} onChange={handleDireccionChange}>
                             <option value=''>Selecciona una opción</option>
                             {direcciones.map(direccion => (
@@ -247,14 +286,20 @@ const Cart = () => {
                     </div>
                 )}
             </div>
+
             <h3>Subtotal: ${totalPrice.toFixed(2)}</h3>
             <h3>Envío: ${costoEnvio}</h3>
             <h3>Total a pagar: ${(totalPrice + Number(costoEnvio)).toFixed(2)}</h3>
-            {currentUser ? <button className='carrito__button' onClick={finalizarPedido}>Finalizar pedido</button>
-            : <Link className='carrito__button' to='/Login'>Inicia sesión para finalizar tu pedido</Link>
+            {currentUser ? 
+            <>
+            <button className='carrito__button' onClick={finalizarPedido}>Finalizar pedido</button>
+            <Link className='carrito__button' to='/'>Volver al menú</Link></>
+            : 
+            <Link className='carrito__button' to='/Login'>Inicia sesión para finalizar tu pedido</Link>
             }
         </div>
     );
-}
+};
 
 export default Cart;
+  

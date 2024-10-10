@@ -7,8 +7,17 @@ const obtenerPedidos = async () => {
 
         const pedidosConFechayHora = pedidos.map(pedido => {
             const fechaCompleta = new Date(pedido.fecha_hora);
-            const fecha = fechaCompleta.toISOString().split('T')[0];
-            const hora = fechaCompleta.toTimeString().split(' ')[0];
+
+            // Extraer los componentes de fecha y hora sin convertir a UTC
+            const year = fechaCompleta.getFullYear();
+            const month = String(fechaCompleta.getMonth() + 1).padStart(2, '0'); // Mes va de 0 a 11
+            const day = String(fechaCompleta.getDate()).padStart(2, '0');
+            const hours = String(fechaCompleta.getHours()).padStart(2, '0');
+            const minutes = String(fechaCompleta.getMinutes()).padStart(2, '0');
+
+            // Formatear la fecha y la hora manualmente
+            const fecha = `${year}-${month}-${day}`;
+            const hora = `${hours}:${minutes}`;
 
 
             return {
