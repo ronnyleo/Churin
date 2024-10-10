@@ -58,60 +58,9 @@ const Cart = () => {
                 const detallePedido = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/pedido/detalle-pedido/${idPedido}`);
                 console.log('detalle: ', detallePedido.data);
 
-                // Verifica si detallePedido.data es null o un array
-                let items = [];
-                if (Array.isArray(detallePedido.data)) {
-                    items = detallePedido.data; // Si es un array, lo usamos directamente
-                } else if (detallePedido.data === null) {
-                    console.error('Error: La respuesta de la API es null');
-                } else {
-                    console.error('Error: La respuesta de la API no es un array');
-                }
-
-                // Crea el mensaje solo si hay items
-                let mensaje = `Hola, soy ${cliente.first_name} ${cliente.last_name}. Hice el siguiente pedido `;
-
-                if (isDelivery) {
-                    mensaje += `para entregar en ${direccion}.\n\n`
-                } else {
-                    mensaje += `para retirar.\n\n`
-                }
-
-                if (items.length > 0) {
-                    mensaje += items.map(item => {
-                        // Manejo de ingredientes
-                        let ingredientesLista;
-                        if (Array.isArray(item.ingredientes) && item.ingredientes.length > 0) {
-                            // Si es un array y tiene elementos, los mapeamos
-                            ingredientesLista = item.ingredientes.map(ingrediente => `${ingrediente.nombre}`).join(', ');
-                        } else if (item.ingredientes === null) {
-                            // Si ingredientes es null
-                            ingredientesLista = 'N/A';
-                        } else {
-                            // Si es un array vacío
-                            ingredientesLista = 'N/A';
-                        }
-
-                        return `${item.nombre} (Cantidad: ${item.cantidad}, Precio: $${(Number(item.precio) * item.cantidad).toFixed(2)})\n` +
-                            ` - Ingredientes: ${ingredientesLista}\n`;
-                    }).join('\n');
-                } else {
-                    mensaje += 'No se encontraron detalles de pedido.';
-                }
-
-                mensaje += `\nEl total es de $${(totalPrice + Number(costoEnvio)).toFixed(2)}. Gracias!`;
-
-                const mensajeCodificado = encodeURIComponent(mensaje);
-                const numeroWhatsApp = '593996995441';
-
-                // Detectar si es un dispositivo móvil
-                const isMobile = isMobileDevice();
-                const enlaceWhatsApp = isMobile
-                    ? `whatsapp://send?phone=${numeroWhatsApp}&text=${mensajeCodificado}` // Para móviles
-                    : `https://wa.me/${numeroWhatsApp}?text=${mensajeCodificado}`; // Para computadoras
+               
 
                 alert('Pedido realizado con éxito');
-                window.location.href(enlaceWhatsApp);
                 clearCart();
             } else {
                 alert('Error al realizar el pedido');
@@ -143,6 +92,44 @@ const Cart = () => {
             }
         }
     };
+
+    const enviarPedidoWhatsApp = async () => {
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/pedido/detalle-pedido`);
+        const items = response.data || [];
+
+        let mensaje = `Hola, soy ${cliente.first_name} ${cliente.last_name}. Hice el siguiente pedido `;
+
+        if (isDelivery) {
+            mensaje += `para entregar en ${direccion}.\n\n`;
+        } else {
+            mensaje += `para retirar.\n\n`;
+        }
+
+        if (items.length > 0) {
+            mensaje += items.map(item => {
+                let ingredientesLista = 'N/A';
+                if (Array.isArray(item.ingredientes) && item.ingredientes.length > 0) {
+                    ingredientesLista = item.ingredientes.map(ingrediente => ingrediente.nombre).join(', ');
+                }
+
+                return `${item.nombre} (Cantidad: ${item.cantidad}, Precio: $${(item.precio * item.cantidad).toFixed(2)})\n` +
+                    ` - Ingredientes: ${ingredientesLista}\n`;
+            }).join('\n');
+        }
+
+        mensaje += `\nEl total es de $${(totalPrice + Number(costoEnvio)).toFixed(2)}. Gracias!`;
+
+        const mensajeCodificado = encodeURIComponent(mensaje);
+        const numeroWhatsApp = '593996995441';
+        const isMobile = isMobileDevice();
+
+        const enlaceWhatsApp = isMobile
+            ? `whatsapp://send?phone=${numeroWhatsApp}&text=${mensajeCodificado}` // Para móviles
+            : `https://wa.me/${numeroWhatsApp}?text=${mensajeCodificado}`; // Para computadoras
+
+        window.open(enlaceWhatsApp, '_blank');
+    };
+
 
     useEffect(() => {
         if (cartItems.length > 0) {
@@ -299,6 +286,7 @@ const Cart = () => {
             {currentUser ?
                 <>
                     <button className='carrito__button' onClick={finalizarPedido}>Finalizar pedido</button>
+                    <button className='carrito__button' onClick={enviarPedidoWhatsApp}>Enviar pedido por WhatsApp</button>
                     <Link className='carrito__button' to='/'>Volver al menú</Link></>
                 :
                 <Link className='carrito__button' to='/Login'>Inicia sesión para finalizar tu pedido</Link>
