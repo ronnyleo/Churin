@@ -28,7 +28,6 @@
 
 .custom-modal-buttons button {
     padding: 0.5rem 1rem;
-    background-color: #ffe600; /* Color de fondo del botón */
     color: black; /* Color del texto del botón */
     border: none; /* Quita el borde del botón */
     border-radius: 4px; /* Bordes redondeados del botón */
@@ -53,4 +52,15 @@
 
 .item__descripcion {
     font-size: small;
+}
+
+
+.disabled-button {
+    background-color: grey;
+    cursor: not-allowed;
+}
+
+.active-button {
+    background-color: #ffe600; /* Color de fondo del botón */
+    cursor: pointer;
 }

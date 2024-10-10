@@ -25,7 +25,6 @@ function CustomizationModal({ item, onClose }) {
 
     const handleAddToCart = (item) => {
         const ingredientesSeleccionados = Object.values(selectedIngredients).flat();
-        console.log("Itemwi:", ingredientesSeleccionados)
         const itemWithIngredientes = {
             ...item,
             ingredientes: ingredientesSeleccionados
@@ -43,7 +42,6 @@ function CustomizationModal({ item, onClose }) {
         return acc;
     }, {});
 
-    // Manejo de selección de ingredientes
    // Manejo de selección de ingredientes
    const handleCheckboxChange = (ingredient, tipo) => {
     setSelectedIngredients(prevSelected => {
@@ -94,6 +92,8 @@ function CustomizationModal({ item, onClose }) {
             <div className="custom-modal-content">
                 <h2 className='item__titulo'>Personaliza tu {item.nombre}</h2>
                 <p className='item__descripcion'>{item.descripcion}</p>
+                <p>Nota: Si seleccionas menos ingredientes de los indicados, se considerará como una porción 
+                    doble del ingrediente elegido.</p>
                 <div className="item__ingredients-section">
                     <p>Elige tus ingredientes:</p>
                     {Object.keys(groupedIngredients).map(tipo => (
@@ -118,7 +118,13 @@ function CustomizationModal({ item, onClose }) {
                     ))}
                 </div>
                 <div className="custom-modal-buttons">
-                    <button  onClick={() => handleAddToCart(item)}>Agregar</button>
+                     {/* Deshabilitar el botón si no hay ingredientes seleccionados */}
+                     <button 
+                        onClick={() => handleAddToCart(item)} 
+                        disabled={selectedCount === 0} // Deshabilitar si no se seleccionan ingredientes
+                        className={selectedCount === 0 ? "disabled-button" : "active-button"}>  
+                        Agregar
+                    </button>
                     <button onClick={onClose}>Cerrar</button>
                 </div>
             </div>
