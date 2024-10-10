@@ -67,7 +67,13 @@ const Cart = () => {
                 }
                 
                 // Crea el mensaje solo si hay items
-                let mensaje = `Hola, soy ${cliente.first_name} ${cliente.last_name}. Hice el siguiente pedido:\n`;
+                let mensaje = `Hola, soy ${cliente.first_name} ${cliente.last_name}. Hice el siguiente pedido `;
+                
+                if (isDelivery) {
+                    mensaje +=  `para entregar en ${direccion}.\n\n`
+                } else {
+                    mensaje += `para retirar.\n\n`
+                }
                 
                 if (items.length > 0) {
                     mensaje += items.map(item => {
@@ -84,13 +90,13 @@ const Cart = () => {
                             ingredientesLista = 'N/A';
                         }
                 
-                        return `${item.nombre} (Cantidad: ${item.cantidad}, Precio: $${(Number(item.precio) * item.cantidad).toFixed(2)})` +
-                               ` - Ingredientes: ${ingredientesLista}`;
+                        return `${item.nombre} (Cantidad: ${item.cantidad}, Precio: $${(Number(item.precio) * item.cantidad).toFixed(2)})\n` +
+                               ` - Ingredientes: ${ingredientesLista}\n`;
                     }).join('\n');
                 } else {
                     mensaje += 'No se encontraron detalles de pedido.';
                 }
-                
+               
                 mensaje += `\nEl total es de $${(totalPrice + Number(costoEnvio)).toFixed(2)}. Gracias!`;
                 
                 const mensajeCodificado = encodeURIComponent(mensaje);
@@ -284,8 +290,12 @@ const Cart = () => {
             <h3>Subtotal: ${totalPrice.toFixed(2)}</h3>
             <h3>Envío: ${costoEnvio}</h3>
             <h3>Total a pagar: ${(totalPrice + Number(costoEnvio)).toFixed(2)}</h3>
-            {currentUser ? <button className='carrito__button' onClick={finalizarPedido}>Finalizar pedido</button>
-            : <Link className='carrito__button' to='/Login'>Inicia sesión para finalizar tu pedido</Link>
+            {currentUser ? 
+            <>
+            <button className='carrito__button' onClick={finalizarPedido}>Finalizar pedido</button>
+            <Link className='carrito__button' to='/'>Volver al menú</Link></>
+            : 
+            <Link className='carrito__button' to='/Login'>Inicia sesión para finalizar tu pedido</Link>
             }
         </div>
     );

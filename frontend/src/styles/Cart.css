@@ -94,7 +94,7 @@
   font-size: 16px; /* Tamaño de fuente uniforme */
   font-weight: normal; /* O 'bold' si quieres que sean negritas */
   line-height: 1.5; /* Altura de línea uniforme */
-  margin: 0;
+  margin: 20px 0 20px 0;
   padding: 10px;
   text-align: center;
   text-decoration: none;
