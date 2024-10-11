@@ -1,6 +1,8 @@
 // controllers/menuController.js
 const { getMenu, getPlateById, searchPlates, subirPlato } = require('../models/menuModel');
 const cloudinary = require('../cloudinary');
+const sharp = require('sharp');
+const stream = require('stream');
 
 const menuController = {
   //Función para manejar la solicitud de obtener el menú
@@ -57,13 +59,18 @@ const menuController = {
       if (!req.file) {
         return res.status(400).json({ message: 'Imagen no proporcionada' });
       }
-
+  
+      // Redimensionar la imagen a 400px de ancho manteniendo la relación de aspecto
+      const resizedBuffer = await sharp(req.file.buffer)
+        .resize(400) // Redimensionar a 400px de ancho
+        .toBuffer(); // Convertir a buffer
+  
       const uploadStream = cloudinary.uploader.upload_stream(async (error, result) => {
         if (error) {
-          return res.status(500).json({ message: 'Error al subir la imagen, error' });
+          return res.status(500).json({ message: 'Error al subir la imagen' });
         }
         const image_url = result.secure_url; // Obtén la URL de la imagen
-
+  
         try {
           const plato = await subirPlato(nombre, descripcion, precio, tipo_id, image_url, tipo_combinacion);
           res.status(201).json({ plato: plato });
@@ -71,14 +78,13 @@ const menuController = {
           console.error('Error al subir plato en controller: ', error);
           res.status(500).send('Error al subir plato controller');
         }
-      })
-
-      // Envía el buffer del archivo a Cloudinary
-      const bufferStream = require('stream').PassThrough();
-      bufferStream.end(req.file.buffer);
+      });
+  
+      // Envía el buffer redimensionado a Cloudinary
+      const bufferStream = new stream.PassThrough();
+      bufferStream.end(resizedBuffer); // Usamos el buffer redimensionado
       bufferStream.pipe(uploadStream); // Pasa el buffer al stream de Cloudinary
-
-
+  
     } catch (error) {
       console.error('Error en el controlador al subir plato: ', error);
       res.status(500).send('Error al subir plato controller');

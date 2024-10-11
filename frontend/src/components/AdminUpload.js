@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import SubirPlato from './SubirPlato';
-import EditPlate from './EditPlate';
+import Platos from './Platos';
 import Pedidos from './Pedidos';
 import '../styles/AdminUpload.css';
 
@@ -34,8 +34,8 @@ const AdminUpload = () => {
           Cargar
         </button>
         <button
-          className={`tab-button ${activeTab === 'edit' ? 'active' : ''}`}
-          onClick={() => setActiveTab('edit')}>
+          className={`tab-button ${activeTab === 'buscar' ? 'active' : ''}`}
+          onClick={() => setActiveTab('buscar')}>
           Buscar
         </button>
         <button
@@ -50,8 +50,8 @@ const AdminUpload = () => {
           <SubirPlato tipos={tipos} onImageUrlChange={setImageUrl} />
         )}
 
-        {activeTab === 'edit' && (
-          <EditPlate tipos={tipos} />
+        {activeTab === 'buscar' && (
+          <Platos tipos={tipos} />
         )}
 
         {activeTab === 'pedidos' && (
