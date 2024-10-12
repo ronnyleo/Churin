@@ -19,5 +19,9 @@ router.get("/search", menuController.searchPlates);
 // Ruta para subir un plato
 router.post('/menu/plato', upload.single('image_url'), menuController.subirPlato);
 
+//Ruta para editar un plato
+router.put('/menu/plato/:id', upload.single('image_url'), menuController.editarPlato);
 
+//Ruta para borrar un plato
+router.delete('/menu/plato/:id' , menuController.borrarPlato)
 module.exports = router;

@@ -59,10 +59,38 @@ const subirPlato = async (nombre, descripcion, precio, tipo_id, image_url, tipo_
     }
 }
 
+const editarPlato = async (id, nombre, descripcion, precio, tipo_id, image_url, tipo_combinacion, tipo_ingrediente) => {
+    try {
+        const query = 
+            `UPDATE menu
+            SET nombre = $1, descripcion = $2, precio = $3, tipo_id = $4, image_url = $5, tipo_combinacion = $6, tipo_ingrediente = $7
+            WHERE id = $8
+            RETURNING *`;
+        const plato = await db.one(query, [nombre, descripcion, precio, tipo_id, image_url, tipo_combinacion, tipo_ingrediente, id])
+        return plato;
+    } catch (error) {
+        console.error('Error al editar plato');
+        throw new Error('Error al editar plato')
+    }
+}
+
+const borrarPlato = async (id) => {
+    try {
+        const query = 'DELETE FROM menu WHERE id = $1'
+        const result = await db.result(query, [id]);
+        return result.rowCount > 0; // Devuelve true si se eliminó al menos un registro
+    } catch (error) {
+        console.error('Error al borrar plato');
+        throw new Error('Error al borrar plato')
+    }
+}
+
 module.exports = {
     getMenu, 
     getPlateById,
     searchPlates,
-    subirPlato
+    subirPlato,
+    editarPlato,
+    borrarPlato
 };
 

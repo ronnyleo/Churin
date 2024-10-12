@@ -73,7 +73,9 @@ function MenuList() {
               {groupedMenuItems[categoria.id] && groupedMenuItems[categoria.id].map(item => (
                 <div key={item.id} className="menu-item">
                   <h3>{item.nombre}</h3>
-                  <img src={item.image_url} alt={item.nombre} className="menu-item-image" />
+                  {item.tipo_id !== 5 && (
+      <img src={item.image_url} alt={item.nombre} className="menu-item-image" />
+    )}
                   <p className="menu-item-descripcion">{item.descripcion}</p>
                   <span className="menu-item-price">${item.precio}</span>
                   <button className="menu-item-button" onClick={() => handleAddToCart(item)}>
