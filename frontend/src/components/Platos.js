@@ -60,7 +60,7 @@ const Platos = () => {
   
     if (name === 'image_url' && files.length > 0) {
       setUpdatedPlato({ ...updatedPlato, [name]: files[0] });
-    } else {
+    } else if (name !== 'image_url') {
       setUpdatedPlato({ ...updatedPlato, [name]: value });
     }
   };
