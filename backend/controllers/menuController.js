@@ -91,62 +91,60 @@ const menuController = {
     }
   },
 
-  editarPlato: async (req, res) => {
-    console.log('Cuerpo de la solicitud (req.body):', req.body);
-    const id = req.params.id;
-    const { nombre, descripcion, precio, tipo_id, image_url: imageUrlFromBody, tipo_combinacion, tipo_ingrediente } = req.body;
-  
-    try {
-      let image_url = imageUrlFromBody; // Iniciamos con el valor proporcionado en el body (si existe)
-  
-      // Función para continuar editando el plato en la base de datos
-      const continuarEdicion = async () => {
-        try {
-          // Si no hay nueva imagen, usamos el valor existente de la base de datos
-          const plato = await editarPlato(id, nombre, descripcion, precio, tipo_id, image_url, tipo_combinacion, tipo_ingrediente);
-          res.status(200).json({ plato }); // Respuesta exitosa
-        } catch (error) {
-          console.error('Error al editar plato en controller: ', error);
-          res.status(500).send('Error al editar plato en controller');
+editarPlato: async (req, res) => {
+  console.log('Cuerpo de la solicitud (req.body):', req.body);
+  const id = req.params.id;
+  const { nombre, descripcion, precio, tipo_id, tipo_combinacion, tipo_ingrediente } = req.body;
+
+  try {
+    let image_url;
+
+    // Función para continuar editando el plato en la base de datos
+    const continuarEdicion = async () => {
+      try {
+        // Si no hay nueva imagen, no actualizamos el campo de la imagen
+        const plato = await editarPlato(id, nombre, descripcion, precio, tipo_id, image_url, tipo_combinacion, tipo_ingrediente);
+        res.status(200).json({ plato }); // Respuesta exitosa
+      } catch (error) {
+        console.error('Error al editar plato en controller: ', error);
+        res.status(500).send('Error al editar plato en controller');
+      }
+    };
+
+    // Verifica si el plato ya tiene una imagen existente
+    const platoExistente = await obtenerPlatoPorId(id); // Asegúrate de tener esta función implementada para obtener el plato de la BD
+    image_url = platoExistente.image_url; // Si no se actualiza la imagen, mantenemos la existente
+
+    // Si hay una imagen en la solicitud, redimensionarla y subirla
+    if (req.file) {
+      // Redimensionar la imagen a 400px de ancho manteniendo la relación de aspecto
+      const resizedBuffer = await sharp(req.file.buffer)
+        .resize(400) // Redimensionar a 400px de ancho
+        .toBuffer(); // Convertir a buffer
+
+      // Subir la imagen a Cloudinary
+      const uploadStream = cloudinary.uploader.upload_stream((error, result) => {
+        if (error) {
+          return res.status(500).json({ message: 'Error al subir la imagen' });
         }
-      };
-  
-      // Verifica si el plato ya tiene una imagen existente si no viene en el body
-      if (!image_url) {
-        const platoExistente = await obtenerPlatoPorId(id); // Asegúrate de tener esta función implementada para obtener el plato de la BD
-        image_url = platoExistente.image_url; // Si no se actualiza la imagen, mantenemos la existente
-      }
-  
-      // Si hay una nueva imagen en la solicitud, redimensionarla y subirla
-      if (req.file) {
-        // Redimensionar la imagen a 400px de ancho manteniendo la relación de aspecto
-        const resizedBuffer = await sharp(req.file.buffer)
-          .resize(400) // Redimensionar a 400px de ancho
-          .toBuffer(); // Convertir a buffer
-  
-        // Subir la imagen a Cloudinary
-        const uploadStream = cloudinary.uploader.upload_stream((error, result) => {
-          if (error) {
-            return res.status(500).json({ message: 'Error al subir la imagen' });
-          }
-          image_url = result.secure_url; // Guarda la URL de la imagen subida
-          continuarEdicion(); // Llama a la función para continuar editando el plato
-        });
-  
-        // Envía el buffer redimensionado a Cloudinary
-        const bufferStream = new stream.PassThrough();
-        bufferStream.end(resizedBuffer);
-        bufferStream.pipe(uploadStream);
-      } else {
-        // Si no hay imagen nueva, continuar con la edición con la imagen existente
-        continuarEdicion();
-      }
-  
-    } catch (error) {
-      console.error('Error en el controlador al editar plato: ', error);
-      res.status(500).send('Error al editar plato en el controller');
+        image_url = result.secure_url; // Guarda la URL de la imagen subida
+        continuarEdicion(); // Llama a la función para continuar editando el plato
+      });
+
+      // Envía el buffer redimensionado a Cloudinary
+      const bufferStream = new stream.PassThrough();
+      bufferStream.end(resizedBuffer);
+      bufferStream.pipe(uploadStream);
+    } else {
+      // Si no hay imagen nueva, continuar con la edición con la imagen existente
+      continuarEdicion();
     }
+
+  } catch (error) {
+    console.error('Error en el controlador al editar plato: ', error);
+    res.status(500).send('Error al editar plato en el controller');
   }
+}
   
 };
 
