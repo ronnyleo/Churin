@@ -10,6 +10,7 @@ import axios from 'axios';
 const Login = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState(''); // Estado para la confirmación de la contraseña
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [telefono, setTelefono] = useState('');
@@ -52,7 +53,7 @@ const Login = ({ onLoginSuccess }) => {
         navigate('/'); // Asegúrate de que '/' coincida con la ruta para MenuList
 
       }
-      
+
     } catch (error) {
       console.error('Error signing in:', error);
       setError('Usuario o contraseña incorrectos.');
@@ -62,6 +63,12 @@ const Login = ({ onLoginSuccess }) => {
   const handleRegister = async (e) => {
     e.preventDefault();
     setError(''); // Limpiar el error antes de registrar
+
+    // Verificar que las contraseñas coincidan
+    if (password !== confirmPassword) {
+      setError('Las contraseñas no coinciden.');
+      return;
+    }
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       console.log('User registered:', userCredential.user);
@@ -70,11 +77,11 @@ const Login = ({ onLoginSuccess }) => {
       const registrationData = {
         email,
         first_name: firstName,  // Mapeo de firstName a first_name
-        last_name: lastName,  
+        last_name: lastName,
         password,
         role: 'user',
         telefono
-    };
+      };
 
       console.log('Enviando datos de registro:', registrationData);
 
@@ -86,22 +93,22 @@ const Login = ({ onLoginSuccess }) => {
     } catch (error) {
       console.error('Error during registration:', error);
 
-        // Verifica el código de error de Firebase
-        if (error.code === 'auth/email-already-in-use') {
-            setError('Este correo electrónico ya está registrado.');
-        } else {
-            setError('Error al registrar el usuario.');
+      // Verifica el código de error de Firebase
+      if (error.code === 'auth/email-already-in-use') {
+        setError('Este correo electrónico ya está registrado.');
+      } else {
+        setError('Error al registrar el usuario.');
+      }
+
+      // Intenta eliminar el usuario de Firebase si fue creado pero el registro en la base de datos falló
+      if (error.code !== 'auth/email-already-in-use') {
+        // Intenta eliminar el usuario de Firebase
+        try {
+          await auth.currentUser.delete();
+          console.log('Usuario eliminado de Firebase debido a error en la base de datos.');
+        } catch (deleteError) {
+          console.error('Error al eliminar el usuario de Firebase:', deleteError);
         }
-        
-         // Intenta eliminar el usuario de Firebase si fue creado pero el registro en la base de datos falló
-         if (error.code !== 'auth/email-already-in-use') {
-          // Intenta eliminar el usuario de Firebase
-          try {
-              await auth.currentUser.delete();
-              console.log('Usuario eliminado de Firebase debido a error en la base de datos.');
-          } catch (deleteError) {
-              console.error('Error al eliminar el usuario de Firebase:', deleteError);
-          }
       }
     }
   };
@@ -156,9 +163,9 @@ const Login = ({ onLoginSuccess }) => {
               value={telefono}
               onChange={(e) => setTelefono(e.target.value)}
               placeholder="Teléfono"
-              pattern = '09[0-9]{8}'
-              maxLength = '10'
-              title = 'El número debe empezar con 09 y contener máximo 10 dígitos'
+              pattern='09[0-9]{8}'
+              maxLength='10'
+              title='El número debe empezar con 09 y contener máximo 10 dígitos'
               required
             />
           </div>
@@ -180,6 +187,17 @@ const Login = ({ onLoginSuccess }) => {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              placeholder="*********"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="confirmPassword">Confirmar Contraseña</label>
+            <input
+              type="password"
+              id="confirmPassword"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="*********"
               required
             />

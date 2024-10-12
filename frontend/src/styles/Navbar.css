@@ -67,34 +67,51 @@
     font-weight: bold; /* Cambia el peso de la fuente al pasar el ratón */
 }
 
-/* Media queries para pantallas más pequeñas */
+/* Estilos responsivos */
 @media (max-width: 768px) {
     .navbar-container {
-        flex-direction: column;
-        align-items: flex-start;
-        height: auto; /* Permite que la altura se ajuste automáticamente */
-        padding: 10px 30px; /* Ajusta el padding para pantallas más pequeñas */
+        padding: 10px;
     }
 
-    .navbar-logo-container {
-        width: 100%;
-        align-items: center;
-        justify-content: center;
+    .navbar-logo-container img {
+        height: 40px;
     }
 
-    .navbar-links {
-        width: 100%; /* Asegura que el contenedor ocupe todo el ancho */
-        justify-content: center; /* Centra los enlaces horizontalmente */
+    /* Evitar columna en pantallas pequeñas */
+    .navbar-links ul {
+        flex-wrap: wrap; /* Permitir que los elementos se ajusten si es necesario */
+        justify-content: flex-end;
+    }
+
+    .navbar-links ul li {
+        margin-bottom: 10px;
+    }
+
+    .navbar-links ul li a, 
+    .navbar-links ul li button {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar-container {
+        padding: 5px;
+    }
+
+    .navbar-logo-container img {
+        height: 35px;
     }
 
     .navbar-links ul {
-        flex-direction: column; /* Cambia la disposición a una columna */
-        width: 100%; /* Asegura que el ul ocupe todo el ancho */
+        gap: 10px;
     }
 
-    .navbar-links li {
-        width: 100%; /* Asegura que los li ocupen todo el ancho */
-        padding: 10px 0; /* Ajusta el padding para pantallas más pequeñas */
-        text-align: center; /* Centra el texto dentro de los enlaces */
+    .navbar-links ul li {
+        margin-bottom: 8px;
+    }
+
+    .navbar-links ul li a, 
+    .navbar-links ul li button {
+        font-size: 12px;
     }
 }

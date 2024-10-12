@@ -88,6 +88,7 @@ const Platos = () => {
       setPlatos(platos.map(plato => (plato.id === editingPlato.id ? { ...plato, ...updatedPlato } : plato)));
       setEditingPlato(null);
       setError('');
+      alert('Plato actualizado exitosamente');
     } catch (error) {
       console.error('Error al actualizar el plato:', error);
       setError('Error al actualizar el plato');
@@ -212,6 +213,16 @@ const Platos = () => {
               className='form__value'
               type='file'
               name='image_url'
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className='form__container'>
+            <label className='form__label'>Tipo de combinación</label>
+            <input
+              className='form__value'
+              type='number'
+              name='tipo_combinacion'
+              value={updatedPlato.tipo_combinacion}
               onChange={handleInputChange}
             />
           </div>

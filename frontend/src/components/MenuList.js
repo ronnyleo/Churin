@@ -74,12 +74,12 @@ function MenuList() {
                 <div key={item.id} className="menu-item">
                   <h3>{item.nombre}</h3>
                   {item.tipo_id !== 5 && (
-      <img src={item.image_url} alt={item.nombre} className="menu-item-image" />
-    )}
+                    <img src={item.image_url} alt={item.nombre} className="menu-item-image" />
+                  )}
                   <p className="menu-item-descripcion">{item.descripcion}</p>
                   <span className="menu-item-price">${item.precio}</span>
                   <button className="menu-item-button" onClick={() => handleAddToCart(item)}>
-                    {item.tipo_combinacion !== 4 && item.tipo_combinacion !== null  ? 'Personalizar' : 'Agregar'}
+                    {item.tipo_combinacion !== 4 && item.tipo_combinacion !== null ? 'Personalizar' : 'Agregar'}
                   </button>
                 </div>
               ))}

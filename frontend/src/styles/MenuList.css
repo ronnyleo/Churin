@@ -57,6 +57,17 @@
   overflow: hidden; /* Oculta el contenido que se desborda */
   background-color: white;
 }
+.menu-item-special {
+  background-color: #f4f4f4;
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+.menu-item-special-content {
+  font-style: italic;
+  color: #555;
+}
 
 .menu-item-image {
   width: 100%; /* Ajusta la imagen al ancho del contenedor */
@@ -94,6 +105,7 @@
 
 /* Estilos responsivos */
 @media (max-width: 768px) {
+
   .menu-items-container {
     grid-template-columns: 1fr; /* Un plato por fila en móviles */
   }
