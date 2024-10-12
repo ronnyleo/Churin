@@ -144,7 +144,28 @@ editarPlato: async (req, res) => {
     console.error('Error en el controlador al editar plato: ', error);
     res.status(500).send('Error al editar plato en el controller');
   }
+},
+
+// controllers/menuController.js
+ borrarPlato : async (req, res) => {
+    const id = req.params.id;
+    try {
+        if (!id || isNaN(id)) {
+            return res.status(400).json({ message: 'ID no válido' });
+        }
+
+        const result = await borrarPlatoFromDB(id); // Implementa esta función para borrar el plato
+        if (result) {
+            res.status(200).json({ message: 'Plato eliminado con éxito' });
+        } else {
+            res.status(404).json({ message: 'Plato no encontrado' });
+        }
+    } catch (error) {
+        console.error('Error al borrar plato:', error);
+        res.status(500).json({ message: 'Error al eliminar el plato' });
+    }
 }
+  
   
 };
 
