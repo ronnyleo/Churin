@@ -49,7 +49,7 @@ const Platos = () => {
       descripcion: plato.descripcion,
       precio: plato.precio,
       tipo_id: plato.tipo_id || '',
-      image_url: '', // Se inicializa vacía para que el usuario seleccione un archivo nuevo
+      image_url: plato.image_url || '',
       tipo_combinacion: plato.tipo_combinacion || '',
       tipo_ingrediente: plato.tipo_ingrediente || ''
     });
