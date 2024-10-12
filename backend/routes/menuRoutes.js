@@ -23,5 +23,5 @@ router.post('/menu/plato', upload.single('image_url'), menuController.subirPlato
 router.put('/menu/plato/:id', upload.single('image_url'), menuController.editarPlato);
 
 //Ruta para borrar un plato
-router.delete('/menu/plato/:id' , menuController.borrarPlato)
+router.delete('/menu/plato/:id', menuController.borrarPlato)
 module.exports = router;
