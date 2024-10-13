@@ -11,6 +11,7 @@ function CustomizationModal({ item, onClose }) {
     const [sabores, setSabores] = useState([]);
     const [ensaladas, setEnsaladas] = useState([]);
     const [proteinas, setProteinas] = useState([]);
+    const [saboresCocteles, setSaboresCocteles] = useState([]);
     const [proteinasYEnsaladas, setProteinasYEnsaladas] = useState([]);
     const [selectedIngredients, setSelectedIngredients] = useState([]);
     const [selectedCount, setSelectedCount] = useState(0); // Total de ingredientes seleccionados
@@ -27,12 +28,14 @@ function CustomizationModal({ item, onClose }) {
                 const ensaladasFiltradas = ingredientes.filter(ingrediente => ingrediente.tipo_id === 2);
                 const salsasFiltradas = ingredientes.filter(ingrediente => ingrediente.tipo_id === 3);
                 const saboresFiltrados = ingredientes.filter(ingrediente => ingrediente.tipo_id === 4);
+                const saboresCoctelesFiltrados = ingredientes.filter(ingrediente => ingrediente.tipo_id === 5);
 
 
                 setProteinas(proteinasFiltradas);
                 setEnsaladas(ensaladasFiltradas);
                 setSalsas(salsasFiltradas);
                 setSabores(saboresFiltrados);
+                setSaboresCocteles(saboresCoctelesFiltrados);
                 
 
                 console.log('Proteinas y ensaladas: ', proteinas);
@@ -210,6 +213,29 @@ function CustomizationModal({ item, onClose }) {
                             </ul>
                         </div>
                     )}
+
+{item.tipo_ingrediente === 5 && (
+                        <div className="ingredients-type-section">
+                            <h3>Sabores</h3>
+                            <ul className="ingredients-list">
+                                {saboresCocteles.map(ingrediente => (
+                                    <li key={ingrediente.id} className="ingredient-list__item">
+                                        <label>
+                                            <input
+                                                type="checkbox"
+                                                value={ingrediente.id}
+                                                checked={selectedIngredients['sabores']?.some(item => item.id === ingrediente.id) || false}
+                                                onChange={() => handleCheckboxChange(ingrediente, 'sabores')}
+                                            />
+                                            {ingrediente.nombre}
+                                        </label>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+
+
                 </div>
                 <div className="custom-modal-buttons">
                     {/* Deshabilitar el botón si no hay ingredientes seleccionados */}
