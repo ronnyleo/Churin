@@ -182,6 +182,7 @@ const Login = ({ onLoginSuccess }) => {
           </div>
           <div className="form-group">
             <label htmlFor="password">Contraseña</label>
+                <span> Ingrese una contraseña de 6 digitos o mas </span>
             <input
               type="password"
               id="password"
