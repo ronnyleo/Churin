@@ -59,13 +59,15 @@ function Pedidos() {
             try {
                 const respuesta = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/estadisticas/dia`)
                 setResumenDia(respuesta.data);
+                console.log(respuesta.data);
             } catch (error) {
                 console.error('Error al obtener el resumen del día: ', error);
             }   finally {
                 setCargando(false);
             }
-            obtenerResumenDia();
+            
         };
+        obtenerResumenDia();
     }
     , []);
 
@@ -85,23 +87,25 @@ function Pedidos() {
                     <div>
                     <h3>Pedidos {fecha}</h3>
                     <button onClick={toggleMostrar}>
-                        {mostrar ? 'Resumen del día' : 'Ocultar'}
+                        {mostrar ? 'Ocultar' : 'Resumen del día'}
                     </button>
-                    {mostrar && resumenDia && (
+                    {resumenDia && (
                         <div>
-                            Número de pedidos: {resumenDia}.numero
-                            Valor total: {resumenDia}.total
+                          <p>Número de pedidos: {resumenDia[0].total_pedidos}</p>
+                          <p>Valor total: {resumenDia[0].valor_total}</p>
                         </div>
                     )}
                     </div>
                     <table className='pedidos__tabla'>
                         <thead>
+                            <tr>
                             <th className='pedidos__fila'>Nro.</th>
                             <th className='pedidos__fila'>Cliente</th>
                             <th className='pedidos__fila'>Teléfono</th>
                             <th className='pedidos__fila'>Hora</th>
                             <th className='pedidos__fila'>Total</th>
                             <th className='pedidos__fila'>Entrega/Retiro</th>
+                            </tr>
                         </thead>
                         <tbody>
                             {pedidos.map(pedido => (
