@@ -22,12 +22,13 @@ const pedidoController = {
     },
 
     enviarPedido: async (req, res) => {
-        const { cliente, total, delivery, lugar_envio } = req.body;
+        const { id_cliente, total, delivery, lugar_envio } = req.body;
         try {
-            const pedido = await enviarPedido(cliente, total, delivery, lugar_envio);
+            const pedido = await enviarPedido(id_cliente, total, delivery, lugar_envio);
             res.status(201).json({ pedido: pedido });
         } catch (error) {
             console.error('Error al enviar el pedido:', error);
+            res.status(500).json({ error: 'Error al enviar el pedido.'});
         }
     },
 

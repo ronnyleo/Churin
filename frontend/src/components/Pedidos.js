@@ -7,6 +7,10 @@ function Pedidos() {
     const [pedidosAgrupados, setPedidosAgrupados] = useState([]);
     const [detallesPedidos, setDetallesPedidos] = useState({}); // Objeto para almacenar detalles de cada pedido
     const [visibilidadDetalles, setVisibilidadDetalles] = useState({}); // Estado para controlar visibilidad
+    const [cargando, setCargando] = useState(true);
+    const [error, setError] = useState(null);
+    const [mostrar, setMostrar] = useState(false);
+    const [resumenDia, setResumenDia] = useState(null);
 
     const handleDetallesClick = async (pedidoId) => {
         const detallePedido = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/pedido/detalle-pedido/${pedidoId}`);
@@ -50,16 +54,51 @@ function Pedidos() {
         fetchPedidos();
     }, []);
 
+    useEffect(() => {
+        const obtenerResumenDia = async () => {
+            try {
+                const respuesta = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/estadisticas/dia`)
+                setResumenDia(respuesta.data);
+            } catch (error) {
+                console.error('Error al obtener el resumen del día: ', error);
+            }   finally {
+                setCargando(false);
+            }
+            obtenerResumenDia();
+        };
+    }
+    , []);
+
+    const toggleMostrar = () => {
+        setMostrar(!mostrar);
+    }
+
+    if (cargando) return <p>Cargando...</p>;
+    if (error) return <p>{error}</p>;
+
+
     return (
         <div>
             <h2>Pedidos recibidos</h2>
             {pedidosAgrupados.map(([fecha, pedidos]) => (
                 <div key={fecha}>
+                    <div>
                     <h3>Pedidos {fecha}</h3>
+                    <button onClick={toggleMostrar}>
+                        {mostrar ? 'Resumen del día' : 'Ocultar'}
+                    </button>
+                    {mostrar && resumenDia && (
+                        <div>
+                            Número de pedidos: {resumenDia}.numero
+                            Valor total: {resumenDia}.total
+                        </div>
+                    )}
+                    </div>
                     <table className='pedidos__tabla'>
                         <thead>
                             <th className='pedidos__fila'>Nro.</th>
                             <th className='pedidos__fila'>Cliente</th>
+                            <th className='pedidos__fila'>Teléfono</th>
                             <th className='pedidos__fila'>Hora</th>
                             <th className='pedidos__fila'>Total</th>
                             <th className='pedidos__fila'>Entrega/Retiro</th>
@@ -69,7 +108,8 @@ function Pedidos() {
                                 <React.Fragment key={pedido.id}>
                                     <tr key={pedido.id}>
                                         <td className='pedidos__fila'>{pedido.id}</td>
-                                        <td className='pedidos__fila'>{pedido.cliente}</td>
+                                        <td className='pedidos__fila'>{pedido.first_name} {pedido.last_name}</td>
+                                        <td className='pedidos__fila'>{pedido.telefono}</td>
                                         <td className='pedidos__fila'>{pedido.hora}</td>
                                         <td className='pedidos__fila'>{pedido.total}</td>
                                         <td className='pedidos__fila'>
@@ -83,7 +123,7 @@ function Pedidos() {
                                     </tr>
                                     {visibilidadDetalles[pedido.id] && (
                                         <tr>
-                                            <td className='pedidos__fila' colSpan="5">
+                                            <td className='pedidos__fila' colSpan="6">
                                                 <h3>Detalle: </h3>
                                                 {(detallesPedidos[pedido.id] || []).map(detallePedido => (
                                                     <div key={detallePedido.id} className="detalle-pedido">
@@ -105,7 +145,6 @@ function Pedidos() {
                                                         </ul>
                                                     </div>
                                                 ))}
-
                                             </td>
                                         </tr>
                                     )}

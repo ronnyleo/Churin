@@ -11,6 +11,7 @@ const pedidosRouter = require('./routes/pedidoRoutes');
 const ingredientRouter = require('./routes/ingredientRoutes');
 const direccionesRouter = require('./routes/direccionesRoutes');
 const tiposPlatoRouter = require('./routes/tiposPlatoRoutes');
+const estadisticasRouter = require('./routes/estadisticasRoutes');
 const multer = require('multer');
 const bodyParser = require('body-parser');
 
@@ -60,6 +61,7 @@ app.use('/api', tiposRouter);
 app.use('/api', pedidosRouter);
 app.use('/api', direccionesRouter);
 app.use('/api', tiposPlatoRouter);
+app.use('/api', estadisticasRouter);
 app.use(categoriaRoutes);
 // Ruta para subir imágenes
 app.use('/api/upload', uploadRouter);

@@ -35,7 +35,7 @@ const Cart = () => {
         }
 
         const pedido = {
-            cliente: `${cliente.first_name} ${cliente.last_name}`,
+            id_cliente: `${cliente.id}`,
             total: totalPrice + Number(costoEnvio),
             delivery: isDelivery,
             lugar_envio: isDelivery ? direccion : '',
