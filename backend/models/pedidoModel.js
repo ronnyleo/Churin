@@ -2,7 +2,10 @@ const db = require('../db');
 
 const obtenerPedidos = async () => {
     try {
-        const query = 'SELECT * FROM pedido';
+        const query = `SELECT p.*, c.first_name, c.last_name, c.telefono  
+            FROM pedido AS p INNER JOIN users AS c
+            ON p.id_cliente = c.id`;
+            
         const pedidos = await db.any(query);
 
         const pedidosConFechayHora = pedidos.map(pedido => {
@@ -49,12 +52,12 @@ const obtenerDetallePedidos = async (id) => {
 }
 
 
-const enviarPedido = async (cliente, total, delivery, lugar_envio) => {
+const enviarPedido = async (id_cliente, total, delivery, lugar_envio) => {
     try {
         const query = `
-            INSERT INTO pedido (cliente, total, fecha_hora, delivery, lugar_envio) 
+            INSERT INTO pedido (id_cliente, total, fecha_hora, delivery, lugar_envio) 
             VALUES ($1, $2, CURRENT_TIMESTAMP, $3, $4) RETURNING *`;
-        const nuevoPedido = await db.one(query, [cliente, total, delivery, lugar_envio]);
+        const nuevoPedido = await db.one(query, [id_cliente, total, delivery, lugar_envio]);
         return nuevoPedido;
     } catch (error) {
         console.error('Error al crear pedido', error);
