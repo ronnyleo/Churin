@@ -117,7 +117,7 @@ function Pedidos() {
                                         </tr>
                                         {visibilidadDetalles[pedido.id] && (
                                             <tr>
-                                                <td className='pedidos__fila' colSpan="5">
+                                                <td className='pedidos__fila' colSpan="6">
                                                     <h3>Detalle: </h3>
                                                     {(detallesPedidos[pedido.id] || []).map(detallePedido => (
                                                         <div key={detallePedido.id} className="detalle-pedido">
