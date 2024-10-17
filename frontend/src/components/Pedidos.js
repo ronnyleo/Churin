@@ -64,24 +64,17 @@ function Pedidos() {
         fetchPedidos();
     }, []);
 
-    useEffect(() => {
-        const obtenerResumenDia = async () => {
-            try {
-                const respuesta = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/estadisticas/dia`)
-                setResumenDia(respuesta.data);
-            } catch (error) {
-                console.error('Error al obtener el resumen del día: ', error);
-            }   finally {
-                setCargando(false);
-            }
-            obtenerResumenDia();
-        };
-    }
-    , []);
-
-    const toggleMostrar = () => {
-        setMostrar(!mostrar);
-    }
+    const obtenerEstadisticasPorFecha = async (fecha) => {
+        try {
+            const respuesta = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/estadisticas/dia/${fecha}`);
+            setResumenPorFecha((prevResumen) => ({
+                ...prevResumen,
+                [fecha]: respuesta.data, // Almacenar las estadísticas por fecha
+            }));
+        } catch (error) {
+            console.error(`Error al obtener estadísticas para ${fecha}:`, error);
+        }
+    };
 
     if (cargando) return <p>Cargando...</p>;
     if (error) return <p>{error}</p>;
@@ -154,7 +147,7 @@ function Pedidos() {
                                 ))}
                             </tbody>
                         </table>
-                        <button onClick={() => obtenerEstadisticasPorFecha2(fecha)}>Ver resumen</button>
+                        <button onClick={() => obtenerEstadisticasPorFecha(fecha)}>Ver resumen</button>
                         {resumenPorFecha[fecha] && (
                             <div>
                                 <p>Número de pedidos: {resumenPorFecha[fecha].total_pedidos}</p>
