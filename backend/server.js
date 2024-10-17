@@ -50,7 +50,7 @@ app.use(express.urlencoded({ extended: true }));
 
 //Ruta de bienvenida para el root URL (/)
 app.get('/', (req, res) => {
-  res.send('BACKEND DESARROLLO');
+  res.send('BACKEND DESARROLLOOOO');
 });
 
 //Rutas para el registro
