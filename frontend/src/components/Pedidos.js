@@ -64,19 +64,24 @@ function Pedidos() {
         fetchPedidos();
     }, []);
 
+    useEffect(() => {
+        const obtenerResumenDia = async () => {
+            try {
+                const respuesta = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/estadisticas/dia`)
+                setResumenDia(respuesta.data);
+            } catch (error) {
+                console.error('Error al obtener el resumen del día: ', error);
+            }   finally {
+                setCargando(false);
+            }
+            obtenerResumenDia();
+        };
+    }
+    , []);
 
-    const obtenerEstadisticasPorFecha2 = async (fecha) => {
-        try {
-            const respuesta = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/estadisticas/dia/${fecha}`);
-            setResumenPorFecha((prevResumen) => ({
-                ...prevResumen,
-                [fecha]: respuesta.data, // Almacenar las estadísticas por fecha
-            }));
-            console.log(resumenPorFecha)
-        } catch (error) {
-            console.error(`Error al obtener estadísticas para ${fecha}:`, error);
-        }
-    };
+    const toggleMostrar = () => {
+        setMostrar(!mostrar);
+    }
 
     if (cargando) return <p>Cargando...</p>;
     if (error) return <p>{error}</p>;
