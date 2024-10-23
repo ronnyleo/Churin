@@ -66,13 +66,16 @@ const Cart = () => {
                 }
                 const isDesktop = /Mobi|Android/i.test(navigator.userAgent) === false;
                 const phoneNumber = '593996995441'; // Reemplaza con el número deseado
-                let mensaje = `Hola, soy ${cliente.first_name} ${cliente.last_name}. Hice el siguiente pedido `;
+              // Usamos una variable para el tipo de entrega
+                const tipoPedido = isDelivery ? `para entregar en ${direccion}` : 'para retirar';
 
-                if (isDelivery) {
-                    mensaje += `para entregar en ${direccion}.\n\n`;
-                } else {
-                    mensaje += `para retirar.\n\n`;
-                }
+                let mensaje = `Hola, hice un pedido ${tipoPedido}.\n\n`;
+                mensaje += `*Datos:*\n`;
+                mensaje += `Nombres: ${cliente.first_name} ${cliente.last_name}\n`;
+                mensaje += `Teléfono: ${cliente.telefono}\n\n`;
+                mensaje += `*Detalle:*\n`;
+
+
                 if (items.length > 0) {
                     mensaje += items.map(item => {
                         // Manejo de ingredientes
@@ -94,7 +97,12 @@ const Cart = () => {
                 } else {
                     mensaje += 'No se encontraron detalles de pedido.';
                 }
-                mensaje += `\nEl total es de $${(totalPrice + Number(costoEnvio)).toFixed(2)}. Gracias!`;
+
+                mensaje += `\n*Subtotal:* $${(totalPrice + Number(costoEnvio)).toFixed(2)}\n`;
+                mensaje += `*Envío:* $${Number(costoEnvio).toFixed(2)}\n`
+                mensaje += `*Total:*  $${(totalPrice + Number(costoEnvio)).toFixed(2)}\n\n`
+                mensaje += `Gracias!`;
+
 
                 const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(mensaje)}`;
                 alert('Serás redirigido a Whatsapp para completar tu pedido');
