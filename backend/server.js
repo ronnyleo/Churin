@@ -62,6 +62,8 @@ app.use('/api', pedidosRouter);
 app.use('/api', direccionesRouter);
 app.use('/api', tiposPlatoRouter);
 app.use('/api', estadisticasRouter);
+
+
 app.use(categoriaRoutes);
 // Ruta para subir imágenes
 app.use('/api/upload', uploadRouter);
