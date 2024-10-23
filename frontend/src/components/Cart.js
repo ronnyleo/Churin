@@ -98,7 +98,7 @@ const Cart = () => {
                     mensaje += 'No se encontraron detalles de pedido.';
                 }
 
-                mensaje += `\n*Subtotal:* $${(totalPrice + Number(costoEnvio)).toFixed(2)}\n`;
+                mensaje += `\n*Subtotal:* $${(totalPrice).toFixed(2)}\n`;
                 mensaje += `*Envío:* $${Number(costoEnvio).toFixed(2)}\n`
                 mensaje += `*Total:*  $${(totalPrice + Number(costoEnvio)).toFixed(2)}\n\n`
                 mensaje += `Gracias!`;
