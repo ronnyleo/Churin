@@ -65,7 +65,7 @@ const Cart = () => {
                     console.error('Error: La respuesta de la API no es un array');
                 }
                 const isDesktop = /Mobi|Android/i.test(navigator.userAgent) === false;
-                const phoneNumber = '593996995441'; // Reemplaza con el número deseado
+                const phoneNumber = '593996153861'; // Reemplaza con el número deseado
               // Usamos una variable para el tipo de entrega
                 const tipoPedido = isDelivery ? `para entregar en ${direccion}` : 'para retirar';
 
