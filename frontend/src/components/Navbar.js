@@ -36,6 +36,11 @@ const Navbar = () => {
                             <Link to='/admin'>Administrador</Link>
                         </li>
                     )}
+                    <li>
+                        <Link to="/perfil">
+                            Mi perfil
+                        </Link>
+                    </li>
                     {currentUser ? (
                         <>
                             <li>

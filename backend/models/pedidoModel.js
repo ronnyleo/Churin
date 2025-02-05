@@ -35,6 +35,16 @@ const obtenerPedidos = async () => {
     }
 }
 
+const obtenerPedidosUsuario = async (id) => {
+    try {
+        const query = "SELECT * FROM pedido WHERE id_cliente = $1"
+        const pedido = await db.any(query, [id]);
+        return pedido;
+    } catch (error) {
+        console.log('Error al obtener los pedidos:', error);
+    }
+
+}
 
 const obtenerDetallePedidos = async (id) => {
     try {
@@ -81,5 +91,6 @@ module.exports = {
     enviarPedido,
     enviarDetallePedido,
     obtenerPedidos,
+    obtenerPedidosUsuario,
     obtenerDetallePedidos
 }
