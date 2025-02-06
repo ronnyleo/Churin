@@ -37,9 +37,82 @@ const obtenerPedidos = async () => {
 
 const obtenerPedidosUsuario = async (id) => {
     try {
-        const query = "SELECT * FROM pedido WHERE id_cliente = $1"
-        const pedido = await db.any(query, [id]);
-        return pedido;
+        const query =  `SELECT 
+            P.id AS id_pedido,
+            P.id_cliente,
+            P.fecha_hora,
+            P.total,
+            P.delivery, 
+            P.lugar_envio,
+            P.lugar_envio_id,
+            DP.id AS id_detalle,
+            DP.menu_id,
+            DP.cantidad,
+            ROUND(DP.precio / DP.cantidad, 2) AS precio_unitario,
+            DP.precio,
+            DP.ingredientes,
+            M.id AS id_menu,
+            M.nombre AS plato
+            FROM pedido AS P 
+            INNER JOIN detalle_pedidos AS DP
+            ON P.id = DP.pedido_id
+            INNER JOIN menu AS M
+            ON DP.menu_id = M.id 
+            WHERE P.id_cliente = $1`
+
+            const result = await db.any(query, [id]);
+            
+
+            // row es cada fila obtenida en la consulta SQL.
+            // acc es el objeto donde se almacenarán los pedidos agrupados
+            const pedidosAgrupados = result.reduce((acc, row) => {
+                
+                const {id_pedido, id_cliente, fecha_hora, total, delivery, lugar_envio, lugar_envio_id, id_detalle,
+                    plato, cantidad, precio_unitario, ingredientes} = row;
+
+                const fechaISO = new Date(fecha_hora); // fecha para ordenar
+
+                // fecha en string
+                const fecha = new Date(fecha_hora). toLocaleString("es-ES", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "numeric",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false // formato de 24 horas
+                });
+
+                if (!acc[id_pedido]) {
+                    acc[id_pedido] = {
+                        id_pedido,
+                        id_cliente,
+                        fecha,
+                        fechaISO,
+                        total,
+                        delivery,
+                        lugar_envio,
+                        lugar_envio_id,
+                        detalles: []
+                    };
+                }
+
+                acc[id_pedido].detalles.push({
+                    id_detalle,
+                    plato,
+                    cantidad,
+                    precio_unitario,
+                    ingredientes
+                })
+
+                return acc 
+            }, {});
+
+            const pedidos = Object.values(pedidosAgrupados).sort((a, b) => {
+                return new Date(b.fechaISO) - new Date(a.fechaISO);
+            });
+
+        return pedidos;
     } catch (error) {
         console.log('Error al obtener los pedidos:', error);
     }
