@@ -1,21 +1,21 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Navbar.css';
-import logo from '../assets/logo.jpg'; 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import logo from '../assets/logo.jpg';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';   
 import { faUser, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../context/AuthContext'; // Importa el hook useAuth
 
 const Navbar = () => {
     const { currentUser, logout } = useAuth(); // Usa el hook useAuth para acceder a la autenticación
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
     const userRole = localStorage.getItem('userRole'); // Obtén el rol del usuario desde el localStorage
 
     const handleLogout = async () => {
         try {
             await logout();
             localStorage.removeItem('userRole'); // Elimina el rol del usuario del localStorage
-            navigate('/'); 
+            navigate('/');
         } catch (error) {
             console.error('Error al cerrar sesión:', error);
         }
@@ -27,7 +27,7 @@ const Navbar = () => {
                 <img src={logo} alt='logo'></img>
             </div>
             <div className='navbar-links'>
-                <ul> 
+                <ul>
                     <li>
                         <Link to='/'>Inicio</Link>
                     </li>
@@ -37,12 +37,17 @@ const Navbar = () => {
                         </li>
                     )}
                     <li>
-                        <Link to="/perfil">
-                            Mi perfil
+                        <Link to="/Cart">
+                            <FontAwesomeIcon icon={faShoppingCart} />
                         </Link>
                     </li>
                     {currentUser ? (
                         <>
+                            <li>
+                                <Link to="/perfil">
+                                    <FontAwesomeIcon icon={faUser} />                                
+                                </Link>
+                            </li>
                             <li>
                                 <button onClick={handleLogout}>Salir</button>
                             </li>
@@ -52,11 +57,6 @@ const Navbar = () => {
                             <Link to='/Login'>Ingresar</Link>
                         </li>
                     )}
-                    <li>
-                        <Link to="/Cart">
-                            <FontAwesomeIcon icon={faShoppingCart} />
-                        </Link>
-                    </li>
                 </ul>
             </div>
         </nav>

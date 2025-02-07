@@ -29,16 +29,6 @@ const AdminUpload = () => {
     <div className='admin-upload'>
       <div className='tabs'>
         <button
-          className={`tab-button ${activeTab === 'upload' ? 'active' : ''}`}
-          onClick={() => setActiveTab('upload')}>
-          Cargar
-        </button>
-        <button
-          className={`tab-button ${activeTab === 'buscar' ? 'active' : ''}`}
-          onClick={() => setActiveTab('buscar')}>
-          Buscar
-        </button>
-        <button
           className={`tab-button ${activeTab === 'pedidos' ? 'active' : ''}`}
           onClick={() => setActiveTab('pedidos')}>
             Pedidos

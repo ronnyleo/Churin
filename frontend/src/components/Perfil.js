@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from '../context/AuthContext';
-import { FaCalendar, FaMoneyBillWave } from "react-icons/fa";
 
 const Perfil = () => {
 
@@ -37,8 +36,8 @@ const Perfil = () => {
     }, [cliente])
 
     return (
-        <div>
-            <h2 >Bienvenid@ {cliente.first_name}</h2>
+        <div className="p-10">
+            <h2 className="text-3xl font-bold" >Bienvenid@ {cliente.first_name}</h2>
             <div className="w-1/2 mx-auto">
                 <h3 className="text-2xl font-bold">Pedidos realizados</h3>
                 <ul>
@@ -49,33 +48,43 @@ const Perfil = () => {
 
                         >
                             {/* 📌 Fecha y total alineados */}
-                            <div className="flex gap-5">
-                                <div className="text-lg font-bold w-1/3">
-                                    <div>
-                                        <span>📅</span>
-                                        <span className="text-green">{pedido.fecha}</span>
-                                    </div>
-                                    <div>
-                                        <span >🛵</span>
-                                        <span>$2.50 - Yachay</span>
-                                    </div>
-                                    
-                                 </div>
-                                 <div className="text-lg font-bold">
-                                    <span >💰</span>
-                                    <span>${pedido.total}</span>
+                            <div className="w-2/3 font-semibold flex justify-between">
+                                <div className="w-1/2 flex items-center">
+                                    <span>📅</span>
+                                    <span>{pedido.fecha}</span>
                                 </div>
+                                    {pedido.lugar_envio ? 
+                                        <div className="w-1/4 flex items-center justify-center">
+                                            <span>🛵</span>
+                                            <span>{pedido.lugar_envio}</span>
+                                        </div> :
+                                        <div className="w-1/4 flex items-center justify-center">
+                                            <span>Retiro</span>
+                                        </div>
+                                    }
+                                    
+                                    <div className="w-1/4 flex items-center justify-center">
+                                        <span >💰</span>
+                                        <span>${pedido.total}</span>
+                                    </div>
                             </div>
 
                             {/* 📌 Detalles, envio y estado */}
-                            <div className="flex gap-20 mt-5 w-2/3 justify-between items-center">
+                            <div className="flex mt-5 items-center">
                                 <ul className="flex flex-col w-1/2">
                                     {pedido.detalles.map(detalle => (
                                         <li
                                             key={detalle.id_detalle}
-                                            className="flex justify-between"
+                                            className="flex justify-between mb-4 items-center"
                                         >
-                                            <div className="ml-6">{detalle.plato}</div>
+                                            <div className="ml-6">
+                                                {detalle.plato}
+                                                <ul className="ml-6 flex flex-col list-disc">
+                                                {detalle.ingredientes && detalle.ingredientes.map(ingrediente => (
+                                                    <li className="text-xs">{ingrediente.nombre}</li>
+                                                ))}
+                                                </ul>
+                                            </div>
                                             <div className="font-semibold">
                                                 {detalle.cantidad} x ${detalle.precio_unitario}
                                             </div>
@@ -83,19 +92,18 @@ const Perfil = () => {
                                     ))}
                                 </ul>
 
-
                                 {/* 📌 Estado del pedido como badge */}
-                                <div className="bg-lime-500 text-sm font-semibold rounded-full p-3">
-                                    Recibido
+                                <div className="flex justify-center w-1/2">
+                                    <span className="bg-lime-400 text-sm font-semibold rounded-full p-3">Recibido</span>
                                 </div>
-                                
-                                
+
+
                             </div>
-                            
+
                         </li>
-                        
+
                     ))}
-                    
+
                 </ul>
             </div>
         </div>

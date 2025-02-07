@@ -54,33 +54,33 @@ function MenuList() {
   };
 
   return (
-    <div className="menu-list">
-      <h1>Menú</h1>
+    <div className="p-20">
+      <h1 className="text-3xl font-bold text-center">Menú</h1>
       {error && <p>{error}</p>}
-      <div className="menu-categoria-container">
+      <div>
         {categorias.map(categoria => (
-          <div key={categoria.id} className="menu-categoria">
-            <h2 className="menu-categoria-title">{categoria.nombre}</h2>
-            <div className="menu-items-container">
+          <div key={categoria.id}>
+            <h2 className="text-2xl font-semibold">{categoria.nombre}</h2>
+            <div className="m-10 flex gap-5 grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3">
               {groupedMenuItems[categoria.id] && groupedMenuItems[categoria.id].map(item => (
                 <div
                   key={item.id}
-                  className={`menu-item ${item.id === 5 ? 'menu-item-special' : ''}`}
+                  className="p-10 bg-white rounded-lg flex flex-col gap-3 justify-evenly"
                 >
-                  <h3>{item.nombre}</h3>
+                  <h3 className="text-xl font-semibold">{item.nombre}</h3>
                   {item.tipo_id === 5 ? (
                     <>
                       {/* Aquí defines el diseño especial para el item con id 5 */}
-                      <span className="menu-item-price">${item.precio}</span>
+                      <span>${item.precio}</span>
                     </>
                   ) : (
                     <>
-                      <img src={item.image_url} alt={item.nombre} className="menu-item-image" />
-                      <p className="menu-item-descripcion">{item.descripcion}</p>
-                      <span className="menu-item-price">${item.precio}</span>
+                      <img src={item.image_url} alt={item.nombre}/>
+                      <p>{item.descripcion}</p>
+                      <span>${item.precio}</span>
                     </>
                   )}
-                  <button className="menu-item-button" onClick={() => handleAddToCart(item)}>
+                  <button onClick={() => handleAddToCart(item)}>
                     {item.tipo_combinacion !== 4 && item.tipo_combinacion !== null ? 'Personalizar' : 'Agregar'}
                   </button>
                 </div>

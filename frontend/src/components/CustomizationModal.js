@@ -120,7 +120,8 @@ function CustomizationModal({ item, onClose }) {
     return (
         <div className="custom-modal-overlay">
             <div className="custom-modal-content">
-                <h2 className='item__titulo'>Personaliza tu {item.nombre}</h2>
+                <h2 className='text-2xl font-semibold'>Personaliza tu plato</h2>
+                <p>{item.nombre}</p>
                 <p className='item__descripcion'>{item.descripcion}</p>
                 <div className="item__ingredients-section">
                     <p>Elige entre las siguientes opciones:</p>
@@ -131,7 +132,7 @@ function CustomizationModal({ item, onClose }) {
                     Nota: Si seleccionas menos ingredientes de los indicados, 
                     se considerará como doble porción al ingrediente elegido.
                 </p>
-                            <h3>Proteínas</h3>
+                            <h3 className="font-semibold">Proteínas</h3>
                             <ul className="ingredients-list">
                                 {proteinas.map(ingrediente => (
                                     <li key={ingrediente.id} className="ingredient-list__item">
@@ -147,7 +148,7 @@ function CustomizationModal({ item, onClose }) {
                                     </li>
                                 ))}
                             </ul>
-                            <h3>Ensaladas</h3>
+                            <h3 className="font-semibold">Ensaladas</h3>
                             <ul className="ingredients-list">
                                 {ensaladas.map(ingrediente => (
                                     <li key={ingrediente.id} className="ingredient-list__item">
