@@ -132,10 +132,12 @@ const Login = ({ onLoginSuccess }) => {
     <div className="login-page">
       {showRegisterForm ? (
         <form onSubmit={handleRegister} className="login-form">
-          <h2>Crear Cuenta</h2>
+          <h2 className='text-2xl font-bold'>Crear cuenta</h2>
           <div className="form-group">
             <label htmlFor="firstName">Nombre</label>
             <input
+              className='border'
+
               type="text"
               id="firstName"
               value={firstName}
@@ -147,6 +149,8 @@ const Login = ({ onLoginSuccess }) => {
           <div className="form-group">
             <label htmlFor="lastName">Apellido</label>
             <input
+              className='border'
+
               type="text"
               id="lastName"
               value={lastName}
@@ -158,6 +162,8 @@ const Login = ({ onLoginSuccess }) => {
           <div className="form-group">
             <label htmlFor="lastName">Teléfono</label>
             <input
+              className='border'
+
               type="text"
               id="telefono"
               value={telefono}
@@ -172,6 +178,8 @@ const Login = ({ onLoginSuccess }) => {
           <div className="form-group">
             <label htmlFor="email">Correo electrónico</label>
             <input
+              className='border'
+
               type="email"
               id="email"
               value={email}
@@ -182,8 +190,10 @@ const Login = ({ onLoginSuccess }) => {
           </div>
           <div className="form-group">
             <label htmlFor="password">Contraseña</label>
-                <span> Ingrese una contraseña de 6 digitos o mas </span>
+            <span> Ingrese una contraseña de 6 digitos o mas </span>
             <input
+              className='border'
+
               type="password"
               id="password"
               value={password}
@@ -195,6 +205,8 @@ const Login = ({ onLoginSuccess }) => {
           <div className="form-group">
             <label htmlFor="confirmPassword">Confirmar Contraseña</label>
             <input
+              className='border'
+
               type="password"
               id="confirmPassword"
               value={confirmPassword}
@@ -230,10 +242,11 @@ const Login = ({ onLoginSuccess }) => {
         </form>
       ) : (
         <form onSubmit={handleLogin} className="login-form">
-          <h2>Iniciar sesión</h2>
+          <h2 className='text-2xl font-bold'>Iniciar sesión</h2>
           <div className="form-group">
             <label htmlFor="email">Usuario</label>
             <input
+              className='border'
               type="email"
               id="email"
               value={email}
@@ -245,6 +258,8 @@ const Login = ({ onLoginSuccess }) => {
           <div className="form-group password-container">
             <label htmlFor="password">Contraseña</label>
             <input
+              className='border'
+
               type={showPassword ? "text" : "password"}
               id="password"
               value={password}

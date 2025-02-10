@@ -43,7 +43,7 @@ const Perfil = () => {
                 <ul>
                     {pedidos && pedidos.map(pedido => (
                         <li
-                            className="bg-gray-200 mt-10 rounded-lg p-5"
+                            className="bg-white mt-10 rounded-lg p-5"
                             key={pedido.id_pedido}
 
                         >

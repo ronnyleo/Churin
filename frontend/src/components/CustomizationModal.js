@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from "react";
-import '../styles/CustomizationModal.css';
 import axios from "axios";
 import { CartContext } from '../context/CartContext';
 
@@ -36,7 +35,7 @@ function CustomizationModal({ item, onClose }) {
                 setSalsas(salsasFiltradas);
                 setSabores(saboresFiltrados);
                 setSaboresCocteles(saboresCoctelesFiltrados);
-                
+
 
                 console.log('Proteinas y ensaladas: ', proteinas);
             } catch (error) {
@@ -118,139 +117,155 @@ function CustomizationModal({ item, onClose }) {
     };
 
     return (
-        <div className="custom-modal-overlay">
-            <div className="custom-modal-content">
-                <h2 className='text-2xl font-semibold'>Personaliza tu plato</h2>
-                <p>{item.nombre}</p>
-                <p className='item__descripcion'>{item.descripcion}</p>
-                <div className="item__ingredients-section">
-                    <p>Elige entre las siguientes opciones:</p>
-                    {/* Mostrar Proteínas y Ensaladas solo si están permitidas */}
-                    {item.tipo_ingrediente === 1 && (      
-                        <div className="ingredients-type-section">
-                             <p className='item__descripcion'>
-                    Nota: Si seleccionas menos ingredientes de los indicados, 
-                    se considerará como doble porción al ingrediente elegido.
-                </p>
-                            <h3 className="font-semibold">Proteínas</h3>
-                            <ul className="ingredients-list">
-                                {proteinas.map(ingrediente => (
-                                    <li key={ingrediente.id} className="ingredient-list__item">
-                                        <label>
-                                            <input
-                                                type="checkbox"
-                                                value={ingrediente.id}
-                                                checked={selectedIngredients['proteinas']?.some(item => item.id === ingrediente.id) || false}
-                                                onChange={() => handleCheckboxChange(ingrediente, 'proteinas')}
-                                            />
-                                            {ingrediente.nombre}
-                                        </label>
-                                    </li>
-                                ))}
-                            </ul>
-                            <h3 className="font-semibold">Ensaladas</h3>
-                            <ul className="ingredients-list">
-                                {ensaladas.map(ingrediente => (
-                                    <li key={ingrediente.id} className="ingredient-list__item">
-                                        <label>
-                                            <input
-                                                type="checkbox"
-                                                value={ingrediente.id}
-                                                checked={selectedIngredients['ensaladas']?.some(item => item.id === ingrediente.id) || false}
-                                                onChange={() => handleCheckboxChange(ingrediente, 'ensaladas')}
-                                            />
-                                            {ingrediente.nombre}
-                                        </label>
-                                    </li>
-                                ))}
-                            </ul>
+        <div className="fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-50">
+            <div className="flex flex-col bg-white w-1/2 max-h-[90vh] overflow-y-auto rounded-lg">
+                <div className="flex flex-col p-10 gap-5">
+                   <div className="border-b border-gray-300">
+                        <h2 className='text-2xl font-semibold'>Personaliza tu plato</h2>
+                   </div>
+                    <div className="flex items-center justify-evenly text-md gap-10">
+                        <div className="w-1/2 h-1/2">
+                            <img 
+                                className="w-full h-full object-cover rounded-lg" 
+                                src={item.image_url} 
+                                />
                         </div>
-                    )}
+                        <div>
 
-                    {/* Mostrar Salsas solo si están permitidas */}
-                    {item.tipo_ingrediente === 2 && (
-                        <div className="ingredients-type-section">
-                             <p className='item__descripcion'>
-                    Nota: Si seleccionas menos ingredientes de los indicados, 
-                    se considerará como doble porción al ingrediente elegido.
-                </p>
-                            <h3>Salsas</h3>
-                            <ul className="ingredients-list">
-                                {salsas.map(ingrediente => (
-                                    <li key={ingrediente.id} className="ingredient-list__item">
-                                        <label>
-                                            <input
-                                                type="checkbox"
-                                                value={ingrediente.id}
-                                                checked={selectedIngredients['salsas']?.some(item => item.id === ingrediente.id) || false}
-                                                onChange={() => handleCheckboxChange(ingrediente, 'salsas')}
-                                            />
-                                            {ingrediente.nombre}
-                                        </label>
-                                    </li>
-                                ))}
-                            </ul>
+                            <p className="text-xl font-bold">{item.nombre}</p>
+                            <p className='opacity-80'>{item.descripcion}</p>
+
+                            <div className="flex flex-col">
+                                <p className="font-bold my-2">Elige entre las siguientes opciones:</p>
+                                {/* Mostrar Proteínas y Ensaladas solo si están permitidas */}
+                                {item.tipo_ingrediente === 1 && (
+                                    <div className="ingredients-type-section">
+                                        <h3 className="font-semibold">Proteínas</h3>
+                                        <ul className="mb-2">
+                                            {proteinas.map(ingrediente => (
+                                                <li                                                             
+                                                className=""
+                                                key={ingrediente.id}>
+                                                    <label className="flex gap-2">
+                                                        <input
+                                                            type="checkbox"
+                                                            value={ingrediente.id}
+                                                            checked={selectedIngredients['proteinas']?.some(item => item.id === ingrediente.id) || false}
+                                                            onChange={() => handleCheckboxChange(ingrediente, 'proteinas')}
+                                                        />
+                                                        {ingrediente.nombre}
+                                                    </label>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                        <h3 className="font-semibold">Ensaladas</h3>
+                                        <ul className="ingredients-list">
+                                            {ensaladas.map(ingrediente => (
+                                                <li 
+                                                    key={ingrediente.id} 
+                                                    className="">
+                                                    <label className="flex gap-2">
+                                                        <input
+                                                            type="checkbox"
+                                                            value={ingrediente.id}
+                                                            checked={selectedIngredients['ensaladas']?.some(item => item.id === ingrediente.id) || false}
+                                                            onChange={() => handleCheckboxChange(ingrediente, 'ensaladas')}
+                                                        />
+                                                        {ingrediente.nombre}
+                                                    </label>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+
+                                {/* Mostrar Salsas solo si están permitidas */}
+                                {item.tipo_ingrediente === 2 && (
+                                    <div className="ingredients-type-section">
+                                        <h3 className="font-semibold">Salsas</h3>
+                                        <ul className="ingredients-list">
+                                            {salsas.map(ingrediente => (
+                                                <li key={ingrediente.id} className="ingredient-list__item">
+                                                    <label>
+                                                        <input
+                                                            type="checkbox"
+                                                            value={ingrediente.id}
+                                                            checked={selectedIngredients['salsas']?.some(item => item.id === ingrediente.id) || false}
+                                                            onChange={() => handleCheckboxChange(ingrediente, 'salsas')}
+                                                        />
+                                                        {ingrediente.nombre}
+                                                    </label>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+
+                                {/* Mostrar Sabores solo si están permitidos */}
+                                {item.tipo_ingrediente === 3 && (
+                                    <div className="ingredients-type-section">
+                                        <h3>Sabores</h3>
+                                        <ul className="ingredients-list">
+                                            {sabores.map(ingrediente => (
+                                                <li key={ingrediente.id} className="ingredient-list__item">
+                                                    <label>
+                                                        <input
+                                                            type="checkbox"
+                                                            value={ingrediente.id}
+                                                            checked={selectedIngredients['sabores']?.some(item => item.id === ingrediente.id) || false}
+                                                            onChange={() => handleCheckboxChange(ingrediente, 'sabores')}
+                                                        />
+                                                        {ingrediente.nombre}
+                                                    </label>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+
+                                {item.tipo_ingrediente === 5 && (
+                                    <div className="ingredients-type-section">
+                                        <h3>Sabores</h3>
+                                        <ul className="ingredients-list">
+                                            {saboresCocteles.map(ingrediente => (
+                                                <li key={ingrediente.id} className="ingredient-list__item">
+                                                    <label>
+                                                        <input
+                                                            type="checkbox"
+                                                            value={ingrediente.id}
+                                                            checked={selectedIngredients['sabores']?.some(item => item.id === ingrediente.id) || false}
+                                                            onChange={() => handleCheckboxChange(ingrediente, 'sabores')}
+                                                        />
+                                                        {ingrediente.nombre}
+                                                    </label>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+
+                            </div>
                         </div>
-                    )}
-
-                    {/* Mostrar Sabores solo si están permitidos */}
-                    {item.tipo_ingrediente === 3 && (
-                        <div className="ingredients-type-section">
-                            <h3>Sabores</h3>
-                            <ul className="ingredients-list">
-                                {sabores.map(ingrediente => (
-                                    <li key={ingrediente.id} className="ingredient-list__item">
-                                        <label>
-                                            <input
-                                                type="checkbox"
-                                                value={ingrediente.id}
-                                                checked={selectedIngredients['sabores']?.some(item => item.id === ingrediente.id) || false}
-                                                onChange={() => handleCheckboxChange(ingrediente, 'sabores')}
-                                            />
-                                            {ingrediente.nombre}
-                                        </label>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
-
-{item.tipo_ingrediente === 5 && (
-                        <div className="ingredients-type-section">
-                            <h3>Sabores</h3>
-                            <ul className="ingredients-list">
-                                {saboresCocteles.map(ingrediente => (
-                                    <li key={ingrediente.id} className="ingredient-list__item">
-                                        <label>
-                                            <input
-                                                type="checkbox"
-                                                value={ingrediente.id}
-                                                checked={selectedIngredients['sabores']?.some(item => item.id === ingrediente.id) || false}
-                                                onChange={() => handleCheckboxChange(ingrediente, 'sabores')}
-                                            />
-                                            {ingrediente.nombre}
-                                        </label>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
-
-
-                </div>
-                <div className="custom-modal-buttons">
-                    {/* Deshabilitar el botón si no hay ingredientes seleccionados */}
-                    <button
-                        onClick={() => handleAddToCart(item)}
-                        disabled={selectedCount === 0} // Deshabilitar si no se seleccionan ingredientes
-                        className={selectedCount === 0 ? "disabled-button" : "active-button"}>
-                        Agregar
-                    </button>
-                    <button onClick={onClose}>Cerrar</button>
+                     
+                    </div>
+                    <div className="flex flex-col gap-2 items-center">
+                        {/* Deshabilitar el botón si no hay ingredientes seleccionados */}
+                        <button
+                            onClick={() => handleAddToCart(item)}
+                            disabled={selectedCount === 0} // Deshabilitar si no se seleccionan ingredientes
+                            className={selectedCount === 0 ? " bg-gray-200 disabled p-2 w-1/3 rounded-lg " : "bg-yellow-300 p-2 rounded-lg p-2 w-1/3"}>
+                            Agregar
+                        </button>
+                        <button 
+                            onClick={onClose}
+                            className="bg-gray-200 p-2 w-1/3 rounded-lg"
+                        >
+                            Cerrar
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     );
 }
-
 export default CustomizationModal;

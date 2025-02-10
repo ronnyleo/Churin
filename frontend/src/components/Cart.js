@@ -66,7 +66,7 @@ const Cart = () => {
                 }
                 const isDesktop = /Mobi|Android/i.test(navigator.userAgent) === false;
                 const phoneNumber = '593996153861'; // Reemplaza con el número deseado
-              // Usamos una variable para el tipo de entrega
+                // Usamos una variable para el tipo de entrega
                 const tipoPedido = isDelivery ? `para entregar en ${direccion}` : 'para retirar';
 
                 let mensaje = `Hola, hice un pedido ${tipoPedido}.\n\n`;
@@ -106,11 +106,11 @@ const Cart = () => {
 
                 const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(mensaje)}`;
                 alert('Serás redirigido a Whatsapp para completar tu pedido');
-                
+
                 if (isDesktop) {
                     // Usar window.open si está en escritorio
                     const newWindow = window.open(whatsappURL, '_blank');
-        
+
                     // Verifica si se bloqueó la ventana emergente
                     if (!newWindow) {
                         alert('Por favor, permite las ventanas emergentes para este sitio.');
@@ -119,7 +119,7 @@ const Cart = () => {
                     // Usar window.location.href si está en móvil
                     window.location.href = whatsappURL;
                 }
-              
+
                 clearCart();
             } else {
                 alert('Error al realizar el pedido');
@@ -226,12 +226,13 @@ const Cart = () => {
     if (error) return <p>{error}</p>;
 
     return (
-        <div className="cart-container">
+        <div className="p-10 flex flex-col w-1/2 mx-auto gap-2">
             {cartItems.length === 0 ? (
-                <p>Tu carrito está vacío.</p>
+                <p>Tu carrito está vacío</p>
             ) : (
+
                 cartItems.map(item => (
-                    <div key={item.id} className="cart-item">
+                    <div key={item.id} className="bg-white p-5 my-5 rounded-lg">
                         <div className="cart-item-content">
                             <img src={item.image_url} alt={item.nombre} className="cart-item-image" />
                             <div className="cart-item-details">
@@ -250,22 +251,13 @@ const Cart = () => {
                             </div>
                         </div>
                     </div>
+
                 ))
             )}
-            <button className='carrito__button' onClick={clearCart}>Vaciar Carrito</button>
+            <button className="bg-yellow-300 p-2 rounded-lg p-2 text-center w-1/3" onClick={clearCart}>Vaciar Carrito</button>
 
             <div className='finalizar-pedido'>
-                <div className='finalizar-pedido__datos'>
-                    <label className='finalizar-pedido__datos-label'>Cliente: </label>
-                    <input
-                        className='finalizar-pedido__datos-value'
-                        type='text'
-                        value={currentUser ? `${cliente.first_name} ${cliente.last_name}` : ''}
-                        readOnly
-                    />
-                </div>
-
-                <div className='finalizar-pedido__datos'>
+                <div className='flex flex-col'>
                     <label className='finalizar-pedido__datos-label'>
                         <input
                             className='finalizar-pedido__datos-value'
@@ -287,9 +279,9 @@ const Cart = () => {
                 </div>
 
                 {isDelivery && (
-                    <div className='finalizar-pedido__datos'>
-                        <label className='finalizar-pedido__datos-label'>Envío:</label>
-                        <select className='finalizar-pedido__datos-value' value={direccion} onChange={handleDireccionChange}>
+                    <div className='flex flex-col'>
+                        <label className='finalizar-pedido__datos-label'>Lugar:</label>
+                        <select className='p-2' value={direccion} onChange={handleDireccionChange}>
                             <option value=''>Selecciona una opción</option>
                             {direcciones.map(direccion => (
                                 <option key={direccion.id} value={direccion.nombre}>
@@ -300,16 +292,24 @@ const Cart = () => {
                     </div>
                 )}
             </div>
-
-            <h3>Subtotal: ${totalPrice.toFixed(2)}</h3>
-            <h3>Envío: ${costoEnvio}</h3>
-            <h3>Total a pagar: ${(totalPrice + Number(costoEnvio)).toFixed(2)}</h3>
+            <div className='flex flex-col w-full my-5 gap-2'>
+                <div className='w-full flex justify-between'>
+                    <h3>Subtotal</h3><span className='font-bold'>${totalPrice.toFixed(2)}</span>
+                </div>
+                <div className='w-full flex justify-between'>
+                    <h3>Envío</h3><span className='font-bold'>${costoEnvio}</span>
+                </div>
+                <div className='w-full flex justify-between'>
+                    <h3>Total a pagar</h3><span className='font-bold'>${(totalPrice + Number(costoEnvio)).toFixed(2)}</span>
+                </div>
+            </div>
             {currentUser ?
-                <>
-                    <button className='carrito__button' onClick={finalizarPedido}>Finalizar pedido</button>
-                    <Link className='carrito__button' to='/'>Volver al menú</Link></>
+                <div className='flex flex-col gap-2 items-center'>
+                    <button className="bg-yellow-300 p-2 rounded-lg p-2 w-1/3" onClick={finalizarPedido}>Finalizar pedido</button>
+                    <Link className="bg-yellow-300 p-2 rounded-lg p-2 text-center w-1/3" to='/'>Volver al menú</Link>
+                </div>
                 :
-                <Link className='carrito__button' to='/Login'>Inicia sesión para finalizar tu pedido</Link>
+                <Link className="bg-yellow-300 p-2 rounded-lg p-2 text-center" to='/Login'>Inicia sesión para finalizar tu pedido</Link>
             }
         </div>
     );

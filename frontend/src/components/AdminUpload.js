@@ -27,6 +27,8 @@ const AdminUpload = () => {
 
   return (
     <div className='admin-upload'>
+      <Pedidos />
+      {/*}
       <div className='tabs'>
         <button
           className={`tab-button ${activeTab === 'pedidos' ? 'active' : ''}`}
@@ -34,7 +36,9 @@ const AdminUpload = () => {
             Pedidos
         </button>
       </div>
+      */}
 
+      {/**
       <div className='tab-content'>
         {activeTab === 'upload' && (
           <SubirPlato tipos={tipos} onImageUrlChange={setImageUrl} />
@@ -48,6 +52,7 @@ const AdminUpload = () => {
           <Pedidos />
         )}
       </div>
+      **/}
     </div>
   );
 };

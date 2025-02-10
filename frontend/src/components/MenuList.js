@@ -59,28 +59,45 @@ function MenuList() {
       {error && <p>{error}</p>}
       <div>
         {categorias.map(categoria => (
-          <div key={categoria.id}>
-            <h2 className="text-2xl font-semibold">{categoria.nombre}</h2>
+          <div className='mb-20' key={categoria.id}>
+            <div className="m-10 flex items-center justify-center space-x-4">
+              <h2 className="text-2xl font-semibold">{categoria.nombre}</h2>
+              <div className="flex-grow border-t-2 border-gray-300" />
+            </div>
             <div className="m-10 flex gap-5 grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3">
               {groupedMenuItems[categoria.id] && groupedMenuItems[categoria.id].map(item => (
                 <div
                   key={item.id}
-                  className="p-10 bg-white rounded-lg flex flex-col gap-3 justify-evenly"
+                  className="p-10 bg-white rounded-lg flex flex-col gap-4"
                 >
-                  <h3 className="text-xl font-semibold">{item.nombre}</h3>
+                  <h3 className="text-lg font-semibold">{item.nombre}</h3>
                   {item.tipo_id === 5 ? (
                     <>
                       {/* Aquí defines el diseño especial para el item con id 5 */}
-                      <span>${item.precio}</span>
+                      <span className='text-center font-bold'>${item.precio}</span>
                     </>
                   ) : (
-                    <>
-                      <img src={item.image_url} alt={item.nombre}/>
-                      <p>{item.descripcion}</p>
-                      <span>${item.precio}</span>
-                    </>
+                  <div className="flex flex-col gap-4">
+                    {/* Contenedor con alto fijo */}
+                    <div className="h-[400px]">
+                      <img 
+                        src={item.image_url} 
+                        alt={item.nombre}  
+                        className="w-full h-full object-cover rounded-lg"
+                      />
+                    </div>
+                    <p 
+                      className='text-sm h-[40px] overflow-hidden opacity-60 line-clamp-2'
+                      title={item.descripcion}
+                      >
+                      {item.descripcion}</p>
+                    <span className='text-center font-bold'>${item.precio}</span>
+                  </div>
                   )}
-                  <button onClick={() => handleAddToCart(item)}>
+                  <button 
+                    onClick={() => handleAddToCart(item)}
+                    className='bg-yellow-300 w-1/2 mx-auto p-2 rounded-lg'
+                    >
                     {item.tipo_combinacion !== 4 && item.tipo_combinacion !== null ? 'Personalizar' : 'Agregar'}
                   </button>
                 </div>
