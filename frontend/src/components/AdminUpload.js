@@ -27,24 +27,18 @@ const AdminUpload = () => {
 
   return (
     <div className='admin-upload'>
+      <Pedidos />
+      {/*}
       <div className='tabs'>
-        <button
-          className={`tab-button ${activeTab === 'upload' ? 'active' : ''}`}
-          onClick={() => setActiveTab('upload')}>
-          Cargar
-        </button>
-        <button
-          className={`tab-button ${activeTab === 'buscar' ? 'active' : ''}`}
-          onClick={() => setActiveTab('buscar')}>
-          Buscar
-        </button>
         <button
           className={`tab-button ${activeTab === 'pedidos' ? 'active' : ''}`}
           onClick={() => setActiveTab('pedidos')}>
             Pedidos
         </button>
       </div>
+      */}
 
+      {/**
       <div className='tab-content'>
         {activeTab === 'upload' && (
           <SubirPlato tipos={tipos} onImageUrlChange={setImageUrl} />
@@ -58,6 +52,7 @@ const AdminUpload = () => {
           <Pedidos />
         )}
       </div>
+      **/}
     </div>
   );
 };

@@ -80,12 +80,12 @@ function Pedidos() {
     if (error) return <p>{error}</p>;
 
     return (
-        <div>
-            <h2>Pedidos recibidos</h2>
+        <div className='flex flex-col gap-2'>
+            <h2 className='text-2xl font-bold'>Pedidos recibidos</h2>
             {pedidosPorFecha.length > 0 ? (
                 pedidosPorFecha.map(([fecha, pedidos]) => (
-                    <div key={fecha}>
-                        <h3>Pedidos del {fecha}</h3>
+                    <div className="flex flex-col gap-2" key={fecha}>
+                        <h3 className='font-bold text-xl'>{fecha}</h3>
                         <table className='pedidos__tabla'>
                             <thead>
                                 <tr>
@@ -147,7 +147,8 @@ function Pedidos() {
                                 ))}
                             </tbody>
                         </table>
-                        <button onClick={() => obtenerEstadisticasPorFecha(fecha)}>Ver resumen</button>
+                        <button className="bg-yellow-300 w-1/2 mx-auto p-2 rounded-lg"
+                            onClick={() => obtenerEstadisticasPorFecha(fecha)}>Resumen</button>
                         {resumenPorFecha[fecha] && (
                             <div>
                                 <p>Número de pedidos: {resumenPorFecha[fecha].total_pedidos}</p>
