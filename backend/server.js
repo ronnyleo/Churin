@@ -25,7 +25,7 @@ const port = process.env.PORT || 10000;
 const allowedOrigins = [
   'http://localhost:3000', // Desarrollo en localhost
   'https://churin-fun-flais.onrender.com', // Producción
-  'https://master.d2en3hk5gfpa40.amplifyapp.com/'
+  'https://master.d2en3hk5gfpa40.amplifyapp.com'
 ];
 
 
