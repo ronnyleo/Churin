@@ -54,7 +54,7 @@ function MenuList() {
   };
 
   return (
-    <div className="p-20">
+    <div className="p-4 sm:p-20">
       <h1 className="text-3xl font-bold text-center">Menú</h1>
       {error && <p>{error}</p>}
       <div>
@@ -70,7 +70,7 @@ function MenuList() {
                   key={item.id}
                   className="p-10 bg-white rounded-lg flex flex-col gap-4"
                 >
-                  <h3 className="text-lg font-semibold">{item.nombre}</h3>
+                  <h3 className="text-sm sm:text-lg font-semibold">{item.nombre}</h3>
                   {item.tipo_id === 5 ? (
                     <>
                       {/* Aquí defines el diseño especial para el item con id 5 */}
@@ -79,7 +79,7 @@ function MenuList() {
                   ) : (
                   <div className="flex flex-col gap-4">
                     {/* Contenedor con alto fijo */}
-                    <div className="h-[400px]">
+                    <div className="h-[150px] sm:h-[400px]">
                       <img 
                         src={item.image_url} 
                         alt={item.nombre}  
@@ -87,7 +87,7 @@ function MenuList() {
                       />
                     </div>
                     <p 
-                      className='text-sm h-[40px] overflow-hidden opacity-60 line-clamp-2'
+                      className='text-xs sm:text-sm h-[20px] sm:h-[40px] overflow-hidden opacity-60 line-clamp-2'
                       title={item.descripcion}
                       >
                       {item.descripcion}</p>
@@ -96,7 +96,7 @@ function MenuList() {
                   )}
                   <button 
                     onClick={() => handleAddToCart(item)}
-                    className='bg-yellow-300 w-1/2 mx-auto p-2 rounded-lg'
+                    className='bg-yellow-300 hover:bg-yellow-400 w-full py-2 text-xs sm:text-sm rounded-md'
                     >
                     {item.tipo_combinacion !== 4 && item.tipo_combinacion !== null ? 'Personalizar' : 'Agregar'}
                   </button>

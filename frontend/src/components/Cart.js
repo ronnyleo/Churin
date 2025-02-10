@@ -66,60 +66,53 @@ const Cart = () => {
                 }
                 const isDesktop = /Mobi|Android/i.test(navigator.userAgent) === false;
                 const phoneNumber = '593996153861'; // Reemplaza con el número deseado
-                // Usamos una variable para el tipo de entrega
                 const tipoPedido = isDelivery ? `para entregar en ${direccion}` : 'para retirar';
-
+                
                 let mensaje = `Hola, hice un pedido ${tipoPedido}.\n\n`;
                 mensaje += `*Datos:*\n`;
                 mensaje += `Nombres: ${cliente.first_name} ${cliente.last_name}\n`;
                 mensaje += `Teléfono: ${cliente.telefono}\n\n`;
                 mensaje += `*Detalle:*\n`;
-
-
+                
                 if (items.length > 0) {
                     mensaje += items.map(item => {
-                        // Manejo de ingredientes
                         let ingredientesLista;
                         if (Array.isArray(item.ingredientes) && item.ingredientes.length > 0) {
-                            // Si es un array y tiene elementos, los mapeamos
                             ingredientesLista = item.ingredientes.map(ingrediente => `${ingrediente.nombre}`).join(', ');
-                        } else if (item.ingredientes === null) {
-                            // Si ingredientes es null
-                            ingredientesLista = 'N/A';
                         } else {
-                            // Si es un array vacío
                             ingredientesLista = 'N/A';
                         }
-
+                
                         return `${item.nombre} (Cantidad: ${item.cantidad}, Precio: $${(Number(item.precio) * item.cantidad).toFixed(2)})\n` +
                             ` - Ingredientes: ${ingredientesLista}\n`;
                     }).join('\n');
                 } else {
                     mensaje += 'No se encontraron detalles de pedido.';
                 }
-
+                
                 mensaje += `\n*Subtotal:* $${(totalPrice).toFixed(2)}\n`;
-                mensaje += `*Envío:* $${Number(costoEnvio).toFixed(2)}\n`
-                mensaje += `*Total:*  $${(totalPrice + Number(costoEnvio)).toFixed(2)}\n\n`
+                mensaje += `*Envío:* $${Number(costoEnvio).toFixed(2)}\n`;
+                mensaje += `*Total:* $${(totalPrice + Number(costoEnvio)).toFixed(2)}\n\n`;
                 mensaje += `Gracias!`;
-
-
-                const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(mensaje)}`;
-                alert('Serás redirigido a Whatsapp para completar tu pedido');
-
+                
+                const encodedMessage = encodeURIComponent(mensaje);
+                const whatsappURLMobile = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+                const whatsappURLEscritorio = `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`;
+                
+                alert('Serás redirigido a WhatsApp para completar tu pedido');
+                
+                // Verifica el dispositivo y redirige
                 if (isDesktop) {
-                    // Usar window.open si está en escritorio
-                    const newWindow = window.open(whatsappURL, '_blank');
-
-                    // Verifica si se bloqueó la ventana emergente
+                    // Redirige a WhatsApp Web en escritorio
+                    const newWindow = window.open(whatsappURLEscritorio, '_blank');
                     if (!newWindow) {
                         alert('Por favor, permite las ventanas emergentes para este sitio.');
                     }
                 } else {
-                    // Usar window.location.href si está en móvil
-                    window.location.href = whatsappURL;
+                    // Redirige a la app de WhatsApp en móvil
+                    window.location.href = whatsappURLMobile;
                 }
-
+                
                 clearCart();
             } else {
                 alert('Error al realizar el pedido');
