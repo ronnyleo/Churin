@@ -196,22 +196,6 @@ const Cart = () => {
         fetchCliente();
     }, [currentUser]);
 
-    useEffect(() => {
-        const fetchFormasPago = async () => {
-            if (currentUser) {
-                try {
-                    const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/forma_pago`, {
-                        email: currentUser.email
-                    });
-                    setCliente(response.data);
-                } catch (error) {
-                    setError('Error al obtener el cliente');
-                }
-            }
-        };
-
-        fetchFormasPago();
-    }, [currentUser]);
 
     const handleDireccionChange = (e) => {
         const selectedDireccion = direcciones.find(d => d.nombre === e.target.value);
