@@ -64,7 +64,7 @@ function MenuList() {
               <h2 className="text-2xl font-semibold">{categoria.nombre}</h2>
               <div className="flex-grow border-t-2 border-gray-300" />
             </div>
-            <div className="m-10 flex gap-5 grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3">
+            <div className="flex sm:gap-5 grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3">
               {groupedMenuItems[categoria.id] && groupedMenuItems[categoria.id].map(item => (
                 <div
                   key={item.id}
