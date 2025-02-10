@@ -27,7 +27,7 @@ const Navbar = () => {
                 <img src={logo} alt='logo'></img>
             </div>
 
-            <ul className="text-xs sm:text-sm flex w-2/3 sm:w-1/2 h-full justify-between">
+            <ul className="text-sm sm:text-lg flex w-2/3 sm:w-1/2 h-full justify-between">
                 <li className="flex-1 flex items-center justify-center text-center hover:bg-yellow-300 hover:font-bold">
                     <Link to="/" className="w-full h-full flex items-center justify-center">
                         Inicio

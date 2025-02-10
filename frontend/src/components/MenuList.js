@@ -54,49 +54,51 @@ function MenuList() {
   };
 
   return (
-    <div className="p-4 sm:p-20">
-      <h1 className="text-3xl font-bold text-center">Menú</h1>
+    <div className="sm:p-20">
+      <h1 className="my-5 sm:my-0 text-3xl font-bold text-center">Menú</h1>
       {error && <p>{error}</p>}
       <div>
         {categorias.map(categoria => (
           <div className='mb-20' key={categoria.id}>
-            <div className="m-10 flex items-center justify-center space-x-4">
+            <div className="my-10 flex items-center justify-center space-x-4">
               <h2 className="text-2xl font-semibold">{categoria.nombre}</h2>
-              <div className="flex-grow border-t-2 border-gray-300" />
+              <div className="sm:flex-grow sm:border-t-2 sm:border-gray-300" />
             </div>
-            <div className="flex sm:gap-5 grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3">
+            <div className="flex gap-2 grid grid-cols-1 sm:grid-cols-1 sm:gap-5 lg:grid-cols-3 ">
               {groupedMenuItems[categoria.id] && groupedMenuItems[categoria.id].map(item => (
                 <div
                   key={item.id}
-                  className="p-10 bg-white rounded-lg flex flex-col gap-4"
+                  className="p-4 bg-white rounded-lg flex flex-col gap-4 sm:gap-10 border-b sm:p-8"
                 >
-                  <h3 className="text-sm sm:text-lg font-semibold">{item.nombre}</h3>
+                  <h3 className="text-sm sm:text-xl font-semibold">{item.nombre}</h3>
                   {item.tipo_id === 5 ? (
                     <>
                       {/* Aquí defines el diseño especial para el item con id 5 */}
                       <span className='text-center font-bold'>${item.precio}</span>
                     </>
                   ) : (
-                  <div className="flex flex-col gap-4">
+                  <div className="flex gap-2 sm:flex-col sm:gap-5">
                     {/* Contenedor con alto fijo */}
-                    <div className="h-[150px] sm:h-[400px]">
+                    <div className="w-1/2 sm:w-full flex">
                       <img 
                         src={item.image_url} 
                         alt={item.nombre}  
-                        className="w-full h-full object-cover rounded-lg"
+                        className="h-auto sm:w-full sm:h-96 object-cover rounded-lg"
                       />
                     </div>
-                    <p 
-                      className='text-xs sm:text-sm h-[20px] sm:h-[40px] overflow-hidden opacity-60 line-clamp-2'
-                      title={item.descripcion}
-                      >
-                      {item.descripcion}</p>
-                    <span className='text-center font-bold'>${item.precio}</span>
+                    <div className='w-1/2 gap-2 sm:gap-5 h-full flex flex-col sm:w-full justify-center'>
+                      <p 
+                        className='text-xs sm:text-lg sm:h-[60px] overflow-hidden opacity-60 sm:line-clamp-2 text-center'
+                        title={item.descripcion}
+                        >
+                        {item.descripcion}</p>
+                      <span className='text-center font-bold'>${item.precio}</span>
+                    </div>
                   </div>
                   )}
                   <button 
                     onClick={() => handleAddToCart(item)}
-                    className='bg-yellow-300 hover:bg-yellow-400 w-full py-2 text-xs sm:text-sm rounded-md'
+                    className='bg-yellow-300 hover:bg-yellow-400 w-full py-2 text-xs sm:text-lg rounded-md sm:w-1/3 mx-auto'
                     >
                     {item.tipo_combinacion !== 4 && item.tipo_combinacion !== null ? 'Personalizar' : 'Agregar'}
                   </button>

@@ -36,20 +36,20 @@ const Perfil = () => {
     }, [cliente])
 
     return (
-        <div className="p-10">
+        <div className="sm:p-10">
             <h2 className="text-3xl font-bold" >Bienvenid@ {cliente.first_name}</h2>
-            <div className="w-1/2 mx-auto">
+            <div className="w-full sm:w-1/2 mx-auto">
                 <h3 className="text-2xl font-bold">Pedidos realizados</h3>
                 <ul>
                     {pedidos && pedidos.map(pedido => (
                         <li
-                            className="bg-white mt-10 rounded-lg p-5"
+                            className="bg-white mt-10 rounded-lg p-5 shadow-md"
                             key={pedido.id_pedido}
 
                         >
                             {/* 📌 Fecha y total alineados */}
-                            <div className="w-2/3 font-semibold flex justify-between">
-                                <div className="w-1/2 flex items-center">
+                            <div className="text-sm sm:text-lg sm:w-2/3 font-semibold flex justify-between sm:justify-between">
+                                <div className="sm:w-1/2 flex items-center">
                                     <span>📅</span>
                                     <span>{pedido.fecha}</span>
                                 </div>

@@ -219,38 +219,37 @@ const Cart = () => {
     if (error) return <p>{error}</p>;
 
     return (
-        <div className="p-10 flex flex-col w-1/2 mx-auto gap-2">
+        <div className="sm:p-10 flex flex-col sm:w-1/2 mx-auto gap-2">
             {cartItems.length === 0 ? (
-                <p>Tu carrito está vacío</p>
+                <p className='text-center text-lg font-semibold'>Tu carrito está vacío</p>
             ) : (
 
                 cartItems.map(item => (
-                    <div key={item.id} className="bg-white p-5 my-5 rounded-lg">
-                        <div className="cart-item-content">
-                            <img src={item.image_url} alt={item.nombre} className="cart-item-image" />
-                            <div className="cart-item-details">
-                                <h3>{item.nombre}</h3>
-                                <p>Precio unitario: ${item.precio}</p>
-                                <p>Cantidad: {item.cantidad}</p>
+                    <div key={item.id} className="bg-white p-5 my-5 rounded-lg shadow-md flex items-center gap-5">
+                            <img src={item.image_url} alt={item.nombre} className="rounded-lg w-32 h-32 object-cover" />
+                            <div className="flex flex-col">
+                                <h3 className='font-semibold'>{item.nombre}</h3>
+                                <p>{item.cantidad} x ${item.precio} </p>
+                               
                                 {item.ingredientes && item.ingredientes.length > 0 ? (
                                     item.ingredientes.map(ingrediente => (
                                         <li key={ingrediente.id}>{ingrediente.nombre}</li>
                                     ))
                                 ) : null}
-                                <button onClick={() => removeFromCart(item.id)} className='cart-button'>Eliminar</button>
+                                <button onClick={() => removeFromCart(item.id)} className='cart-button'>Borrar</button>
                             </div>
-                            <div className="cart-item-total">
+                            <div className="font-semibold">
                                 <p>${(item.precio * item.cantidad).toFixed(2)}</p>
                             </div>
-                        </div>
                     </div>
 
                 ))
             )}
-            <button className="bg-yellow-300 p-2 rounded-lg p-2 text-center w-1/3" onClick={clearCart}>Vaciar Carrito</button>
+            <button className="mx-auto bg-yellow-300 p-2 rounded-lg p-2 text-center w-1/3" onClick={clearCart}>Vaciar Carrito</button>
 
-            <div className='finalizar-pedido'>
+            <div className='px-5'>
                 <div className='flex flex-col'>
+                    <h3 className='text-lg font-bold'>Método de entrega</h3>
                     <label className='finalizar-pedido__datos-label'>
                         <input
                             className='finalizar-pedido__datos-value'
@@ -275,9 +274,9 @@ const Cart = () => {
                     <div className='flex flex-col'>
                         <label className='finalizar-pedido__datos-label'>Lugar:</label>
                         <select className='p-2' value={direccion} onChange={handleDireccionChange}>
-                            <option value=''>Selecciona una opción</option>
+                            <option className='text-sm'  value=''>Selecciona una opción</option>
                             {direcciones.map(direccion => (
-                                <option key={direccion.id} value={direccion.nombre}>
+                                <option className='text-sm' key={direccion.id} value={direccion.nombre}>
                                     {direccion.nombre} - ${direccion.costo_envio}
                                 </option>
                             ))}
@@ -285,7 +284,9 @@ const Cart = () => {
                     </div>
                 )}
             </div>
-            <div className='flex flex-col w-full my-5 gap-2'>
+            <div className='flex flex-col w-full gap-2 px-5'>
+            <h3 className='text-lg font-bold'>Pago</h3>
+
                 <div className='w-full flex justify-between'>
                     <h3>Subtotal</h3><span className='font-bold'>${totalPrice.toFixed(2)}</span>
                 </div>
@@ -297,9 +298,9 @@ const Cart = () => {
                 </div>
             </div>
             {currentUser ?
-                <div className='flex flex-col gap-2 items-center'>
-                    <button className="bg-yellow-300 p-2 rounded-lg p-2 w-1/3" onClick={finalizarPedido}>Finalizar pedido</button>
-                    <Link className="bg-yellow-300 p-2 rounded-lg p-2 text-center w-1/3" to='/'>Volver al menú</Link>
+                <div className='p-5 sm:p-0 flex flex-col gap-2 items-center'>
+                    <button className="bg-yellow-300 p-2 rounded-lg p-2 w-full sm:w-1/3" onClick={finalizarPedido}>Finalizar pedido</button>
+                    <Link className="bg-yellow-300 p-2 rounded-lg p-2 text-center w-full sm:w-1/3" to='/'>Volver al menú</Link>
                 </div>
                 :
                 <Link className="bg-yellow-300 p-2 rounded-lg p-2 text-center" to='/Login'>Inicia sesión para finalizar tu pedido</Link>
