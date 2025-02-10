@@ -64,11 +64,11 @@ function MenuList() {
               <h2 className="text-2xl font-semibold">{categoria.nombre}</h2>
               <div className="sm:flex-grow sm:border-t-2 sm:border-gray-300" />
             </div>
-            <div className="flex gap-2 grid grid-cols-1 sm:grid-cols-1 sm:gap-5 lg:grid-cols-3 ">
+            <div className="flex gap-2 grid grid-cols-1 sm:grid-cols-1 sm:gap-3 lg:grid-cols-3 ">
               {groupedMenuItems[categoria.id] && groupedMenuItems[categoria.id].map(item => (
                 <div
                   key={item.id}
-                  className="p-4 bg-white rounded-lg flex flex-col gap-4 sm:gap-10 border-b sm:p-8"
+                  className="p-4 bg-white rounded-lg flex flex-col gap-4 sm:gap-6 border-b sm:p-8 sm:text-xl "
                 >
                   <h3 className="text-sm sm:text-xl font-semibold">{item.nombre}</h3>
                   {item.tipo_id === 5 ? (

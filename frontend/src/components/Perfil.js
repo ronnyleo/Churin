@@ -37,7 +37,7 @@ const Perfil = () => {
 
     return (
         <div className="sm:p-10">
-            <h2 className="text-3xl font-bold" >Bienvenid@ {cliente.first_name}</h2>
+            <h2 className="text-3xl font-bold" >¡Hola {cliente.first_name}!</h2>
             <div className="w-full sm:w-1/2 mx-auto">
                 <h3 className="text-2xl font-bold">Pedidos realizados</h3>
                 <ul>
@@ -53,6 +53,10 @@ const Perfil = () => {
                                     <span>📅</span>
                                     <span>{pedido.fecha}</span>
                                 </div>
+                                    <div className="w-1/4 flex items-center justify-center">
+                                        <span >💰</span>
+                                        <span>${pedido.total}</span>
+                                    </div>
                                     {pedido.lugar_envio ? 
                                         <div className="w-1/4 flex items-center justify-center">
                                             <span>🛵</span>
@@ -62,11 +66,6 @@ const Perfil = () => {
                                             <span>Retiro</span>
                                         </div>
                                     }
-                                    
-                                    <div className="w-1/4 flex items-center justify-center">
-                                        <span >💰</span>
-                                        <span>${pedido.total}</span>
-                                    </div>
                             </div>
 
                             {/* 📌 Detalles, envio y estado */}

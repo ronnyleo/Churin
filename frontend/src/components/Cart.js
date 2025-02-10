@@ -13,6 +13,7 @@ const Cart = () => {
     const [direcciones, setDirecciones] = useState([]);
     const [cliente, setCliente] = useState('');
     const [direccion, setDireccion] = useState('');
+    const [formaPago, setFormaPago] = useState('');
     const [costoEnvio, setCostoEnvio] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -39,6 +40,7 @@ const Cart = () => {
             total: totalPrice + Number(costoEnvio),
             delivery: isDelivery,
             lugar_envio: isDelivery ? direccion : '',
+            id_forma_pago: formaPago
         };
 
         console.log('Pedido a enviar:', pedido);
@@ -192,6 +194,23 @@ const Cart = () => {
         };
 
         fetchCliente();
+    }, [currentUser]);
+
+    useEffect(() => {
+        const fetchFormasPago = async () => {
+            if (currentUser) {
+                try {
+                    const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/forma_pago`, {
+                        email: currentUser.email
+                    });
+                    setCliente(response.data);
+                } catch (error) {
+                    setError('Error al obtener el cliente');
+                }
+            }
+        };
+
+        fetchFormasPago();
     }, [currentUser]);
 
     const handleDireccionChange = (e) => {
