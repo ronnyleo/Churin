@@ -2,7 +2,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import { CartContext } from '../context/CartContext';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import Loading from './Loading';
 import axios from 'axios';
+import logo2 from '../assets/logo2.png';
 import '../styles/Cart.css';
 
 const Cart = () => {
@@ -15,11 +17,12 @@ const Cart = () => {
     const [direccion, setDireccion] = useState('');
     const [formaPago, setFormaPago] = useState('');
     const [costoEnvio, setCostoEnvio] = useState(0);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const totalPrice = cartItems.reduce((total, item) => total + item.precio * item.cantidad, 0);
 
     const finalizarPedido = async () => {
+
         if (cartItems.length === 0) {
             alert('Debe tener al menos un producto en el carrito');
             return;
@@ -34,6 +37,8 @@ const Cart = () => {
             alert('Debe seleccionar un lugar de envío');
             return;
         }
+
+        setLoading(true)
 
         const pedido = {
             id_cliente: `${cliente.id}`,
@@ -69,13 +74,13 @@ const Cart = () => {
                 const isDesktop = /Mobi|Android/i.test(navigator.userAgent) === false;
                 const phoneNumber = '593996153861'; // Reemplaza con el número deseado
                 const tipoPedido = isDelivery ? `para entregar en ${direccion}` : 'para retirar';
-                
+
                 let mensaje = `Hola, hice un pedido ${tipoPedido}.\n\n`;
                 mensaje += `*Datos:*\n`;
                 mensaje += `Nombres: ${cliente.first_name} ${cliente.last_name}\n`;
                 mensaje += `Teléfono: ${cliente.telefono}\n\n`;
                 mensaje += `*Detalle:*\n`;
-                
+
                 if (items.length > 0) {
                     mensaje += items.map(item => {
                         let ingredientesLista;
@@ -84,25 +89,25 @@ const Cart = () => {
                         } else {
                             ingredientesLista = 'N/A';
                         }
-                
+
                         return `${item.nombre} (Cantidad: ${item.cantidad}, Precio: $${(Number(item.precio) * item.cantidad).toFixed(2)})\n` +
                             ` - Ingredientes: ${ingredientesLista}\n`;
                     }).join('\n');
                 } else {
                     mensaje += 'No se encontraron detalles de pedido.';
                 }
-                
+
                 mensaje += `\n*Subtotal:* $${(totalPrice).toFixed(2)}\n`;
                 mensaje += `*Envío:* $${Number(costoEnvio).toFixed(2)}\n`;
                 mensaje += `*Total:* $${(totalPrice + Number(costoEnvio)).toFixed(2)}\n\n`;
                 mensaje += `Gracias!`;
-                
+
                 const encodedMessage = encodeURIComponent(mensaje);
                 const whatsappURLMobile = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
                 const whatsappURLEscritorio = `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`;
-                
+
                 alert('Serás redirigido a WhatsApp para completar tu pedido');
-                
+
                 // Verifica el dispositivo y redirige
                 if (isDesktop) {
                     // Redirige a WhatsApp Web en escritorio
@@ -114,7 +119,7 @@ const Cart = () => {
                     // Redirige a la app de WhatsApp en móvil
                     window.location.href = whatsappURLMobile;
                 }
-                
+
                 clearCart();
             } else {
                 alert('Error al realizar el pedido');
@@ -122,6 +127,8 @@ const Cart = () => {
         } catch (error) {
             console.error('Error al enviar el pedido:', error);
             alert('Hubo un problema al enviar el pedido');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -166,6 +173,7 @@ const Cart = () => {
 
     useEffect(() => {
         const fetchDirecciones = async () => {
+            setLoading(true);
             try {
                 const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/direcciones`);
                 setDirecciones(response.data);
@@ -218,7 +226,6 @@ const Cart = () => {
         setCostoEnvio(0);
     };
 
-    if (loading) return <p>Cargando...</p>;
     if (error) return <p>{error}</p>;
 
     return (
@@ -229,26 +236,26 @@ const Cart = () => {
 
                 cartItems.map(item => (
                     <div key={item.id} className="bg-white p-5 my-5 rounded-lg shadow-md flex items-center gap-5">
-                            <img src={item.image_url} alt={item.nombre} className="rounded-lg w-32 h-32 object-cover" />
-                            <div className="flex flex-col">
-                                <h3 className='font-semibold'>{item.nombre}</h3>
-                                <p>{item.cantidad} x ${item.precio} </p>
-                               
-                                {item.ingredientes && item.ingredientes.length > 0 ? (
-                                    item.ingredientes.map(ingrediente => (
-                                        <li key={ingrediente.id}>{ingrediente.nombre}</li>
-                                    ))
-                                ) : null}
-                                <button onClick={() => removeFromCart(item.id)} className='cart-button'>Borrar</button>
-                            </div>
-                            <div className="font-semibold">
-                                <p>${(item.precio * item.cantidad).toFixed(2)}</p>
-                            </div>
+                        <img src={item.image_url} alt={item.nombre} className="rounded-lg w-32 h-32 object-cover" />
+                        <div className="flex flex-col">
+                            <h3 className='font-semibold'>{item.nombre}</h3>
+                            <p>{item.cantidad} x ${item.precio} </p>
+
+                            {item.ingredientes && item.ingredientes.length > 0 ? (
+                                item.ingredientes.map(ingrediente => (
+                                    <li key={ingrediente.id}>{ingrediente.nombre}</li>
+                                ))
+                            ) : null}
+                            <button onClick={() => removeFromCart(item.id)} className='cart-button'>Borrar</button>
+                        </div>
+                        <div className="font-semibold">
+                            <p>${(item.precio * item.cantidad).toFixed(2)}</p>
+                        </div>
                     </div>
 
                 ))
             )}
-            <button className="mx-auto bg-yellow-300 p-2 rounded-lg p-2 text-center w-1/3" onClick={clearCart}>Vaciar Carrito</button>
+            <button className="mx-auto bg-yellow-300 p-2 rounded-lg p-2 text-center w-1/3" onClick={clearCart}>Vaciar carrito</button>
 
             <div className='px-5'>
                 <div className='flex flex-col'>
@@ -277,7 +284,7 @@ const Cart = () => {
                     <div className='flex flex-col'>
                         <label className='finalizar-pedido__datos-label'>Lugar:</label>
                         <select className='p-2' value={direccion} onChange={handleDireccionChange}>
-                            <option className='text-sm'  value=''>Selecciona una opción</option>
+                            <option className='text-sm' value=''>Selecciona una opción</option>
                             {direcciones.map(direccion => (
                                 <option className='text-sm' key={direccion.id} value={direccion.nombre}>
                                     {direccion.nombre} - ${direccion.costo_envio}
@@ -288,7 +295,7 @@ const Cart = () => {
                 )}
             </div>
             <div className='flex flex-col w-full gap-2 px-5'>
-            <h3 className='text-lg font-bold'>Pago</h3>
+                <h3 className='text-lg font-bold'>Pago</h3>
 
                 <div className='w-full flex justify-between'>
                     <h3>Subtotal</h3><span className='font-bold'>${totalPrice.toFixed(2)}</span>
@@ -300,15 +307,18 @@ const Cart = () => {
                     <h3>Total a pagar</h3><span className='font-bold'>${(totalPrice + Number(costoEnvio)).toFixed(2)}</span>
                 </div>
             </div>
-            {currentUser ?
-                <div className='p-5 sm:p-0 flex flex-col gap-2 items-center'>
-                    <button className="bg-yellow-300 p-2 rounded-lg p-2 w-full sm:w-1/3" onClick={finalizarPedido}>Finalizar pedido</button>
-                    <Link className="bg-yellow-300 p-2 rounded-lg p-2 text-center w-full sm:w-1/3" to='/'>Volver al menú</Link>
-                </div>
-                :
+            {currentUser ? (
+                loading ? (
+                    <Loading />
+                ) : (
+                    <div className='p-5 sm:p-0 flex flex-col gap-2 items-center'>
+                        <button className="bg-yellow-300 p-2 rounded-lg p-2 w-full sm:w-1/3" onClick={finalizarPedido}>Finalizar</button>
+                        <Link className="bg-yellow-300 p-2 rounded-lg p-2 text-center w-full sm:w-1/3" to='/'>Volver al menú</Link>
+                    </div>
+                )) : (
                 <Link className="bg-yellow-300 p-2 rounded-lg p-2 text-center" to='/Login'>Inicia sesión para finalizar tu pedido</Link>
-            }
-        </div>
+            )}
+        </div >
     );
 };
 
