@@ -27,32 +27,32 @@ const Navbar = () => {
                 <img src={logo} alt='logo'></img>
             </div>
 
-            <ul className="text-sm sm:text-lg flex w-2/3 sm:w-1/2 h-full justify-between">
-                <li className="flex-1 flex items-center justify-center text-center hover:bg-yellow-300 hover:font-bold">
+            <ul className="text-sm sm:text-lg flex w-2/3 sm:w-1/3 h-full justify-between">
+                <li className="flex-1 flex items-center justify-center text-center hover:font-bold">
                     <Link to="/" className="w-full h-full flex items-center justify-center">
                         Inicio
                     </Link>
                 </li>
                 {currentUser && userRole === "admin" && (
-                    <li className="flex-1 flex items-center justify-center text-center hover:bg-yellow-300 hover:font-bold">
+                    <li className="flex-1 flex items-center justify-center text-center hover:font-bold">
                         <Link to="/admin" className="w-full h-full flex items-center justify-center">
                             Administrador
                         </Link>
                     </li>
                 )}
-                <li className="flex-1 flex items-center justify-center text-center hover:bg-yellow-300 hover:font-bold">
+                <li className="flex-1 flex items-center justify-center text-center hover:font-bold">
                     <Link to="/Cart" className="w-full h-full flex items-center justify-center">
                         <FontAwesomeIcon icon={faShoppingCart} />
                     </Link>
                 </li>
                 {currentUser ? (
                     <>
-                        <li className="flex-1 flex items-center justify-center text-center hover:bg-yellow-300 hover:font-bold">
+                        <li className="flex-1 flex items-center justify-center text-center hover:font-bold">
                             <Link to="/perfil" className="w-full h-full flex items-center justify-center">
                                 <FontAwesomeIcon icon={faUser} />
                             </Link>
                         </li>
-                        <li className="flex-1 flex items-center justify-center text-center hover:bg-yellow-300 hover:font-bold">
+                        <li className="flex-1 flex items-center justify-center text-center hover:font-bold">
                             <button
                                 onClick={handleLogout}
                                 className="w-full h-full flex items-center justify-center"
@@ -62,7 +62,7 @@ const Navbar = () => {
                         </li>
                     </>
                 ) : (
-                    <li className="flex-1 flex items-center justify-center text-center hover:bg-yellow-300 hover:font-bold">
+                    <li className="flex-1 flex items-center justify-center text-center hover:font-bold">
                         <Link to="/Login" className="w-full h-full flex items-center justify-center">
                             Ingresar
                         </Link>

@@ -67,7 +67,7 @@ function MenuList() {
       
         <div>
           {categorias.map(categoria => (
-            <div className='mb-20' key={categoria.id}>
+            <div className='sm:mx-20 mb-20' key={categoria.id}>
               <div className="my-10 flex items-center justify-center space-x-4">
                 <h2 className="text-2xl font-semibold">{categoria.nombre}</h2>
                 <div className="sm:flex-grow sm:border-t-2 sm:border-gray-300" />
@@ -94,19 +94,19 @@ function MenuList() {
                             className="h-auto sm:w-full sm:h-96 object-cover rounded-lg"
                           />
                         </div>
-                        <div className='w-1/2 gap-2 sm:gap-5 h-full flex flex-col sm:w-full justify-center'>
+                        <div className='w-1/2 gap-2 h-full flex flex-col sm:w-full justify-center'>
                           <p
-                            className='text-xs sm:text-lg sm:h-[60px] overflow-hidden opacity-60 sm:line-clamp-2 text-center'
+                            className='text-center sm:text-left text-xs sm:text-base sm:h-[50px] overflow-hidden opacity-60 sm:line-clamp-2'
                             title={item.descripcion}
                           >
                             {item.descripcion}</p>
-                          <span className='text-center font-bold'>${item.precio}</span>
+                          <span className='text-center font-semibold'>${item.precio}</span>
                         </div>
                       </div>
                     )}
                     <button
                       onClick={() => handleAddToCart(item)}
-                      className='bg-yellow-300 hover:bg-yellow-400 w-full py-2 text-xs sm:text-lg rounded-md sm:w-1/3 mx-auto'
+                      className='bg-yellow-300 hover:bg-yellow-400 w-full py-2 text-xs sm:text-base rounded-md sm:w-1/3 mx-auto'
                     >
                       {item.tipo_combinacion !== 4 && item.tipo_combinacion !== null ? 'Personalizar' : 'Agregar'}
                     </button>

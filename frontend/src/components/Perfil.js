@@ -52,8 +52,8 @@ const Perfil = () => {
 
     return (
         <div className="sm:p-10">
-            <h2 className="text-3xl font-bold" >¡Hola {cliente.first_name}!</h2>
-            <div className="w-full sm:w-1/2 mx-auto">
+            <div className="flex flex-col gap-2 w-full sm:w-1/2 mx-auto">
+                <h2 className="text-3xl font-bold" >¡Hola {cliente.first_name}!</h2>
                 <h3 className="text-2xl font-bold">Pedidos realizados</h3>
                 <ul>
                     {pedidos && pedidos.map(pedido => (

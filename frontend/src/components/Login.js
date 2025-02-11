@@ -6,6 +6,7 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { auth } from '../firebaseConfig';
 import '../styles/Login.css';
 import axios from 'axios';
+import Loading from './Loading'
 
 const Login = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState('');
@@ -14,7 +15,8 @@ const Login = ({ onLoginSuccess }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [telefono, setTelefono] = useState('');
-  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const [showResetForm, setShowResetForm] = useState(false);
   const [showRegisterForm, setShowRegisterForm] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -23,6 +25,7 @@ const Login = ({ onLoginSuccess }) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       console.log('User signed in:', userCredential.user);
@@ -57,6 +60,8 @@ const Login = ({ onLoginSuccess }) => {
     } catch (error) {
       console.error('Error signing in:', error);
       setError('Usuario o contraseña incorrectos.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -127,6 +132,8 @@ const Login = ({ onLoginSuccess }) => {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
+  if (loading) return <Loading />;
 
   return (
     <div className="login-page">
