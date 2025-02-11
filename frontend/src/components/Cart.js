@@ -226,6 +226,7 @@ const Cart = () => {
         setCostoEnvio(0);
     };
 
+    if (loading) return <Loading />;
     if (error) return <p>{error}</p>;
 
     return (
@@ -308,14 +309,11 @@ const Cart = () => {
                 </div>
             </div>
             {currentUser ? (
-                loading ? (
-                    <Loading />
-                ) : (
                     <div className='p-5 sm:p-0 flex flex-col gap-2 items-center'>
                         <button className="bg-yellow-300 p-2 rounded-lg p-2 w-full sm:w-1/3" onClick={finalizarPedido}>Finalizar</button>
                         <Link className="bg-yellow-300 p-2 rounded-lg p-2 text-center w-full sm:w-1/3" to='/'>Volver al menú</Link>
                     </div>
-                )) : (
+                ) : (
                 <Link className="bg-yellow-300 p-2 rounded-lg p-2 text-center" to='/Login'>Inicia sesión para finalizar tu pedido</Link>
             )}
         </div >

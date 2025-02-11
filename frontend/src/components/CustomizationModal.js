@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { CartContext } from '../context/CartContext';
+import Loading from "./Loading";
 
 
 function CustomizationModal({ item, onClose }) {
 
     const [ingredients, setIngredients] = useState([]);
+    const [loading, setLoading] = useState([]);
     const [salsas, setSalsas] = useState([]);
     const [sabores, setSabores] = useState([]);
     const [ensaladas, setEnsaladas] = useState([]);
@@ -17,6 +19,7 @@ function CustomizationModal({ item, onClose }) {
     const { addToCart } = useContext(CartContext);
 
     useEffect(() => {
+        setLoading(true);
         async function fetchIngredients() {
             try {
                 const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/ingredients`);
@@ -40,6 +43,8 @@ function CustomizationModal({ item, onClose }) {
                 console.log('Proteinas y ensaladas: ', proteinas);
             } catch (error) {
                 console.error('Error al obtener los ingredientes:', error);
+            } finally {
+                setLoading(false);
             }
         }
         fetchIngredients();
@@ -115,6 +120,8 @@ function CustomizationModal({ item, onClose }) {
             };
         });
     };
+
+    if (loading) return <Loading />
 
     return (
         <div className="fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-50">

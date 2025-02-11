@@ -58,13 +58,13 @@ function MenuList() {
     setCustomizingItem(null);
   };
 
+  if (loading) return <Loading />
+
   return (
     <div className="sm:p-20">
       <h1 className="my-5 sm:my-0 text-3xl font-bold text-center">Menú</h1>
       {error && <p>{error}</p>}
-      {loading ? (
-        <Loading />
-      ) : (
+      
         <div>
           {categorias.map(categoria => (
             <div className='mb-20' key={categoria.id}>
@@ -122,8 +122,6 @@ function MenuList() {
             />
           )}
         </div>
-      )}
-
     </div>
   );
 }

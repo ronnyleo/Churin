@@ -1,14 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import Loading from "./Loading";
 import { useAuth } from '../context/AuthContext';
 
 const Perfil = () => {
 
     const [pedidos, setPedidos] = useState([]);
+    const [loading, setLoading] = useState(false);
     const { currentUser } = useAuth();
     const [cliente, setCliente] = useState('');
 
     useEffect(() => {
+        setLoading(true);
         const fetchCliente = async () => {
             if (currentUser) {
                 try {
@@ -17,6 +20,9 @@ const Perfil = () => {
                     });
                     setCliente(response.data);
                 } catch (error) {
+                    console.log(error)
+                } finally {
+                    setLoading(false);
                 }
             }
         };
@@ -25,15 +31,24 @@ const Perfil = () => {
     }, [currentUser]);
 
     useEffect(() => {
+        setLoading(true);
         const fetchPedidos = async () => {
-            if (cliente) {
-                const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/pedido/${cliente.id}`)
-                setPedidos(response.data);
-            }
+            try{
+                if (cliente) {
+                    const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/pedido/${cliente.id}`)
+                    setPedidos(response.data);
+                }
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setLoading(false);
+            }    
         }
 
         fetchPedidos();
     }, [cliente])
+
+    if (loading) return <Loading />
 
     return (
         <div className="sm:p-10">

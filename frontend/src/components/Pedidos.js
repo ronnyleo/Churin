@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../styles/Pedidos.css'
+import Loading from './Loading';
 
 function Pedidos() {
     const [pedidosPorFecha, setPedidosPorFecha] = useState([]);
     const [resumenPorFecha, setResumenPorFecha] = useState({});
-    const [cargando, setCargando] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     const [detallesPedidos, setDetallesPedidos] = useState({}); // Objeto para almacenar detalles de cada pedido
@@ -27,6 +28,7 @@ function Pedidos() {
     }
 
     useEffect(() => {
+        setLoading(true)
         const fetchPedidos = async () => {
             try {
                 const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/pedido`);
@@ -53,11 +55,11 @@ function Pedidos() {
                     throw new Error("Formato inesperado de los datos de pedidos.");
                 }
 
-                setCargando(false);
+                setLoading(false);
             } catch (error) {
                 console.log('Error al obtener los pedidos:', error);
                 setError('Error al obtener los pedidos');
-                setCargando(false);
+                setLoading(false);
             }
         };
 
@@ -76,7 +78,7 @@ function Pedidos() {
         }
     };
 
-    if (cargando) return <p>Cargando...</p>;
+    if (loading) return <Loading />;
     if (error) return <p>{error}</p>;
 
     return (
