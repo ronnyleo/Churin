@@ -139,7 +139,7 @@ const Login = ({ onLoginSuccess }) => {
   return (
     <div className="login-page h-screen">
       {showRegisterForm ? (
-        <form onSubmit={handleRegister} className="w-full lg:w-1/3 my-auto flex flex-col gap-2 border overflow-auto p-10">
+        <form onSubmit={handleRegister} className="w-full lg:w-1/3 lg:my-auto flex flex-col gap-2 lg:border overflow-auto p-10">
           <h2 className='text-2xl font-bold '>Crear cuenta</h2>
           <div className='form-group flex gap-1'>
             <label htmlFor="firstName">Nombre</label>
@@ -230,7 +230,7 @@ const Login = ({ onLoginSuccess }) => {
           </div>
         </form>
       ) : showResetForm ? (
-        <form onSubmit={handlePasswordReset} className="w-full lg:w-1/3 my-auto flex flex-col gap-2 border overflow-auto p-10" >
+        <form onSubmit={handlePasswordReset} className="w-full lg:w-1/3 lg:my-auto flex flex-col gap-2 lg:border overflow-auto p-10" >
           <h2 className='text-2xl font-bold'>Reestablecer contraseña</h2>
           <div className="form-group flex gap-1">
             <label htmlFor="reset-email">Correo electrónico</label>
@@ -249,7 +249,7 @@ const Login = ({ onLoginSuccess }) => {
           </div>
         </form>
       ) : (
-        <form onSubmit={handleLogin} className="w-full  lg:w-1/3 my-auto flex flex-col gap-2 border overflow-auto p-10">
+        <form onSubmit={handleLogin} className="w-full  lg:w-1/3 lg:my-auto flex flex-col gap-2 lg:border overflow-auto p-10">
           <h2 className='text-2xl font-bold'>Iniciar sesión</h2>
           <div className="form-group flex gap-1">
             <label htmlFor="email">Usuario</label>

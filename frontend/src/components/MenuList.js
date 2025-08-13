@@ -64,16 +64,18 @@ function MenuList() {
     <div className="sm:p-20">
       <h1 className="my-5 sm:my-0 text-3xl font-bold text-center">MENÚ</h1>
       {error && <p>{error}</p>}
-      
-        <div>
-          {categorias.map(categoria => (
-            <div className='sm:mx-20 mb-20' key={categoria.id}>
-              <div className="my-10 flex items-center justify-center space-x-4">
-                <h2 className="text-2xl font-semibold">{categoria.nombre}</h2>
-                <div className="sm:flex-grow sm:border-t-2 sm:border-gray-300" />
-              </div>
-              <div className="flex gap-2 grid grid-cols-1 sm:grid-cols-1 sm:gap-3 lg:grid-cols-3 ">
-                {groupedMenuItems[categoria.id] && groupedMenuItems[categoria.id].map(item => (
+
+      <div>
+        {categorias.map(categoria => (
+          <div className='sm:mx-20 mb-20' key={categoria.id}>
+            <div className="my-10 flex items-center justify-center space-x-4">
+              <h2 className="text-2xl font-semibold">{categoria.nombre}</h2>
+              <div className="sm:flex-grow sm:border-t-2 sm:border-gray-300" />
+            </div>
+
+            <div className="flex gap-2 grid grid-cols-1 sm:grid-cols-1 sm:gap-3 lg:grid-cols-3 ">
+              {groupedMenuItems[categoria.id] && groupedMenuItems[categoria.id].length > 0 ?
+                (groupedMenuItems[categoria.id].map(item => (
                   <div
                     key={item.id}
                     className="p-4 bg-white rounded-lg flex flex-col gap-4 sm:gap-6 border-b sm:p-8 sm:text-xl "
@@ -111,17 +113,19 @@ function MenuList() {
                       {item.tipo_combinacion !== 4 && item.tipo_combinacion !== null ? 'Personalizar' : 'Agregar'}
                     </button>
                   </div>
-                ))}
-              </div>
+                ))) : (<div className="col-span-full text-center py-6 text-gray-500">
+                  Muy pronto podrás disfrutar de este nuevo plato
+                </div>)}
             </div>
-          ))}
-          {customizingItem && (
-            <CustomizationModal
-              item={customizingItem}
-              onClose={handleCloseModal}
-            />
-          )}
-        </div>
+          </div>
+        ))}
+        {customizingItem && (
+          <CustomizationModal
+            item={customizingItem}
+            onClose={handleCloseModal}
+          />
+        )}
+      </div>
     </div>
   );
 }
