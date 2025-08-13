@@ -9,49 +9,60 @@ const Perfil = () => {
     const [loading, setLoading] = useState(false);
     const { currentUser } = useAuth();
     const [cliente, setCliente] = useState('');
+useEffect(() => {
+  let cancelled = false;
+  const controller = new AbortController();
 
-    useEffect(() => {
-        setLoading(true);
-        const fetchCliente = async () => {
-            if (currentUser) {
-                try {
-                    const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/getUser`, {
-                        email: currentUser.email
-                    });
-                    setCliente(response.data);
-                } catch (error) {
-                    console.log(error)
-                } finally {
-                    setLoading(false);
-                }
-            }
-        };
+  const run = async () => {
+    // si no hay usuario, limpia estados y sal
+    if (!currentUser) {
+      setCliente('');
+      setPedidos([]);
+      return;
+    }
 
-        fetchCliente();
-    }, [currentUser]);
+    setLoading(true);
+    try {
+      // 1) obtener cliente
+      const r1 = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/api/auth/getUser`,
+        { email: currentUser.email },
+        { signal: controller.signal }
+      );
+      if (cancelled) return;
+      setCliente(r1.data);
 
-    useEffect(() => {
-        setLoading(true);
-        const fetchPedidos = async () => {
-            try{
-                if (cliente) {
-                    const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/pedido/${cliente.id}`)
-                    setPedidos(response.data);
-                }
-            } catch (error) {
-                console.log(error);
-            } finally {
-                setLoading(false);
-            }    
-        }
+      // 2) obtener pedidos (depende de cliente.id)
+      if (r1.data && r1.data.id) {
+        const r2 = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/api/pedido/${r1.data.id}`,
+          { signal: controller.signal }
+        );
+        if (cancelled) return;
+        setPedidos(r2.data);
+      } else {
+        setPedidos([]);
+      }
+    } catch (err) {
+      if (!cancelled) console.log(err);
+    } finally {
+      if (!cancelled) setLoading(false);
+    }
+  };
 
-        fetchPedidos();
-    }, [cliente])
+  run();
+
+  return () => {
+    cancelled = true;
+    controller.abort();
+  };
+}, [currentUser]);
+
 
     if (loading) return <Loading />
 
     return (
-        <div className="sm:p-10">
+        <div className="sm:p-10 p-5">
             <div className="flex flex-col gap-5 w-full sm:w-1/2 mx-auto">
                 <h2 className="text-3xl font-bold" >¡Hola {cliente.first_name}!</h2>
                 {pedidos && pedidos.length > 0 ? 

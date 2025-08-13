@@ -61,8 +61,8 @@ function MenuList() {
   if (loading) return <Loading />
 
   return (
-    <div className="sm:p-20">
-      <h1 className="my-5 sm:my-0 text-3xl font-bold text-center">MENÚ</h1>
+    <div className="lg:p-108 flex flex-col items-center">
+      <h1 className="lg:my-10 my-5 text-3xl font-bold text-center">MENÚ</h1>
       {error && <p>{error}</p>}
 
       <div>
@@ -78,7 +78,7 @@ function MenuList() {
                 (groupedMenuItems[categoria.id].map(item => (
                   <div
                     key={item.id}
-                    className="p-4 bg-white rounded-lg flex flex-col gap-4 sm:gap-6 border-b sm:p-8 sm:text-xl "
+                    className="p-6 bg-white rounded-lg flex flex-col gap-4 sm:gap-6 border-b sm:p-8 sm:text-xl "
                   >
                     <h3 className="text-sm sm:text-xl font-semibold">{item.nombre}</h3>
                     {item.tipo_id === 5 ? (

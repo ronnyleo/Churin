@@ -230,92 +230,113 @@ const Cart = () => {
     if (error) return <p>{error}</p>;
 
     return (
-        <div className="sm:p-10 flex flex-col sm:w-1/2 mx-auto gap-2">
-            {cartItems.length === 0 ? (
-                <p className='text-center text-lg font-semibold'>Tu carrito está vacío</p>
-            ) : (
-
-                cartItems.map(item => (
-                    <div key={item.id} className="bg-white p-5 my-5 rounded-lg shadow-md flex items-center gap-5">
-                        <img src={item.image_url} alt={item.nombre} className="rounded-lg w-32 h-32 object-cover" />
-                        <div className="flex flex-col">
-                            <h3 className='font-semibold'>{item.nombre}</h3>
-                            <p>{item.cantidad} x ${item.precio} </p>
-
-                            {item.ingredientes && item.ingredientes.length > 0 ? (
-                                item.ingredientes.map(ingrediente => (
-                                    <li key={ingrediente.id}>{ingrediente.nombre}</li>
-                                ))
-                            ) : null}
-                            <button onClick={() => removeFromCart(item.id)} className='cart-button'>Borrar</button>
+        <div className="sm:p-10 flex flex-col sm:w-1/2 mx-auto gap-5">
+            {cartItems.length > 0 && (
+                <div className='border flex flex-col gap-5'>
+                    <h3 className='px-4 py-2 text-lg font-bold bg-white'>¿Cómo quieres recibir tu pedido?</h3>
+                    <div className='flex flex-col py-5 px-10 gap-5'>
+                        <div className='flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-5'>
+                            <div className='flex justify-center'>
+                                <label className='flex gap-2'>
+                                    <input
+                                        className=''
+                                        type="checkbox"
+                                        checked={isDelivery}
+                                        onChange={handleDeliveryChange}
+                                    />
+                                    Delivery
+                                </label>
+                            </div>
+                            <div><span className='font-bold'>-o-</span></div>
+                            <div className='flex justify-center'>
+                                <label className='flex gap-2'>
+                                    <input
+                                        className=''
+                                        type="checkbox"
+                                        checked={isPickup}
+                                        onChange={handlePickupChange}
+                                    />
+                                    Retirar
+                                </label>
+                            </div>
                         </div>
-                        <div className="font-semibold">
-                            <p>${(item.precio * item.cantidad).toFixed(2)}</p>
-                        </div>
+                        {isDelivery && (
+
+                            <div className='flex flex-col gap-2'>
+                                <label className='font-bold'>Lugar</label>
+                                <select className='p-2' value={direccion} onChange={handleDireccionChange}>
+                                    <option className='text-sm' value=''>Selecciona una opción</option>
+                                    {direcciones.map(direccion => (
+                                        <option className='text-sm' key={direccion.id} value={direccion.nombre}>
+                                            {direccion.nombre} - ${direccion.costo_envio}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                        )}
                     </div>
+                </div>)}
 
-                ))
-            )}
-            <button className="mx-auto bg-yellow-300 p-2 rounded-lg p-2 text-center w-1/3" onClick={clearCart}>Vaciar carrito</button>
+            <div className='border flex flex-col gap-5'>
+                <h3 className='px-4 py-2 text-lg font-bold bg-white'>Detalles del pedido</h3>
+                <div className='flex flex-col px-5 sm:py-5 sm:px-10 gap-5'>
+                    {cartItems.length === 0 ? (
+                        <div className='flex flex-col gap-5'>
+                            <p className='text-center text-lg font-semibold'>Tu carrito está vacío</p>
+                            <Link className="mx-auto bg-yellow-300 p-2 rounded-lg p-2 text-center w-full sm:w-1/3" to='/'>Ver menú</Link>                        </div>
+                    ) : (
+                        <>
+                            {cartItems.map(item => (
+                                <div key={item.id} className="bg-white sm:py-5 sm:px-10 px-5 shadow-md flex items-center gap-2 justify-between">
+                                    <div className="flex gap-5">
+                                        <img src={item.image_url} alt={item.nombre} className="w-32 h-32 object-cover" />
+                                        <div className='flex flex-col justify-center'>
+                                            <h3 className='font-semibold'>{item.nombre}</h3>
+                                            <p>{item.cantidad} x ${item.precio} </p>
 
-            <div className='px-5'>
-                <div className='flex flex-col'>
-                    <h3 className='text-lg font-bold'>Método de entrega</h3>
-                    <label className='finalizar-pedido__datos-label'>
-                        <input
-                            className='finalizar-pedido__datos-value'
-                            type="checkbox"
-                            checked={isDelivery}
-                            onChange={handleDeliveryChange}
-                        />
-                        Delivery
-                    </label>
-                    <label className='finalizar-pedido__datos-label'>
-                        <input
-                            className='finalizar-pedido__datos-value'
-                            type="checkbox"
-                            checked={isPickup}
-                            onChange={handlePickupChange}
-                        />
-                        Retirar
-                    </label>
-                </div>
-
-                {isDelivery && (
-                    <div className='flex flex-col'>
-                        <label className='finalizar-pedido__datos-label'>Lugar:</label>
-                        <select className='p-2' value={direccion} onChange={handleDireccionChange}>
-                            <option className='text-sm' value=''>Selecciona una opción</option>
-                            {direcciones.map(direccion => (
-                                <option className='text-sm' key={direccion.id} value={direccion.nombre}>
-                                    {direccion.nombre} - ${direccion.costo_envio}
-                                </option>
+                                            {item.ingredientes && item.ingredientes.length > 0 ? (
+                                                item.ingredientes.map(ingrediente => (
+                                                    <li key={ingrediente.id}>{ingrediente.nombre}</li>
+                                                ))
+                                            ) : null}
+                                            <button onClick={() => removeFromCart(item.id)} className='cart-button'>Borrar</button>
+                                        </div>
+                                    </div>
+                                    <div className="font-semibold">
+                                        <p>${(item.precio * item.cantidad).toFixed(2)}</p>
+                                    </div>
+                                </div>
                             ))}
-                        </select>
-                    </div>
-                )}
-            </div>
-            <div className='flex flex-col w-full gap-2 px-5'>
-                <h3 className='text-lg font-bold'>Pago</h3>
+                            <button className="mx-auto bg-yellow-300 p-2 rounded-lg p-2 text-center w-1/3" onClick={clearCart}>Vaciar carrito</button>
 
-                <div className='w-full flex justify-between'>
-                    <h3>Subtotal</h3><span className='font-bold'>${totalPrice.toFixed(2)}</span>
-                </div>
-                <div className='w-full flex justify-between'>
-                    <h3>Envío</h3><span className='font-bold'>${costoEnvio}</span>
-                </div>
-                <div className='w-full flex justify-between'>
-                    <h3>Total a pagar</h3><span className='font-bold'>${(totalPrice + Number(costoEnvio)).toFixed(2)}</span>
+                            <div className='flex flex-col w-full gap-2'>
+                                <div>
+                                    <h3 className='text-lg font-bold'>Pago</h3>
+                                    <div className='w-full flex justify-between'>
+                                        <h3>Subtotal</h3><span className='font-bold'>${totalPrice.toFixed(2)}</span>
+                                    </div>
+                                    <div className='w-full flex justify-between'>
+                                        <h3>Envío</h3><span className='font-bold'>${Number(costoEnvio).toFixed(2)}</span>
+                                    </div>
+                                    <div className='w-full flex justify-between'>
+                                        <h3>Total a pagar</h3><span className='font-bold text-xl'>${(totalPrice + Number(costoEnvio)).toFixed(2)}</span>
+                                    </div>
+                                </div>
+                                {currentUser ? (
+                                    <div className='p-5 sm:p-0 flex flex-col gap-2 items-center'>
+                                        <button className="bg-yellow-300 p-2 rounded-lg p-2 w-full sm:w-1/3" onClick={finalizarPedido}>Finalizar</button>
+                                        <Link className="bg-yellow-300 p-2 rounded-lg p-2 text-center w-full sm:w-1/3" to='/'>Volver al menú</Link>
+                                    </div>
+                                ) : (
+                                    <Link className="bg-yellow-300 p-2 rounded-lg p-2 text-center" to='/Login'>Inicia sesión para finalizar tu pedido</Link>
+                                )}
+                            </div>
+                        </>
+                    )}
+
                 </div>
             </div>
-            {currentUser ? (
-                    <div className='p-5 sm:p-0 flex flex-col gap-2 items-center'>
-                        <button className="bg-yellow-300 p-2 rounded-lg p-2 w-full sm:w-1/3" onClick={finalizarPedido}>Finalizar</button>
-                        <Link className="bg-yellow-300 p-2 rounded-lg p-2 text-center w-full sm:w-1/3" to='/'>Volver al menú</Link>
-                    </div>
-                ) : (
-                <Link className="bg-yellow-300 p-2 rounded-lg p-2 text-center" to='/Login'>Inicia sesión para finalizar tu pedido</Link>
-            )}
         </div >
     );
 };
