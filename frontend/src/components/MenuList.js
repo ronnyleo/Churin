@@ -62,7 +62,7 @@ function MenuList() {
 
   return (
     <div className="sm:p-20">
-      <h1 className="my-5 sm:my-0 text-3xl font-bold text-center">Menú</h1>
+      <h1 className="my-5 sm:my-0 text-3xl font-bold text-center">MENÚ</h1>
       {error && <p>{error}</p>}
       
         <div>
