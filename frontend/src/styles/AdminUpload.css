@@ -21,7 +21,6 @@
   /* Estilo para los labels */
   .form-group label {
     font-weight: bold;
-    margin-bottom: 0.5rem; /* Espacio entre el label y el input */
   }
   
   /* Estilo para los inputs */
