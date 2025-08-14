@@ -233,7 +233,7 @@ const Cart = () => {
     if (error) return <p>{error}</p>;
 
     return (
-        <div className="sm:p-10 flex flex-col sm:w-1/2 mx-auto gap-5">
+        <div className="sm:p-10 p-5 flex flex-col sm:w-1/2 mx-auto gap-5">
             {cartItems.length > 0 && (
                 <div className='border flex flex-col gap-5'>
                     <h3 className='px-4 py-2 text-lg font-bold bg-white'>¿Cómo quieres recibir tu pedido?</h3>
@@ -291,7 +291,7 @@ const Cart = () => {
                     ) : (
                         <>
                             {cartItems.map(item => (
-                                <div key={item.id} className="bg-white sm:py-5 sm:px-10 px-5 shadow-md flex items-center gap-2 justify-between">
+                                <div key={item.id} className="bg-white p-5 sm:py-5 sm:px-10 px-5 shadow-md flex items-center gap-2 justify-between">
                                     <div className="flex gap-5">
                                         <img src={item.image_url} alt={item.nombre} className="w-32 h-32 object-cover" />
                                         <div className='flex flex-col justify-center'>
