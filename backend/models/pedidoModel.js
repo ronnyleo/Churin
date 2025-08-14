@@ -160,10 +160,20 @@ const enviarDetallePedido = async (pedido_id, menu_id, cantidad, precio, ingredi
 
 }
 
+const obtenerDetalleConRetry = async(id, intentos=5) => {
+  for (let i=0; i<intentos; i++) {
+    const d = await obtenerDetallePedidos(id);
+    if (d.length) return d;
+    await new Promise(r => setTimeout(r, 400)); // 0.4s
+  }
+  return [];
+}
+
 module.exports = {
     enviarPedido,
     enviarDetallePedido,
     obtenerPedidos,
     obtenerPedidosUsuario,
-    obtenerDetallePedidos
+    obtenerDetallePedidos,
+    obtenerDetalleConRetry
 }
