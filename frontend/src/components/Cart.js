@@ -226,6 +226,9 @@ const Cart = () => {
         setCostoEnvio(0);
     };
 
+
+
+
     if (loading) return <Loading />;
     if (error) return <p>{error}</p>;
 
