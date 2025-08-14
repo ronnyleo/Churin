@@ -1,16 +1,16 @@
+/*
 .navbar-container {
     background-color: #ffffff;
     width: 100%;
-    height: 80px; /* Altura fija */
+    height: 80px; 
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Alinea los elementos a los extremos */
-    overflow: hidden; /* Evita el desbordamiento */
+    justify-content: space-between;
+    overflow: hidden; 
     box-sizing: border-box;
-    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1); /* Sutil sombra */ /* Asegura que el padding no aumente el tamaño total del navbar */
-    padding: 0 100px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
 }
-
+*/
 .navbar-logo-container {
     display: flex;
     align-items: center;

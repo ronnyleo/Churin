@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { CartContext } from '../context/CartContext';
+import Loading from "./Loading";
 
 
 function CustomizationModal({ item, onClose }) {
 
     const [ingredients, setIngredients] = useState([]);
+    const [loading, setLoading] = useState([]);
     const [salsas, setSalsas] = useState([]);
     const [sabores, setSabores] = useState([]);
     const [ensaladas, setEnsaladas] = useState([]);
@@ -17,6 +19,7 @@ function CustomizationModal({ item, onClose }) {
     const { addToCart } = useContext(CartContext);
 
     useEffect(() => {
+        setLoading(true);
         async function fetchIngredients() {
             try {
                 const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/ingredients`);
@@ -40,6 +43,8 @@ function CustomizationModal({ item, onClose }) {
                 console.log('Proteinas y ensaladas: ', proteinas);
             } catch (error) {
                 console.error('Error al obtener los ingredientes:', error);
+            } finally {
+                setLoading(false);
             }
         }
         fetchIngredients();
@@ -116,17 +121,19 @@ function CustomizationModal({ item, onClose }) {
         });
     };
 
+    if (loading) return <Loading />
+
     return (
         <div className="fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-50">
-            <div className="flex flex-col bg-white w-1/2 max-h-[90vh] overflow-y-auto rounded-lg">
-                <div className="flex flex-col p-10 gap-5">
+            <div className="flex flex-col bg-white w-full sm:w-1/2 max-h-[90vh] overflow-y-auto rounded-lg">
+                <div className="flex flex-col p-4 sm:p-10 gap-5">
                    <div className="border-b border-gray-300">
-                        <h2 className='text-2xl font-semibold'>Personaliza tu plato</h2>
+                        <h2 className='text-xl sm:text-2xl font-semibold'>Personaliza tu plato</h2>
                    </div>
-                    <div className="flex items-center justify-evenly text-md gap-10">
-                        <div className="w-1/2 h-1/2">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-evenly text-md gap-5 sm:gap-10">
+                        <div className="w-full sm:w-1/2 h-1/2">
                             <img 
-                                className="w-full h-full object-cover rounded-lg" 
+                                className="w-full h-auto sm:h-full object-cover rounded-lg" 
                                 src={item.image_url} 
                                 />
                         </div>
@@ -186,7 +193,7 @@ function CustomizationModal({ item, onClose }) {
                                         <ul className="ingredients-list">
                                             {salsas.map(ingrediente => (
                                                 <li key={ingrediente.id} className="ingredient-list__item">
-                                                    <label>
+                                                    <label className="flex gap-2">
                                                         <input
                                                             type="checkbox"
                                                             value={ingrediente.id}
@@ -253,7 +260,7 @@ function CustomizationModal({ item, onClose }) {
                         <button
                             onClick={() => handleAddToCart(item)}
                             disabled={selectedCount === 0} // Deshabilitar si no se seleccionan ingredientes
-                            className={selectedCount === 0 ? " bg-gray-200 disabled p-2 w-1/3 rounded-lg " : "bg-yellow-300 p-2 rounded-lg p-2 w-1/3"}>
+                            className={selectedCount === 0 ? " bg-gray-200 disabled p-2 w-1/3 rounded-lg " : "bg-yellow-300 hover:bg-yellow-400 p-2 rounded-lg p-2 w-1/3 "}>
                             Agregar
                         </button>
                         <button 

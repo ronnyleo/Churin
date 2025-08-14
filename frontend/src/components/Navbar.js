@@ -22,54 +22,53 @@ const Navbar = () => {
     };
 
     return (
-        <nav className='navbar-container'>
+        <nav className='flex justify-around items-center bg-white py-2 shadow-md'>
             <div className='navbar-logo-container'>
                 <img src={logo} alt='logo'></img>
             </div>
 
-            <ul className="flex w-1/2 h-full justify-between">
-                <li className="flex-1 flex items-center justify-center text-center hover:bg-yellow-300 hover:font-bold">
-                    <Link to="/" className="w-full h-full flex items-center justify-center">
-                        Inicio
-                    </Link>
-                </li>
-                {currentUser && userRole === "admin" && (
-                    <li className="flex-1 flex items-center justify-center text-center hover:bg-yellow-300 hover:font-bold">
-                        <Link to="/admin" className="w-full h-full flex items-center justify-center">
-                            Administrador
+                <ul className="text-sm sm:text-lg flex w-2/3 sm:w-1/3 h-full justify-between">
+                    <li className="flex-1 flex items-center justify-center text-center hover:font-bold">
+                        <Link to="/" className="w-full h-full flex items-center justify-center">
+                            Inicio
                         </Link>
                     </li>
-                )}
-                <li className="flex-1 flex items-center justify-center text-center hover:bg-yellow-300 hover:font-bold">
-                    <Link to="/Cart" className="w-full h-full flex items-center justify-center">
-                        <FontAwesomeIcon icon={faShoppingCart} />
-                    </Link>
-                </li>
-                {currentUser ? (
-                    <>
-                        <li className="flex-1 flex items-center justify-center text-center hover:bg-yellow-300 hover:font-bold">
-                            <Link to="/perfil" className="w-full h-full flex items-center justify-center">
-                                <FontAwesomeIcon icon={faUser} />
+                    {currentUser && userRole === "admin" && (
+                        <li className="flex-1 flex items-center justify-center text-center hover:font-bold">
+                            <Link to="/admin" className="w-full h-full flex items-center justify-center">
+                                Administrador
                             </Link>
                         </li>
-                        <li className="flex-1 flex items-center justify-center text-center hover:bg-yellow-300 hover:font-bold">
-                            <button
-                                onClick={handleLogout}
-                                className="w-full h-full flex items-center justify-center"
-                            >
-                                Salir
-                            </button>
-                        </li>
-                    </>
-                ) : (
-                    <li className="flex-1 flex items-center justify-center text-center hover:bg-yellow-300 hover:font-bold">
-                        <Link to="/Login" className="w-full h-full flex items-center justify-center">
-                            Ingresar
+                    )}
+                    <li className="flex-1 flex items-center justify-center text-center hover:font-bold">
+                        <Link to="/Cart" className="w-full h-full flex items-center justify-center">
+                            <FontAwesomeIcon icon={faShoppingCart} />
                         </Link>
                     </li>
-                )}
-            </ul>
-
+                    {currentUser ? (
+                        <>
+                            <li className="flex-1 flex items-center justify-center text-center hover:font-bold">
+                                <Link to="/perfil" className="w-full h-full flex items-center justify-center">
+                                    <FontAwesomeIcon icon={faUser} />
+                                </Link>
+                            </li>
+                            <li className="flex-1 flex items-center justify-center text-center hover:font-bold">
+                                <button
+                                    onClick={handleLogout}
+                                    className="w-full h-full flex items-center justify-center"
+                                >
+                                    Salir
+                                </button>
+                            </li>
+                        </>
+                    ) : (
+                        <li className="flex-1 flex items-center justify-center text-center hover:font-bold">
+                            <Link to="/Login" className="w-full h-full flex items-center justify-center">
+                                Iniciar sesión
+                            </Link>
+                        </li>
+                    )}
+                </ul>
 
         </nav>
     );

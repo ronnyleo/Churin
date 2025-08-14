@@ -5,6 +5,7 @@ import axios from 'axios';
 import SubirPlato from './SubirPlato';
 import Platos from './Platos';
 import Pedidos from './Pedidos';
+import Loading from './Loading';
 import '../styles/AdminUpload.css';
 
 const AdminUpload = () => {

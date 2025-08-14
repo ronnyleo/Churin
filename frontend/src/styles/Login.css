@@ -3,7 +3,6 @@
 /* Contenedor principal de la página de inicio de sesión */
 .login-page {
   display: flex;
-  height: 100vh;
   justify-content: center;
   flex: 1;
   padding: 20px;
@@ -30,22 +29,8 @@
 
 
 
-.login-form {
-  width: 100%;
-  max-width: 400px; /* Ancho máximo del formulario */
-  box-sizing: border-box; /* Incluye padding y border en el ancho total */
-  padding: 20px;
-}
 
-.login-form h2 {
-  margin-bottom: 40px;
-  text-align: center;
-}
 
-.form-group {
-  margin-bottom: 15px;
-  width: 100%;
-}
 
 .form-group label {
   width: 100%;
@@ -76,7 +61,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 20px;
   flex-direction: column;
   text-align: center;
 }
@@ -132,7 +116,6 @@
 
 .forgot-password {
   text-decoration: none;
-  font-size: 12px;
   display: flex;
 }
 

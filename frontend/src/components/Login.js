@@ -6,6 +6,7 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { auth } from '../firebaseConfig';
 import '../styles/Login.css';
 import axios from 'axios';
+import Loading from './Loading'
 
 const Login = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState('');
@@ -14,7 +15,8 @@ const Login = ({ onLoginSuccess }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [telefono, setTelefono] = useState('');
-  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const [showResetForm, setShowResetForm] = useState(false);
   const [showRegisterForm, setShowRegisterForm] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -23,6 +25,7 @@ const Login = ({ onLoginSuccess }) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       console.log('User signed in:', userCredential.user);
@@ -49,7 +52,6 @@ const Login = ({ onLoginSuccess }) => {
         navigate('/admin'); // Asegúrate de que '/admin' coincida con la ruta para Admin
 
       } else {
-        alert('Ingreso exitoso');
         navigate('/'); // Asegúrate de que '/' coincida con la ruta para MenuList
 
       }
@@ -57,13 +59,15 @@ const Login = ({ onLoginSuccess }) => {
     } catch (error) {
       console.error('Error signing in:', error);
       setError('Usuario o contraseña incorrectos.');
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setError(''); // Limpiar el error antes de registrar
-
+    setLoading(true);
     // Verificar que las contraseñas coincidan
     if (password !== confirmPassword) {
       setError('Las contraseñas no coinciden.');
@@ -110,6 +114,8 @@ const Login = ({ onLoginSuccess }) => {
           console.error('Error al eliminar el usuario de Firebase:', deleteError);
         }
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -128,12 +134,14 @@ const Login = ({ onLoginSuccess }) => {
     setShowPassword(!showPassword);
   };
 
+  if (loading) return <Loading />;
+
   return (
-    <div className="login-page">
+    <div className="login-page h-screen">
       {showRegisterForm ? (
-        <form onSubmit={handleRegister} className="login-form">
-          <h2 className='text-2xl font-bold'>Crear cuenta</h2>
-          <div className="form-group">
+        <form onSubmit={handleRegister} className="w-full lg:w-1/3 lg:my-auto flex flex-col gap-2 lg:border overflow-auto p-10">
+          <h2 className='text-2xl font-bold '>Crear cuenta</h2>
+          <div className='form-group flex gap-1'>
             <label htmlFor="firstName">Nombre</label>
             <input
               className='border'
@@ -146,7 +154,7 @@ const Login = ({ onLoginSuccess }) => {
               required
             />
           </div>
-          <div className="form-group">
+          <div className='form-group flex gap-1'>
             <label htmlFor="lastName">Apellido</label>
             <input
               className='border'
@@ -159,7 +167,7 @@ const Login = ({ onLoginSuccess }) => {
               required
             />
           </div>
-          <div className="form-group">
+          <div className="form-group flex gap-1">
             <label htmlFor="lastName">Teléfono</label>
             <input
               className='border'
@@ -175,7 +183,7 @@ const Login = ({ onLoginSuccess }) => {
               required
             />
           </div>
-          <div className="form-group">
+          <div className="form-group flex gap-1">
             <label htmlFor="email">Correo electrónico</label>
             <input
               className='border'
@@ -188,9 +196,9 @@ const Login = ({ onLoginSuccess }) => {
               required
             />
           </div>
-          <div className="form-group">
+          <div className="form-group flex gap-1">
             <label htmlFor="password">Contraseña</label>
-            <span> Ingrese una contraseña de 6 digitos o mas </span>
+            <span className='text-sm'> Ingrese una contraseña de 6 caracteres o más </span>
             <input
               className='border'
 
@@ -202,8 +210,8 @@ const Login = ({ onLoginSuccess }) => {
               required
             />
           </div>
-          <div className="form-group">
-            <label htmlFor="confirmPassword">Confirmar Contraseña</label>
+          <div className="form-group flex gap-1">
+            <label htmlFor="confirmPassword">Confirmar contraseña</label>
             <input
               className='border'
 
@@ -216,15 +224,15 @@ const Login = ({ onLoginSuccess }) => {
             />
           </div>
           <div className="button-container">
-            <button type="submit">Crear cuenta</button>
+            <button type="submit">Registrar</button>
             <button type="button" onClick={() => setShowRegisterForm(false)}>Cancelar</button>
             {error && <p className="error-message">{error}</p>}
           </div>
         </form>
       ) : showResetForm ? (
-        <form onSubmit={handlePasswordReset} className="login-form">
-          <h2>Reestablecer contraseña</h2>
-          <div className="form-group">
+        <form onSubmit={handlePasswordReset} className="w-full lg:w-1/3 lg:my-auto flex flex-col gap-2 lg:border overflow-auto p-10" >
+          <h2 className='text-2xl font-bold'>Reestablecer contraseña</h2>
+          <div className="form-group flex gap-1">
             <label htmlFor="reset-email">Correo electrónico</label>
             <input
               type="email"
@@ -241,9 +249,9 @@ const Login = ({ onLoginSuccess }) => {
           </div>
         </form>
       ) : (
-        <form onSubmit={handleLogin} className="login-form">
+        <form onSubmit={handleLogin} className="w-full  lg:w-1/3 lg:my-auto flex flex-col gap-2 lg:border overflow-auto p-10">
           <h2 className='text-2xl font-bold'>Iniciar sesión</h2>
-          <div className="form-group">
+          <div className="form-group flex gap-1">
             <label htmlFor="email">Usuario</label>
             <input
               className='border'
@@ -255,7 +263,7 @@ const Login = ({ onLoginSuccess }) => {
               required
             />
           </div>
-          <div className="form-group password-container">
+          <div className="form-group password-container flex gap-1">
             <label htmlFor="password">Contraseña</label>
             <input
               className='border'
