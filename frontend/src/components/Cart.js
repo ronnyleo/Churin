@@ -133,6 +133,7 @@ const Cart = () => {
     };
 
     const enviarDetallesPedido = async (idPedido) => {
+
         const detallesPedido = cartItems.map(item => ({
             menu_id: item.id,
             cantidad: item.cantidad,
@@ -140,17 +141,19 @@ const Cart = () => {
             ingredientes: item.ingredientes,
         }));
 
-        for (const detalle of detallesPedido) {
-            try {
-                console.log('Enviado detalles:', detalle);
-                await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/pedido/detalle-pedido`, {
+        try {
+            await Promise.all(detallesPedido.map(detalle =>
+                axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/pedido/detalle-pedido`, {
                     pedido_id: idPedido,
                     ...detalle,
-                });
-            } catch (error) {
-                console.error('Error al enviar el detalle del pedido:', error);
-                alert('Hubo un problema al enviar los detalles del pedido');
-            }
+                })
+            ));
+
+        }
+
+        catch (error) {
+            console.error('Error al enviar los detalles del pedido:', error);
+            alert('Hubo un problema al enviar los detalles del pedido');
         }
     };
 

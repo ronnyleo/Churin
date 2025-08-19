@@ -10,26 +10,28 @@ async function notifyTelegram(pedido) {
 
   let mensaje = `¡Hay un nuevo pedido!\n`
   mensaje += `Nro: ${pedido.id}\n`;
+  mensaje += `Cliente: ${pedido.nombre} ${pedido.apellido}\n`;
+  mensaje += `Hora: ${pedido.hora}\n`;
   mensaje += `Entrega: ${pedido.entrega}\n`;
+  mensaje += `Teléfono: ${pedido.telefono}\n`;
 
   if (detalle.length > 0) {
     mensaje += `Detalle:\n`;
-
     mensaje += detalle.map(d => {
       const ingredientesLista = Array.isArray(d.ingredientes) && d.ingredientes.length > 0
         ? d.ingredientes.map(ing => ing.nombre).join(', ')
         : 'N/A';
 
-      return `${d.nombre} (Cantidad: ${d.cantidad}, Precio: $${(Number(d.precio) * d.cantidad).toFixed(2)})\n` +
+      return `${d.nombre} (Cantidad: ${d.cantidad}, Precio: $${(Number(d.precio)).toFixed(2)})\n` +
         ` - Ingredientes: ${ingredientesLista}\n`;
     })
-    .join('');         // <- sin comas extra
+    .join('\n');         // <- sin comas extra
 
   }
   else {
     mensaje += `Detalle: N/A\n`;
   }
-  mensaje += `Total: $${pedido.total}\n`;
+  mensaje += `\nTotal: $${pedido.total}\n`;
 
   console.log(pedido);
   await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
