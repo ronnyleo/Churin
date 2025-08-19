@@ -5,7 +5,7 @@ const obtenerPedidos = async () => {
         const query = `SELECT p.*, c.first_name, c.last_name, c.telefono  
             FROM pedido AS p INNER JOIN users AS c
             ON p.id_cliente = c.id`;
-            
+
         const pedidos = await db.any(query);
 
         const pedidosConFechayHora = pedidos.map(pedido => {
@@ -37,7 +37,7 @@ const obtenerPedidos = async () => {
 
 const obtenerPedidosUsuario = async (id) => {
     try {
-        const query =  `SELECT 
+        const query = `SELECT 
             P.id AS id_pedido,
             P.id_cliente,
             P.fecha_hora,
@@ -60,57 +60,57 @@ const obtenerPedidosUsuario = async (id) => {
             ON DP.menu_id = M.id 
             WHERE P.id_cliente = $1`
 
-            const result = await db.any(query, [id]);
-            
+        const result = await db.any(query, [id]);
 
-            // row es cada fila obtenida en la consulta SQL.
-            // acc es el objeto donde se almacenarán los pedidos agrupados
-            const pedidosAgrupados = result.reduce((acc, row) => {
-                
-                const {id_pedido, id_cliente, fecha_hora, total, delivery, lugar_envio, lugar_envio_id, id_detalle,
-                    plato, cantidad, precio_unitario, ingredientes} = row;
 
-                const fechaISO = new Date(fecha_hora); // fecha para ordenar
+        // row es cada fila obtenida en la consulta SQL.
+        // acc es el objeto donde se almacenarán los pedidos agrupados
+        const pedidosAgrupados = result.reduce((acc, row) => {
 
-                // fecha en string
-                const fecha = new Date(fecha_hora). toLocaleString("es-ES", {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "numeric",
-                    day: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: false // formato de 24 horas
-                });
+            const { id_pedido, id_cliente, fecha_hora, total, delivery, lugar_envio, lugar_envio_id, id_detalle,
+                plato, cantidad, precio_unitario, ingredientes } = row;
 
-                if (!acc[id_pedido]) {
-                    acc[id_pedido] = {
-                        id_pedido,
-                        id_cliente,
-                        fecha,
-                        fechaISO,
-                        total,
-                        delivery,
-                        lugar_envio,
-                        lugar_envio_id,
-                        detalles: []
-                    };
-                }
+            const fechaISO = new Date(fecha_hora); // fecha para ordenar
 
-                acc[id_pedido].detalles.push({
-                    id_detalle,
-                    plato,
-                    cantidad,
-                    precio_unitario,
-                    ingredientes
-                })
-
-                return acc 
-            }, {});
-
-            const pedidos = Object.values(pedidosAgrupados).sort((a, b) => {
-                return new Date(b.fechaISO) - new Date(a.fechaISO);
+            // fecha en string
+            const fecha = new Date(fecha_hora).toLocaleString("es-ES", {
+                weekday: "long",
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false // formato de 24 horas
             });
+
+            if (!acc[id_pedido]) {
+                acc[id_pedido] = {
+                    id_pedido,
+                    id_cliente,
+                    fecha,
+                    fechaISO,
+                    total,
+                    delivery,
+                    lugar_envio,
+                    lugar_envio_id,
+                    detalles: []
+                };
+            }
+
+            acc[id_pedido].detalles.push({
+                id_detalle,
+                plato,
+                cantidad,
+                precio_unitario,
+                ingredientes
+            })
+
+            return acc
+        }, {});
+
+        const pedidos = Object.values(pedidosAgrupados).sort((a, b) => {
+            return new Date(b.fechaISO) - new Date(a.fechaISO);
+        });
 
         return pedidos;
     } catch (error) {
@@ -137,9 +137,17 @@ const obtenerDetallePedidos = async (id) => {
 
 const enviarPedido = async (id_cliente, total, delivery, lugar_envio) => {
     try {
-        const query = `
-            INSERT INTO pedido (id_cliente, total, fecha_hora, delivery, lugar_envio) 
-            VALUES ($1, $2, CURRENT_TIMESTAMP, $3, $4) RETURNING *`;
+          const query = `
+            WITH inserted AS (
+                INSERT INTO pedido (id_cliente, total, fecha_hora, delivery, lugar_envio)
+                VALUES ($1, $2, CURRENT_TIMESTAMP, $3, $4)
+                RETURNING *
+            )
+            SELECT i.*, to_char(i.fecha_hora, 'HH24:MI') as hora, u.first_name, u.last_name, u.telefono
+            FROM inserted i
+            INNER JOIN users u ON i.id_cliente = u.id
+        `;
+
         const nuevoPedido = await db.one(query, [id_cliente, total, delivery, lugar_envio]);
         return nuevoPedido;
     } catch (error) {
@@ -160,13 +168,37 @@ const enviarDetallePedido = async (pedido_id, menu_id, cantidad, precio, ingredi
 
 }
 
-const obtenerDetalleConRetry = async(id, intentos=5) => {
-  for (let i=0; i<intentos; i++) {
-    const d = await obtenerDetallePedidos(id);
-    if (d.length) return d;
-    await new Promise(r => setTimeout(r, 400)); // 0.4s
-  }
-  return [];
+const obtenerDetalleConRetry = async (
+    id,
+    intentos = 10,      // antes era 5 → ahora 10 intentos
+    delayMs = 1000      // antes era 400 ms → ahora 1 segundo
+) => {
+    for (let i = 0; i < intentos; i++) {
+        const d = await obtenerDetallePedidos(id);
+        if (Array.isArray(d) && d.length) {
+            return d; // en cuanto encuentre datos, devuelve
+        }
+        // espera antes del siguiente intento
+        await new Promise(r => setTimeout(r, delayMs));
+    }
+    return []; // si no encontró nada en todos los intentos
+};
+
+const obtenerPedidoPorId = async (id) => {
+    try {
+        const query = `select u.first_name, u.last_name, u.telefono, p.* 
+        from pedido as p inner join users as u 
+        on p.id_cliente = u.id
+        where p.id = $1`;
+
+        const pedido = await db.one(query, [id]);
+
+        return pedido;
+
+    } catch (error) {
+        console.error('Error al obtener pedido por ID', error);
+        throw error;
+    }
 }
 
 module.exports = {
@@ -175,5 +207,6 @@ module.exports = {
     obtenerPedidos,
     obtenerPedidosUsuario,
     obtenerDetallePedidos,
-    obtenerDetalleConRetry
+    obtenerDetalleConRetry,
+    obtenerPedidoPorId
 }

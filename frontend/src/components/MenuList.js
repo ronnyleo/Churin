@@ -75,47 +75,47 @@ function MenuList() {
 
             <div className="flex gap-2 grid grid-cols-1 sm:grid-cols-1 sm:gap-3 lg:grid-cols-3 ">
               {groupedMenuItems[categoria.id] && groupedMenuItems[categoria.id].length > 0 ?
-                (groupedMenuItems[categoria.id].map(item => (
-                  <div
-                    key={item.id}
-                    className="p-6 bg-white rounded-lg flex flex-col gap-4 sm:gap-6 border-b sm:p-8 sm:text-xl "
-                  >
-                    <h3 className="text-sm sm:text-xl font-semibold">{item.nombre}</h3>
-                    {item.tipo_id === 5 ? (
-                      <>
-                        {/* Aquí defines el diseño especial para el item con id 5 */}
-                        <span className='text-center font-bold'>${item.precio}</span>
-                      </>
-                    ) : (
-                      <div className="flex gap-2 sm:flex-col sm:gap-5">
-                        {/* Contenedor con alto fijo */}
-                        <div className="w-1/2 sm:w-full flex">
-                          <img
-                            src={item.image_url}
-                            alt={item.nombre}
-                            className="h-auto sm:w-full sm:h-96 object-cover rounded-lg"
-                          />
-                        </div>
-                        <div className='w-1/2 gap-2 h-full flex flex-col sm:w-full justify-center'>
-                          <p
-                            className='text-center sm:text-left text-xs sm:text-base sm:h-[50px] overflow-hidden opacity-60 sm:line-clamp-2'
-                            title={item.descripcion}
-                          >
-                            {item.descripcion}</p>
-                          <span className='text-center font-semibold'>${item.precio}</span>
-                        </div>
-                      </div>
-                    )}
-                    <button
-                      onClick={() => handleAddToCart(item)}
-                      className='bg-yellow-300 hover:bg-yellow-400 w-full py-2 text-xs sm:text-base rounded-md sm:w-1/3 mx-auto'
+                (groupedMenuItems[categoria.id].filter(item => item.activo).map(item => (
+                    <div
+                      key={item.id}
+                      className="p-6 bg-white rounded-lg flex flex-col gap-4 sm:gap-6 border-b sm:p-8 sm:text-xl "
                     >
-                      {item.tipo_combinacion !== 4 && item.tipo_combinacion !== null ? 'Personalizar' : 'Agregar'}
-                    </button>
-                  </div>
-                ))) : (<div className="col-span-full text-center py-6 text-gray-500">
-                  Muy pronto podrás disfrutar de este nuevo plato
-                </div>)}
+                      <h3 className="text-sm sm:text-xl font-semibold">{item.nombre}</h3>
+                      {item.tipo_id === 5 ? (
+                        <>
+                          {/* Aquí defines el diseño especial para el item con id 5 */}
+                          <span className='text-center font-bold'>${item.precio}</span>
+                        </>
+                      ) : (
+                        <div className="flex gap-2 sm:flex-col sm:gap-5">
+                          {/* Contenedor con alto fijo */}
+                          <div className="w-1/2 sm:w-full flex">
+                            <img
+                              src={item.image_url}
+                              alt={item.nombre}
+                              className="h-auto sm:w-full sm:h-96 object-cover rounded-lg"
+                            />
+                          </div>
+                          <div className='w-1/2 gap-2 h-full flex flex-col sm:w-full justify-center'>
+                            <p
+                              className='text-center sm:text-left text-xs sm:text-base sm:h-[50px] overflow-hidden opacity-60 sm:line-clamp-2'
+                              title={item.descripcion}
+                            >
+                              {item.descripcion}</p>
+                            <span className='text-center font-semibold'>${item.precio}</span>
+                          </div>
+                        </div>
+                      )}
+                      <button
+                        onClick={() => handleAddToCart(item)}
+                        className='bg-yellow-300 hover:bg-yellow-400 w-full py-2 text-xs sm:text-base rounded-md sm:w-1/3 mx-auto'
+                      >
+                        {item.tipo_combinacion !== 4 && item.tipo_combinacion !== null ? 'Personalizar' : 'Agregar'}
+                      </button>
+                    </div>
+                  ))) : (<div className="col-span-full text-center py-6 text-gray-500">
+                    Muy pronto podrás disfrutar de este nuevo plato
+                  </div>)}
             </div>
           </div>
         ))}

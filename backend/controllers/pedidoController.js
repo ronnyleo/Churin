@@ -1,6 +1,7 @@
 const { obtenerPedidos, enviarPedido, 
     enviarDetallePedido, obtenerDetallePedidos, 
-    obtenerPedidosUsuario, obtenerDetalleConRetry } = require('../models/pedidoModel');
+    obtenerPedidosUsuario, obtenerDetalleConRetry, 
+    obtenerPedidoPorId} = require('../models/pedidoModel');
 const { notifyTelegram } = require("../notifications/telegram"); // <- tu helper
 
 
@@ -27,10 +28,12 @@ const pedidoController = {
         const pedidoId = parseInt(req.params.id)
         try {
             const detallePedido = await obtenerDetallePedidos(pedidoId);
-
-
-
             res.json(detallePedido);
+            const pedido = await obtenerPedidoPorId(pedidoId);
+            payload = {
+                id: pedidoId,
+                detalle: detallePedido
+            };          
         } catch (error) {
             console.error('Error al obtener pedidos:', error)
         }
@@ -41,13 +44,18 @@ const pedidoController = {
         try {
             const pedido = await enviarPedido(id_cliente, total, delivery, lugar_envio);
             
-            
+            console.log('Pedido insertado', pedido);
             res.status(201).json({ pedido: pedido });
 
             const detalle = await obtenerDetalleConRetry(pedido.id);
+            console.log('Detalle pedido', detalle);
 
             const payload = {
                 id: pedido.id,
+                nombre: pedido.first_name,
+                apellido: pedido.last_name,
+                telefono: pedido.telefono,
+                hora: pedido.hora,
                 total: pedido.total,
                 entrega: pedido.delivery ? pedido.lugar_envio : "Retiro",
                 detalle: detalle.map(d=>({
@@ -56,7 +64,7 @@ const pedidoController = {
                     cantidad: d.cantidad,
                     precio: d.precio,
                 }))
-            }
+            };
 
             notifyTelegram(payload);
 
