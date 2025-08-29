@@ -13,6 +13,7 @@ import Login from "features/auth/pages/Login";
 import Profile from "features/account/pages/ProfilePage";
 import AdminLayout from "features/admin/components/AdminLayout";
 import OrdersPage from "features/admin/pages/AdminOrdersPage";
+import MenuPage from 'features/admin/pages/AdminMenuPage'
 import AdminOverviewPage from "features/admin/pages/AdminOverviewPage";
 import { AuthProvider, useAuth } from "app/context/AuthContext"; // Asegúrate de importar el AuthProvider
 
@@ -57,6 +58,7 @@ const App = () => {
               <Route index element={<Navigate to="overview" replace />} />
               <Route path="overview" element={<AdminOverviewPage />} />
               <Route path="orders" element={<OrdersPage />} />
+              <Route path="menu" element={<MenuPage />} />
             </Route>
             <Route path="/cart" element={<Cart />} />
           </Routes>

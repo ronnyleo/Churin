@@ -93,7 +93,7 @@ export default function OrdersPage() {
         pedidosPorFecha.map(([fecha, pedidos]) => (
           <div className="flex flex-col gap-2" key={fecha}>
             <h3 className="text-xl font-bold">{fecha}</h3>
-            <table className="pedidos__tabla">
+            <table className="">
               <thead>
                 <tr>
                   <th className="pedidos__fila">Nro.</th>

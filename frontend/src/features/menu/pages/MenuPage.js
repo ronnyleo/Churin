@@ -78,7 +78,7 @@ function MenuList() {
       </h1>
       {error && <p>{error}</p>}
 
-      <div className="font-comfortaa">
+      <div className="">
         {categorias.map((categoria) => (
           <div className="md:mb-20 md:px-60" key={categoria.id}>
             <div className="my-5 flex items-center justify-center space-x-4 md:my-10">
@@ -148,7 +148,7 @@ function MenuList() {
                             >
                               {item.descripcion}
                             </p>
-                            <span className="text-center font-semibold">
+                            <span className="text-center">
                               ${item.precio}
                             </span>
                             <button
