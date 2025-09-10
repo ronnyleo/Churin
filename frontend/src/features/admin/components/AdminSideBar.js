@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function AdminSideBar() {
   return (
-    <nav className="flex h-full flex-col gap-4 border-r-2 px-10 py-5">
+    <nav className="flex flex-col gap-4 border-r-2 h-full py-5 px-10">
       <Link to="/admin/overview">Resumen</Link>
       <Link to="/admin/orders">Órdenes</Link>
       <Link to="/admin/clients">Clientes</Link>
