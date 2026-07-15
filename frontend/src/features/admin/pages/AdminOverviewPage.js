@@ -1,8 +1,10 @@
-// src/features/admin/pages/AdminOverviewPage.js
 export default function AdminOverviewPage() {
   return (
-    <h1 className="text-xl font-bold flex gap-10 border-r-2 px-10">
-      Panel de administración
-    </h1>
+    <section className="flex flex-col gap-3 px-10 py-6">
+      <h1 className="text-xl font-bold">Panel de administracion</h1>
+      <p className="max-w-2xl text-sm text-gray-600">
+        Revisa ordenes recientes y administra el menu del restaurante desde la barra lateral.
+      </p>
+    </section>
   );
 }

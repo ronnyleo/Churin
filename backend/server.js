@@ -1,7 +1,7 @@
 // server.js
 const express = require('express');
 const cors = require('cors')
-const client = require('./db'); // Asegúrate de que el cliente de PostgreSQL esté exportado correctamente
+const client = require('./db'); 
 const authRouter = require ('./routes/authRoutes');
 const menuRouter = require('./routes/menuRoutes');
 const uploadRouter = require('./routes/upload');
@@ -13,7 +13,6 @@ const direccionesRouter = require('./routes/direccionesRoutes');
 const tiposPlatoRouter = require('./routes/tiposPlatoRoutes');
 const estadisticasRouter = require('./routes/estadisticasRoutes');
 const multer = require('multer');
-const bodyParser = require('body-parser');
 
 
 const app = express();
@@ -43,15 +42,16 @@ app.use(cors({
 
 // Middleware para manejar JSON en las solicitudes
 app.use(express.json());
-app.use(bodyParser.json()); // Asegúrate de que estás usando esto
 
 // Rutas principales
-
 app.use(express.urlencoded({ extended: true }));
 
 //Ruta de bienvenida para el root URL (/)
 app.get('/', (req, res) => {
-  res.send('BACKEND DESARROLLOOOO');
+  res.json({
+    service: 'Churin API',
+    status: 'ok'
+  });
 });
 
 //Rutas para el registro
