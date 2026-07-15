@@ -1,15 +1,19 @@
 import { Link } from "react-router-dom";
 
+const adminLinks = [
+  { to: "/admin/overview", label: "Resumen" },
+  { to: "/admin/orders", label: "Ordenes" },
+  { to: "/admin/menu", label: "Menu" },
+];
+
 export default function AdminSideBar() {
   return (
-    <nav className="flex flex-col gap-4 border-r-2 h-full py-5 px-10">
-      <Link to="/admin/overview">Resumen</Link>
-      <Link to="/admin/orders">Órdenes</Link>
-      <Link to="/admin/clients">Clientes</Link>
-      <Link to="/admin/sales">Ventas</Link>
-      <Link to="/admin/menu">Menú</Link>
-      <Link to="/admin/promotions">Promociones</Link>
-      <Link to="/admin/settings">Configuración</Link>
+    <nav className="flex h-full flex-col gap-4 border-r-2 px-10 py-5">
+      {adminLinks.map((link) => (
+        <Link key={link.to} to={link.to}>
+          {link.label}
+        </Link>
+      ))}
     </nav>
   );
 }
