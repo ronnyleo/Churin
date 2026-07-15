@@ -1,43 +1,45 @@
-# Churin - Sistema de pedidos para restaurante
+# Churin - Restaurant Ordering System
 
-Aplicacion web para consultar menu, armar un carrito, registrar pedidos y administrar platos de un restaurante. El proyecto esta separado en un frontend React y un backend Express conectado a PostgreSQL, con integracion de Firebase Authentication, Cloudinary para imagenes y notificaciones por Telegram.
+Churin is a full-stack restaurant ordering and menu management application. Customers can browse the menu, customize dishes, manage a cart, place orders, and continue the checkout flow through WhatsApp. Administrators can review orders and manage menu items from an internal dashboard.
 
-## Stack principal
+## Tech Stack
 
-- Frontend: React 18, React Router, Firebase Auth, Axios, Tailwind CSS, Material UI.
-- Backend: Node.js, Express, pg-promise/PostgreSQL, Multer, Sharp, Cloudinary.
-- Integraciones: Firebase, Cloudinary, Telegram Bot API.
+- Frontend: React 18, React Router, Firebase Authentication, Axios, Tailwind CSS, Material UI.
+- Backend: Node.js, Express, PostgreSQL, pg-promise, Multer, Sharp, Cloudinary.
+- Integrations: Firebase, Cloudinary, Telegram Bot API, WhatsApp checkout links.
 
-## Estructura
+## Project Structure
 
 ```text
 backend/
-  controllers/      Logica HTTP por dominio
-  models/           Consultas SQL y acceso a datos
-  routes/           Definicion de endpoints Express
-  notifications/    Integraciones de notificacion
+  controllers/      HTTP handlers by domain
+  models/           SQL queries and data access
+  routes/           Express API routes
+  notifications/    External notification helpers
 frontend/
-  src/app/          Router, providers y contextos
-  src/features/     Modulos por funcionalidad
-  src/shared/       UI, estilos y librerias compartidas
+  src/app/          Router, providers, and global context
+  src/features/     Feature-based application modules
+  src/shared/       Shared UI, styles, and utilities
 ```
 
-## Requisitos
+## Requirements
 
-- Node.js 18 o superior recomendado.
-- PostgreSQL disponible.
-- Credenciales para Firebase, Cloudinary y Telegram si se quieren probar esas integraciones.
+- Node.js 18 or newer recommended.
+- PostgreSQL database.
+- Firebase project for authentication.
+- Cloudinary account for image uploads.
+- Telegram bot credentials if order notifications are enabled.
 
-## Configuracion
+## Environment Setup
 
-Copia las plantillas de entorno y completa los valores locales:
+Create local environment files from the provided examples:
 
 ```bash
 cp backend/.env.example backend/.env
 cp frontend/.env.example frontend/.env
 ```
 
-Variables backend:
+Backend variables:
 
 ```text
 DB_HOST=
@@ -52,13 +54,13 @@ TELEGRAM_BOT_TOKEN=
 TELEGRAM_CHAT_IDS=
 ```
 
-Variable frontend:
+Frontend variable:
 
 ```text
 REACT_APP_BACKEND_URL=http://localhost:10000
 ```
 
-## Instalacion y ejecucion
+## Installation and Local Development
 
 Backend:
 
@@ -76,9 +78,9 @@ npm ci
 npm start
 ```
 
-La API corre por defecto en `http://localhost:10000` y el frontend de Create React App en `http://localhost:3000`.
+By default, the API runs on `http://localhost:10000` and the React app runs on `http://localhost:3000`.
 
-## Scripts utiles
+## Useful Commands
 
 Backend:
 
@@ -96,15 +98,16 @@ npm test -- --watchAll=false
 npm audit --omit=dev
 ```
 
-## Estado de calidad
+## Current Quality Notes
 
-- Hay separacion entre frontend y backend, con carpetas por dominio en ambos lados.
-- El proyecto incluye plantillas `.env.example` para evitar exponer credenciales.
-- Antes de presentarlo a un cliente conviene ejecutar auditoria de dependencias, pruebas y una limpieza de archivos generados del historial de Git.
+- The project is organized as separate frontend and backend applications.
+- Environment examples are included so real credentials do not need to be committed.
+- Generated folders such as `node_modules`, `frontend/build`, and upload artifacts should stay out of version control.
+- Before using this as a public portfolio project, rotate any credentials that were previously committed and run a fresh dependency audit.
 
-## Notas para despliegue
+## Deployment Notes
 
-- Configurar variables de entorno en el proveedor de hosting, no en archivos versionados.
-- Rotar credenciales si alguna vez se compartio un `.env` real.
-- Verificar CORS para el dominio final del frontend.
-- Subir imagenes a Cloudinary y evitar persistir uploads temporales en el repositorio.
+- Configure all production secrets through the hosting provider, not through committed files.
+- Update CORS origins for the final frontend domain.
+- Store uploaded images in Cloudinary and keep temporary upload files out of Git.
+- Rebuild the frontend after changing `REACT_APP_BACKEND_URL`.
