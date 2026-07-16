@@ -81,7 +81,7 @@ function EditUserModal({ isOpen, form, saving, error, onClose, onChange, onSubmi
           </label>
 
           <label className="text-sm font-medium text-gray-700">
-            Telefono
+            Teléfono
             <input
               type="text"
               name="telefono"
@@ -112,7 +112,7 @@ function EditUserModal({ isOpen, form, saving, error, onClose, onChange, onSubmi
               className="mt-1 h-10 w-full rounded-md border border-gray-200 px-3 text-sm outline-none focus:border-yellow-400"
               value={form.password}
               onChange={onChange}
-              placeholder="Dejar vacio para mantener la actual"
+              placeholder="Dejar vacío para mantener la actual"
             />
           </label>
         </div>
@@ -324,11 +324,11 @@ export default function AdminUsersPage() {
             <p className="text-lg font-bold text-gray-900">{pagination.total}</p>
           </div>
           <div className="rounded-lg border border-gray-200 bg-white px-3 py-2">
-            <p className="text-xs font-medium text-gray-500">Admins pag.</p>
+            <p className="text-xs font-medium text-gray-500">Admins pág.</p>
             <p className="text-lg font-bold text-gray-900">{adminCount}</p>
           </div>
           <div className="rounded-lg border border-gray-200 bg-white px-3 py-2">
-            <p className="text-xs font-medium text-gray-500">Clientes pag.</p>
+            <p className="text-xs font-medium text-gray-500">Clientes pág.</p>
             <p className="text-lg font-bold text-gray-900">{clientCount}</p>
           </div>
         </div>
@@ -338,7 +338,7 @@ export default function AdminUsersPage() {
         <input
           type="search"
           className="h-10 rounded-md border border-gray-200 px-3 text-sm outline-none focus:border-yellow-400 md:w-80"
-          placeholder="Buscar por nombre, email o telefono"
+          placeholder="Buscar por nombre, email o teléfono"
           value={search}
           onChange={(event) => setSearch(event.target.value)}
         />
@@ -379,7 +379,7 @@ export default function AdminUsersPage() {
               <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-500">
                 <tr>
                   <th className="px-4 py-3 font-semibold">Usuario</th>
-                  <th className="hidden px-4 py-3 font-semibold md:table-cell">Telefono</th>
+                  <th className="hidden px-4 py-3 font-semibold md:table-cell">Teléfono</th>
                   <th className="px-4 py-3 font-semibold">Rol</th>
                   <th className="hidden px-4 py-3 text-right font-semibold sm:table-cell">ID</th>
                   <th className="px-4 py-3 text-right font-semibold">Acciones</th>
@@ -432,7 +432,7 @@ export default function AdminUsersPage() {
 
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-gray-500">
-              Pagina {pagination.totalPages === 0 ? 0 : pagination.page} de {pagination.totalPages} - {pagination.total} usuarios
+              Página {pagination.totalPages === 0 ? 0 : pagination.page} de {pagination.totalPages} - {pagination.total} usuarios
             </p>
             <div className="flex gap-2">
               <button

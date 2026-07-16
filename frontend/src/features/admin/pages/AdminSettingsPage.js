@@ -6,7 +6,7 @@ const API_BASE = (process.env.REACT_APP_BACKEND_URL || "").replace(/\/$/, "");
 
 const DEFAULT_BANNER = {
   enabled: false,
-  title: "Promocion del dia",
+  title: "Promoción del día",
   description: "Disfruta nuestros platos favoritos preparados al momento.",
   imageUrl: "",
 };
@@ -68,7 +68,7 @@ export default function AdminSettingsPage() {
         setOperation({ ...DEFAULT_OPERATION, ...operationResponse.data });
         setError(null);
       } catch {
-        if (!cancelled) setError("No se pudo cargar la configuracion.");
+        if (!cancelled) setError("No se pudo cargar la configuración.");
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -119,7 +119,7 @@ export default function AdminSettingsPage() {
       setBannerImage(null);
       setSaved(true);
     } catch (err) {
-      setError(err.response?.data?.message || "No se pudo guardar la configuracion.");
+      setError(err.response?.data?.message || "No se pudo guardar la configuración.");
     } finally {
       setSaving(false);
     }
@@ -130,7 +130,7 @@ export default function AdminSettingsPage() {
   return (
     <section className="flex max-w-5xl flex-col gap-5 pb-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Configuracion</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Configuración</h1>
         <p className="mt-1 text-sm text-gray-500">
           Administra preferencias operativas y el banner de publicidad que aparece al abrir el inicio.
         </p>
@@ -148,7 +148,7 @@ export default function AdminSettingsPage() {
             checked={operation.acceptOrders}
             onChange={() => updateOperation("acceptOrders")}
             label="Aceptar pedidos"
-            description="Marca si el restaurante se encuentra operativo para recibir nuevas ordenes."
+            description="Marca si el restaurante se encuentra operativo para recibir nuevas órdenes."
           />
           <Toggle
             checked={operation.freeDelivery}
@@ -166,7 +166,7 @@ export default function AdminSettingsPage() {
             checked={operation.highlightDelivery}
             onChange={() => updateOperation("highlightDelivery")}
             label="Resaltar delivery"
-            description="Ayuda a priorizar pedidos con entrega a domicilio durante la revision."
+            description="Ayuda a priorizar pedidos con entrega a domicilio durante la revisión."
           />
           <Toggle
             checked={banner.enabled}
@@ -198,9 +198,9 @@ export default function AdminSettingsPage() {
             disabled={saving}
             onClick={saveSettings}
           >
-            {saving ? "Guardando..." : "Guardar configuracion"}
+            {saving ? "Guardando..." : "Guardar configuración"}
           </button>
-          {saved && <span className="text-sm font-medium text-green-700">Configuracion guardada</span>}
+          {saved && <span className="text-sm font-medium text-green-700">Configuración guardada</span>}
         </div>
       </div>
     </section>

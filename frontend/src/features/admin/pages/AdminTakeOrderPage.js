@@ -102,7 +102,7 @@ function CustomizationModal({ item, ingredients, onClose, onAdd }) {
           <div className="grid gap-3">
             {Number(item.tipo_ingrediente) === 1 && (
               <>
-                {renderGroup("Proteinas", "proteinas", groups.proteinas)}
+                {renderGroup("Proteínas", "proteinas", groups.proteinas)}
                 {renderGroup("Ensaladas", "ensaladas", groups.ensaladas)}
               </>
             )}
@@ -222,7 +222,7 @@ export default function AdminTakeOrderPage() {
       setIngredients(Array.isArray(ingredientsResponse.data) ? ingredientsResponse.data : []);
       setError(null);
     } catch {
-      setError("No se pudo cargar la toma de ordenes.");
+      setError("No se pudo cargar la toma de órdenes.");
     } finally {
       setLoading(false);
     }
@@ -252,7 +252,7 @@ export default function AdminTakeOrderPage() {
     const categories = new Map();
     filteredMenu.forEach((item) => {
       const categoryId = String(item.tipo_id || "uncategorized");
-      const categoryName = typeById[categoryId] || "Sin categoria";
+      const categoryName = typeById[categoryId] || "Sin categoría";
       if (!categories.has(categoryId)) categories.set(categoryId, { id: categoryId, name: categoryName, items: [] });
       categories.get(categoryId).items.push(item);
     });
@@ -345,7 +345,7 @@ export default function AdminTakeOrderPage() {
     setSaving(true);
     try {
       await axios.patch(`${API_BASE}/api/admin/orders/${table.active_order_id}/status`, { status: "paid" });
-      setSuccess(`${table.name} quedo disponible.`);
+      setSuccess(`${table.name} quedó disponible.`);
       if (selectedTable?.id === table.id) {
         setSelectedTable(null);
         setOrderItems([]);
@@ -434,7 +434,7 @@ export default function AdminTakeOrderPage() {
           <div className="mb-3 flex items-center justify-between gap-3">
             <div>
               <h2 className="font-semibold text-gray-900">Mesas</h2>
-              <p className="text-xs text-gray-500">Plano de atencion</p>
+              <p className="text-xs text-gray-500">Plano de atención</p>
             </div>
             <div className="flex gap-2 text-xs font-semibold">
               <span className="rounded-full bg-green-50 px-2 py-1 text-green-700">{availableTables} libres</span>
@@ -545,7 +545,7 @@ export default function AdminTakeOrderPage() {
           </div>
 
           {menuByCategory.length === 0 ? (
-            <p className="rounded-lg bg-gray-50 px-4 py-10 text-center text-sm text-gray-500">No hay platos para esta categoria.</p>
+            <p className="rounded-lg bg-gray-50 px-4 py-10 text-center text-sm text-gray-500">No hay platos para esta categoría.</p>
           ) : (
             <div className="grid gap-4">
               {menuByCategory.map((category) => (

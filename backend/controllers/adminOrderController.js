@@ -18,8 +18,8 @@ const adminOrderController = {
       const orders = await getOpenOrders();
       res.json(orders);
     } catch (error) {
-      console.error('Error al obtener ordenes admin:', error);
-      res.status(500).json({ message: 'Error al obtener ordenes' });
+      console.error('Error al obtener órdenes admin:', error);
+      res.status(500).json({ message: 'Error al obtener órdenes' });
     }
   },
 
@@ -28,7 +28,7 @@ const adminOrderController = {
     const items = Array.isArray(req.body.items) ? req.body.items : [];
 
     if (!Number.isInteger(tableId) || tableId <= 0) {
-      return res.status(400).json({ message: 'Selecciona una mesa valida' });
+      return res.status(400).json({ message: 'Selecciona una mesa válida' });
     }
 
     if (items.length === 0) {
@@ -49,11 +49,11 @@ const adminOrderController = {
     const { status } = req.body;
 
     if (!Number.isInteger(orderId) || orderId <= 0) {
-      return res.status(400).json({ message: 'ID de orden invalido' });
+      return res.status(400).json({ message: 'ID de orden inválido' });
     }
 
     if (!VALID_STATUSES.has(status)) {
-      return res.status(400).json({ message: 'Estado invalido' });
+      return res.status(400).json({ message: 'Estado inválido' });
     }
 
     try {

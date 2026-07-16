@@ -2,10 +2,10 @@ import { Link, useLocation } from "react-router-dom";
 
 const adminLinks = [
   { to: "/admin/overview", label: "Resumen" },
-  { to: "/admin/orders", label: "Ordenes" },
+  { to: "/admin/orders", label: "Órdenes" },
   { to: "/admin/take-order", label: "Tomar orden" },
-  { to: "/admin/menu", label: "Menu" },
-  { to: "/admin/settings", label: "Configuracion" },
+  { to: "/admin/menu", label: "Menú" },
+  { to: "/admin/settings", label: "Configuración" },
   { to: "/admin/users", label: "Usuarios" },
 ];
 

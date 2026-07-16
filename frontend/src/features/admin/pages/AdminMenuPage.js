@@ -71,7 +71,7 @@ function ConfirmDeleteModal({ plato, deleting, onCancel, onConfirm }) {
         <div className="mt-4 text-center">
           <h2 className="text-lg font-bold text-gray-900">Eliminar plato</h2>
           <p className="mt-2 text-sm text-gray-500">
-            Vas a eliminar {plato.nombre}. Esta accion no se puede deshacer.
+            Vas a eliminar {plato.nombre}. Esta acción no se puede deshacer.
           </p>
         </div>
         <div className="mt-5 flex gap-2">
@@ -111,7 +111,7 @@ function PlateFormModal({ isOpen, form, tipos, editingPlato, saving, error, onCl
               {editingPlato ? "Editar plato" : "Nuevo plato"}
             </h2>
             <p className="mt-1 text-sm text-gray-500">
-              {editingPlato ? "Actualiza informacion, precio o imagen." : "Agrega un plato disponible en el menu."}
+              {editingPlato ? "Actualiza información, precio o imagen." : "Agrega un plato disponible en el menú."}
             </p>
           </div>
           <button
@@ -155,7 +155,7 @@ function PlateFormModal({ isOpen, form, tipos, editingPlato, saving, error, onCl
           </label>
 
           <label className="text-sm font-medium text-gray-700 md:col-span-2">
-            Descripcion
+            Descripción
             <textarea
               name="descripcion"
               rows="3"
@@ -166,7 +166,7 @@ function PlateFormModal({ isOpen, form, tipos, editingPlato, saving, error, onCl
           </label>
 
           <label className="text-sm font-medium text-gray-700">
-            Categoria
+            Categoría
             <select
               name="tipo_id"
               className="mt-1 h-10 w-full rounded-md border border-gray-200 px-3 text-sm outline-none focus:border-yellow-400"
@@ -181,7 +181,7 @@ function PlateFormModal({ isOpen, form, tipos, editingPlato, saving, error, onCl
           </label>
 
           <label className="text-sm font-medium text-gray-700">
-            Combinacion
+            Combinación
             <input
               type="number"
               name="tipo_combinacion"
@@ -204,26 +204,26 @@ function PlateFormModal({ isOpen, form, tipos, editingPlato, saving, error, onCl
 
           <details className="rounded-lg border border-gray-200 bg-gray-50 p-3 text-xs text-gray-600 md:col-span-2">
             <summary className="cursor-pointer font-semibold text-gray-700">
-              Ver claves de combinacion e ingrediente
+              Ver claves de combinación e ingrediente
             </summary>
             <div className="mt-3 grid gap-3 md:grid-cols-2">
               <div>
-                <p className="font-semibold text-gray-800">Combinacion</p>
+                <p className="font-semibold text-gray-800">Combinación</p>
                 <ul className="mt-1 space-y-1">
-                  <li>1: Proteina y ensalada, maximo 2 opciones.</li>
-                  <li>2: Salsas, seleccion simple.</li>
-                  <li>3: Sabores, seleccion simple.</li>
-                  <li>4: Sin personalizacion.</li>
-                  <li>5: Sabores de cocteles, seleccion simple.</li>
+                  <li>1: Proteína y ensalada, máximo 2 opciones.</li>
+                  <li>2: Salsas, selección simple.</li>
+                  <li>3: Sabores, selección simple.</li>
+                  <li>4: Sin personalización.</li>
+                  <li>5: Sabores de cócteles, selección simple.</li>
                 </ul>
               </div>
               <div>
                 <p className="font-semibold text-gray-800">Ingrediente</p>
                 <ul className="mt-1 space-y-1">
-                  <li>1: Proteinas y ensaladas.</li>
+                  <li>1: Proteínas y ensaladas.</li>
                   <li>2: Salsas.</li>
                   <li>3: Sabores.</li>
-                  <li>5: Sabores de cocteles.</li>
+                  <li>5: Sabores de cócteles.</li>
                 </ul>
               </div>
             </div>
@@ -301,7 +301,7 @@ export default function AdminMenuPage() {
       setTipos(Array.isArray(tiposResponse.data) ? tiposResponse.data : []);
       setError(null);
     } catch {
-      setError("No se pudo cargar el menu.");
+      setError("No se pudo cargar el menú.");
     } finally {
       setLoading(false);
     }
@@ -336,7 +336,7 @@ export default function AdminMenuPage() {
 
     filteredPlatos.forEach((plato) => {
       const categoryId = String(plato.tipo_id || "uncategorized");
-      const categoryName = typeById[categoryId] || "Sin categoria";
+      const categoryName = typeById[categoryId] || "Sin categoría";
 
       if (!categoryMap.has(categoryId)) {
         categoryMap.set(categoryId, { id: categoryId, name: categoryName, items: [] });
@@ -404,7 +404,7 @@ export default function AdminMenuPage() {
 
   const validateForm = () => {
     if (!form.nombre.trim() || !form.descripcion.trim() || !form.precio || !form.tipo_id) {
-      setFormError("Completa nombre, descripcion, precio y tipo de plato.");
+      setFormError("Completa nombre, descripción, precio y tipo de plato.");
       return false;
     }
 
@@ -443,7 +443,7 @@ export default function AdminMenuPage() {
         );
         setSuccessModal({
           title: "Plato actualizado",
-          message: `${updatedPlato?.nombre || form.nombre} se actualizo correctamente.`,
+          message: `${updatedPlato?.nombre || form.nombre} se actualizó correctamente.`,
         });
       } else {
         const response = await axios.post(`${API_BASE}/api/menu/plato`, formData, {
@@ -453,7 +453,7 @@ export default function AdminMenuPage() {
         setPlatos((currentPlatos) => [newPlato, ...currentPlatos]);
         setSuccessModal({
           title: "Plato creado",
-          message: `${newPlato?.nombre || form.nombre} se agrego al menu correctamente.`,
+          message: `${newPlato?.nombre || form.nombre} se agregó al menú correctamente.`,
         });
       }
 
@@ -484,7 +484,7 @@ export default function AdminMenuPage() {
       setPlatos((currentPlatos) => currentPlatos.filter((item) => item.id !== deleteTarget.id));
       setSuccessModal({
         title: "Plato eliminado",
-        message: `${deleteTarget.nombre} se elimino correctamente.`,
+        message: `${deleteTarget.nombre} se eliminó correctamente.`,
       });
       setDeleteTarget(null);
       setError(null);
@@ -543,9 +543,9 @@ export default function AdminMenuPage() {
 
       <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Menu</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Menú</h1>
           <p className="mt-1 text-sm text-gray-500">
-            Administra platos, precios, categorias e imagenes del restaurante.
+            Administra platos, precios, categorías e imágenes del restaurante.
           </p>
         </div>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -555,7 +555,7 @@ export default function AdminMenuPage() {
               <p className="text-lg font-bold text-gray-900">{platos.length}</p>
             </div>
             <div className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-center">
-              <p className="text-xs font-medium text-gray-500">Categorias</p>
+              <p className="text-xs font-medium text-gray-500">Categorías</p>
               <p className="text-lg font-bold text-gray-900">{tipos.length}</p>
             </div>
           </div>
@@ -580,7 +580,7 @@ export default function AdminMenuPage() {
           <input
             type="search"
             className="h-10 rounded-md border border-gray-200 px-3 text-sm outline-none focus:border-yellow-400 md:w-80"
-            placeholder="Buscar plato o descripcion"
+            placeholder="Buscar plato o descripción"
             value={searchTerm}
             onChange={(event) => setSearchTerm(event.target.value)}
           />
@@ -590,7 +590,7 @@ export default function AdminMenuPage() {
               value={selectedType}
               onChange={(event) => setSelectedType(event.target.value)}
             >
-              <option value="all">Todas las categorias</option>
+              <option value="all">Todas las categorías</option>
               {tipos.map((tipo) => (
                 <option key={tipo.id} value={tipo.id}>{tipo.nombre}</option>
               ))}
@@ -649,7 +649,7 @@ export default function AdminMenuPage() {
                         <thead className="bg-white text-left text-xs uppercase tracking-wide text-gray-500">
                           <tr>
                             <th className="px-4 py-2.5 font-semibold">Plato</th>
-                            <th className="hidden px-4 py-2.5 font-semibold lg:table-cell">Descripcion</th>
+                            <th className="hidden px-4 py-2.5 font-semibold lg:table-cell">Descripción</th>
                             <th className="px-4 py-2.5 text-right font-semibold">Precio</th>
                             <th className="px-4 py-2.5 text-right font-semibold">Acciones</th>
                           </tr>

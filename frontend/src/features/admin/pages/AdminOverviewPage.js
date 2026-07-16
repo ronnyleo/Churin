@@ -83,7 +83,7 @@ export default function AdminOverviewPage() {
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Resumen</h1>
         <p className="mt-1 text-sm text-gray-500">
-          Vista rapida de la actividad del restaurante para hoy.
+          Vista rápida de la actividad del restaurante para hoy.
         </p>
       </div>
 
@@ -103,7 +103,7 @@ export default function AdminOverviewPage() {
           <p className="mt-2 text-2xl font-bold text-gray-900">{formatMoney(summary?.valor_total)}</p>
         </div>
         <div className="rounded-lg border border-gray-200 bg-white p-4">
-          <p className="text-sm font-medium text-gray-500">Platos en menu</p>
+          <p className="text-sm font-medium text-gray-500">Platos en menú</p>
           <p className="mt-2 text-2xl font-bold text-gray-900">{activeMenuItems}</p>
         </div>
         <div className="rounded-lg border border-gray-200 bg-white p-4">
@@ -115,11 +115,11 @@ export default function AdminOverviewPage() {
       <div className="grid gap-5 xl:grid-cols-[1.5fr_1fr]">
         <div className="rounded-lg border border-gray-200 bg-white">
           <div className="border-b border-gray-100 px-4 py-3">
-            <h2 className="font-semibold text-gray-900">Ultimos pedidos</h2>
+            <h2 className="font-semibold text-gray-900">Últimos pedidos</h2>
           </div>
           <div className="divide-y divide-gray-100">
             {orders.length === 0 ? (
-              <p className="px-4 py-8 text-center text-sm text-gray-500">Todavia no hay pedidos hoy.</p>
+              <p className="px-4 py-8 text-center text-sm text-gray-500">Todavía no hay pedidos hoy.</p>
             ) : (
               orders.map((order) => (
                 <div key={order.id} className="flex items-center justify-between gap-4 px-4 py-3">
@@ -139,14 +139,14 @@ export default function AdminOverviewPage() {
         </div>
 
         <div className="rounded-lg border border-gray-200 bg-white p-4">
-          <h2 className="font-semibold text-gray-900">Operacion de hoy</h2>
+          <h2 className="font-semibold text-gray-900">Operación de hoy</h2>
           <div className="mt-4 flex flex-col gap-3">
             <div className="flex items-center justify-between rounded-md bg-gray-50 px-3 py-2">
               <span className="text-sm text-gray-600">Delivery</span>
               <span className="font-semibold text-gray-900">{deliveryOrders}</span>
             </div>
             <div className="flex items-center justify-between rounded-md bg-gray-50 px-3 py-2">
-              <span className="text-sm text-gray-600">Ordenes en mesa</span>
+              <span className="text-sm text-gray-600">Órdenes en mesa</span>
               <span className="font-semibold text-gray-900">{tableOrders}</span>
             </div>
             <div className="flex items-center justify-between rounded-md bg-gray-50 px-3 py-2">

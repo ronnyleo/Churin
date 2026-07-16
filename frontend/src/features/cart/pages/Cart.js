@@ -38,7 +38,7 @@ const Cart = () => {
 
   const finalizarPedido = async () => {
     if (!operationSettings.acceptOrders) {
-      alert("El restaurante no esta aceptando pedidos en este momento");
+      alert("El restaurante no está aceptando pedidos en este momento");
       return;
     }
 
@@ -53,7 +53,7 @@ const Cart = () => {
     }
 
     if (isDelivery && !direccion) {
-      alert("Debe seleccionar un lugar de envio");
+      alert("Debe seleccionar un lugar de envío");
       return;
     }
 
@@ -82,7 +82,7 @@ const Cart = () => {
         let mensaje = `Hola, hice un pedido ${tipoPedido}.\n\n`;
         mensaje += `*Datos:*\n`;
         mensaje += `Nombres: ${cliente.first_name} ${cliente.last_name}\n`;
-        mensaje += `Telefono: ${cliente.telefono}\n\n`;
+        mensaje += `Teléfono: ${cliente.telefono}\n\n`;
         mensaje += `*Detalle:*\n`;
 
         if (items.length > 0) {
@@ -103,15 +103,15 @@ const Cart = () => {
         }
 
         mensaje += `\n*Subtotal:* $${totalPrice.toFixed(2)}\n`;
-        mensaje += `*Envio:* $${effectiveShippingCost.toFixed(2)}\n`;
+        mensaje += `*Envío:* $${effectiveShippingCost.toFixed(2)}\n`;
         mensaje += `*Total:* $${totalToPay.toFixed(2)}\n\n`;
-        mensaje += `Gracias!`;
+        mensaje += `¡Gracias!`;
 
         const encodedMessage = encodeURIComponent(mensaje);
         const whatsappURLMobile = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
         const whatsappURLEscritorio = `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`;
 
-        alert("Seras redirigido a WhatsApp para completar tu pedido");
+        alert("Serás redirigido a WhatsApp para completar tu pedido");
 
         if (isDesktop) {
           const newWindow = window.open(whatsappURLEscritorio, "_blank");
@@ -178,7 +178,7 @@ const Cart = () => {
           setOperationSettings({ ...DEFAULT_OPERATION_SETTINGS, ...response.data });
         }
       } catch (error) {
-        console.error("Error al obtener la configuracion operativa:", error);
+        console.error("Error al obtener la configuración operativa:", error);
       }
     };
 
@@ -246,7 +246,7 @@ const Cart = () => {
     <div className="mx-auto flex flex-col gap-5 p-5 font-comfortaa sm:w-1/2 sm:p-10">
       {!operationSettings.acceptOrders && cartItems.length > 0 && (
         <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
-          El restaurante no esta aceptando pedidos en este momento.
+          El restaurante no está aceptando pedidos en este momento.
         </div>
       )}
 
@@ -259,7 +259,7 @@ const Cart = () => {
       {cartItems.length > 0 && (
         <div className="flex flex-col gap-5 border">
           <h3 className="bg-white px-4 py-2 font-paytone text-lg font-bold">
-            Como quieres recibir tu pedido?
+            ¿Cómo quieres recibir tu pedido?
           </h3>
           <div className="flex flex-col gap-5 px-10 py-5">
             <div className="flex flex-col items-center justify-center gap-2 sm:flex-row sm:gap-5">
@@ -296,7 +296,7 @@ const Cart = () => {
                   onChange={handleDireccionChange}
                 >
                   <option className="text-sm" value="">
-                    Selecciona una opcion
+                    Selecciona una opción
                   </option>
                   {direcciones.map((direccionItem) => (
                     <option
@@ -322,13 +322,13 @@ const Cart = () => {
           {cartItems.length === 0 ? (
             <div className="flex flex-col gap-5">
               <p className="text-center text-lg font-semibold">
-                Tu carrito esta vacio
+                Tu carrito está vacío
               </p>
               <Link
                 className="mx-auto w-full rounded-lg bg-yellow-300 p-2 text-center sm:w-1/3"
                 to="/"
               >
-                Ver menu
+                Ver menú
               </Link>
             </div>
           ) : (
@@ -383,7 +383,7 @@ const Cart = () => {
                     <span className="font-bold">${totalPrice.toFixed(2)}</span>
                   </div>
                   <div className="flex w-full justify-between">
-                    <h3>Envio</h3>
+                    <h3>Envío</h3>
                     <span className="font-bold">
                       ${effectiveShippingCost.toFixed(2)}
                     </span>
@@ -408,7 +408,7 @@ const Cart = () => {
                       className="w-full rounded-lg bg-yellow-300 p-2 text-center sm:w-1/3"
                       to="/"
                     >
-                      Volver al menu
+                      Volver al menú
                     </Link>
                   </div>
                 ) : (
@@ -416,7 +416,7 @@ const Cart = () => {
                     className="rounded-lg bg-yellow-300 p-2 text-center"
                     to="/Login"
                   >
-                    Inicia sesion para finalizar tu pedido
+                    Inicia sesión para finalizar tu pedido
                   </Link>
                 )}
               </div>

@@ -72,7 +72,7 @@ export default function OrdersPage() {
           setOperationSettings({ ...DEFAULT_OPERATION_SETTINGS, ...response.data });
         }
       } catch (err) {
-        console.error("Error al obtener la configuracion operativa:", err);
+        console.error("Error al obtener la configuración operativa:", err);
       }
     };
 
@@ -193,7 +193,7 @@ export default function OrdersPage() {
       );
       setResumenPorFecha((prev) => ({ ...prev, [fecha]: res.data }));
     } catch {
-      setError("Error al obtener estadisticas del dia");
+      setError("Error al obtener estadísticas del día");
     }
   };
 
@@ -231,7 +231,7 @@ export default function OrdersPage() {
               className="h-9 rounded-md bg-gray-100 px-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200"
               onClick={() => aplicarFiltroRapido("last7")}
             >
-              Ultimos 7 dias
+              Últimos 7 días
             </button>
           </div>
 
@@ -292,7 +292,7 @@ export default function OrdersPage() {
                       <th className="font-semibold text-gray-500 px-4 py-3 whitespace-nowrap hidden md:table-cell">Hora</th>
                       <th className="font-semibold text-gray-500 px-4 py-3 whitespace-nowrap text-right">Total</th>
                       <th className="font-semibold text-gray-500 px-4 py-3 whitespace-nowrap hidden sm:table-cell">Tipo</th>
-                      <th className="font-semibold text-gray-500 px-4 py-3 whitespace-nowrap hidden lg:table-cell">Telefono</th>
+                      <th className="font-semibold text-gray-500 px-4 py-3 whitespace-nowrap hidden lg:table-cell">Teléfono</th>
                       <th className="font-semibold text-gray-500 px-4 py-3 w-10"></th>
                     </tr>
                   </thead>
@@ -408,7 +408,7 @@ export default function OrdersPage() {
                   className="px-4 py-2 bg-yellow-300 hover:bg-yellow-400 rounded-lg text-sm font-medium transition-colors w-full sm:w-auto"
                   onClick={() => obtenerEstadisticasPorFecha(fecha)}
                 >
-                  Resumen del dia
+                  Resumen del día
                 </button>
                 {resumenPorFecha[fecha] && (
                   <div className="flex items-center gap-4 text-sm text-gray-600">
@@ -427,7 +427,7 @@ export default function OrdersPage() {
           {pagination.totalPages > 1 && (
             <div className="mt-2 flex flex-col gap-3 border-t border-gray-100 pt-4 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-gray-500">
-                Pagina {pagination.page} de {pagination.totalPages}
+                Página {pagination.page} de {pagination.totalPages}
               </p>
               <div className="flex gap-2">
                 <button
