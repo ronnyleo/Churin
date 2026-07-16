@@ -19,6 +19,15 @@ function formatMoney(value) {
   return currencyFormatter.format(Number(value || 0));
 }
 
+function isTableOrder(order) {
+  return order?.email === "mesa@churin.local" || /^Mesa\s+/i.test(order?.lugar_envio || "");
+}
+
+function orderChannelLabel(order) {
+  if (isTableOrder(order)) return order.lugar_envio || "Mesa";
+  return order.delivery ? order.lugar_envio : "Retiro";
+}
+
 export default function AdminOverviewPage() {
   const today = useMemo(() => getDateInputValue(new Date()), []);
   const [summary, setSummary] = useState(null);
@@ -63,8 +72,9 @@ export default function AdminOverviewPage() {
   }, [today]);
 
   const activeMenuItems = menuItems.filter((item) => item.activo !== false).length;
-  const deliveryOrders = orders.filter((order) => order.delivery).length;
-  const pickupOrders = orders.length - deliveryOrders;
+  const deliveryOrders = Number(summary?.delivery_pedidos || 0);
+  const tableOrders = Number(summary?.mesa_pedidos || 0);
+  const pickupOrders = Number(summary?.retiro_pedidos || 0);
 
   if (loading) return <Loading />;
 
@@ -118,7 +128,7 @@ export default function AdminOverviewPage() {
                       #{order.id} - {order.first_name} {order.last_name}
                     </p>
                     <p className="text-xs text-gray-500">
-                      {order.hora} - {order.delivery ? order.lugar_envio : "Retiro"}
+                      {order.hora} - {orderChannelLabel(order)}
                     </p>
                   </div>
                   <p className="whitespace-nowrap font-semibold text-gray-900">{formatMoney(order.total)}</p>
@@ -134,6 +144,10 @@ export default function AdminOverviewPage() {
             <div className="flex items-center justify-between rounded-md bg-gray-50 px-3 py-2">
               <span className="text-sm text-gray-600">Delivery</span>
               <span className="font-semibold text-gray-900">{deliveryOrders}</span>
+            </div>
+            <div className="flex items-center justify-between rounded-md bg-gray-50 px-3 py-2">
+              <span className="text-sm text-gray-600">Ordenes en mesa</span>
+              <span className="font-semibold text-gray-900">{tableOrders}</span>
             </div>
             <div className="flex items-center justify-between rounded-md bg-gray-50 px-3 py-2">
               <span className="text-sm text-gray-600">Retiro</span>

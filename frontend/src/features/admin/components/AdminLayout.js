@@ -3,11 +3,11 @@ import { Outlet } from "react-router-dom";
 
 export default function AdminLayout() {
   return (
-    <div className="pt-20 px-4 md:px-8 flex h-[calc(100vh-5rem)] overflow-hidden">
-      <aside className="flex-shrink-0 border-r border-gray-200">
+    <div className="flex min-h-[calc(100vh-5rem)] flex-col pt-20 md:flex-row md:px-8">
+      <aside className="border-b border-gray-200 bg-white md:w-56 md:flex-shrink-0 md:border-b-0 md:border-r">
         <AdminSideBar />
       </aside>
-      <section className="flex-1 min-w-0 min-h-0 overflow-y-auto px-4 md:px-8 py-6">
+      <section className="min-h-0 min-w-0 flex-1 overflow-y-auto px-4 py-5 md:px-8 md:py-6">
         <Outlet />
       </section>
     </div>

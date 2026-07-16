@@ -16,6 +16,7 @@ import MenuPage from 'features/admin/pages/AdminMenuPage'
 import AdminOverviewPage from "features/admin/pages/AdminOverviewPage";
 import AdminSettingsPage from "features/admin/pages/AdminSettingsPage";
 import AdminUsersPage from "features/admin/pages/AdminUsersPage";
+import AdminTakeOrderPage from "features/admin/pages/AdminTakeOrderPage";
 import { AuthProvider } from "app/context/AuthContext";
 
 const App = () => {
@@ -54,6 +55,7 @@ const App = () => {
               <Route index element={<Navigate to="overview" replace />} />
               <Route path="overview" element={<AdminOverviewPage />} />
               <Route path="orders" element={<OrdersPage />} />
+              <Route path="take-order" element={<AdminTakeOrderPage />} />
               <Route path="menu" element={<MenuPage />} />
               <Route path="settings" element={<AdminSettingsPage />} />
               <Route path="users" element={<AdminUsersPage />} />

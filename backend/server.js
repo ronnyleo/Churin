@@ -13,6 +13,7 @@ const direccionesRouter = require('./routes/direccionesRoutes');
 const tiposPlatoRouter = require('./routes/tiposPlatoRoutes');
 const estadisticasRouter = require('./routes/estadisticasRoutes');
 const settingsRouter = require('./routes/settingsRoutes');
+const adminOrderRouter = require('./routes/adminOrderRoutes');
 const multer = require('multer');
 
 
@@ -37,7 +38,7 @@ app.use(cors({
           callback(new Error('Not allowed by CORS'));
       }
   },
-  methods: 'GET,POST,PUT,DELETE',
+  methods: 'GET,POST,PUT,PATCH,DELETE',
   allowedHeaders: 'Content-Type,Authorization'
 }));
 
@@ -65,6 +66,7 @@ app.use('/api', direccionesRouter);
 app.use('/api', tiposPlatoRouter);
 app.use('/api', estadisticasRouter);
 app.use('/api', settingsRouter);
+app.use('/api', adminOrderRouter);
 
 
 app.use(categoriaRoutes);
