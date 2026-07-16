@@ -83,7 +83,7 @@ export default function AdminOverviewPage() {
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Resumen</h1>
         <p className="mt-1 text-sm text-gray-500">
-          Vista rápida de la actividad del restaurante para hoy.
+          Vista rápida de la actividad para hoy.
         </p>
       </div>
 
@@ -139,7 +139,7 @@ export default function AdminOverviewPage() {
         </div>
 
         <div className="rounded-lg border border-gray-200 bg-white p-4">
-          <h2 className="font-semibold text-gray-900">Operación de hoy</h2>
+          <h2 className="font-semibold text-gray-900">Actividad de hoy</h2>
           <div className="mt-4 flex flex-col gap-3">
             <div className="flex items-center justify-between rounded-md bg-gray-50 px-3 py-2">
               <span className="text-sm text-gray-600">Delivery</span>
@@ -152,12 +152,6 @@ export default function AdminOverviewPage() {
             <div className="flex items-center justify-between rounded-md bg-gray-50 px-3 py-2">
               <span className="text-sm text-gray-600">Retiro</span>
               <span className="font-semibold text-gray-900">{pickupOrders}</span>
-            </div>
-            <div className="flex items-center justify-between rounded-md bg-gray-50 px-3 py-2">
-              <span className="text-sm text-gray-600">Promedio por pedido</span>
-              <span className="font-semibold text-gray-900">
-                {summary?.total_pedidos ? formatMoney(Number(summary.valor_total || 0) / Number(summary.total_pedidos)) : formatMoney(0)}
-              </span>
             </div>
           </div>
         </div>

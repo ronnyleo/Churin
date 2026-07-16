@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 
 export default function AdminLayout() {
   return (
-    <div className="flex min-h-[calc(100vh-5rem)] flex-col pt-20 md:flex-row md:px-8">
+    <div className="flex min-h-[calc(100vh-5rem)] flex-col md:pt-20 md:flex-row md:px-8">
       <aside className="border-b border-gray-200 bg-white md:w-56 md:flex-shrink-0 md:border-b-0 md:border-r">
         <AdminSideBar />
       </aside>

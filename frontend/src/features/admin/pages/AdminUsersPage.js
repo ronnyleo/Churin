@@ -380,8 +380,7 @@ export default function AdminUsersPage() {
                 <tr>
                   <th className="px-4 py-3 font-semibold">Usuario</th>
                   <th className="hidden px-4 py-3 font-semibold md:table-cell">Teléfono</th>
-                  <th className="px-4 py-3 font-semibold">Rol</th>
-                  <th className="hidden px-4 py-3 text-right font-semibold sm:table-cell">ID</th>
+                  <th className="hidden px-4 py-3 font-semibold md:table-cell">Rol</th>
                   <th className="px-4 py-3 text-right font-semibold">Acciones</th>
                 </tr>
               </thead>
@@ -404,15 +403,12 @@ export default function AdminUsersPage() {
                       <td className="hidden px-4 py-3 text-gray-600 md:table-cell">
                         {user.telefono || "-"}
                       </td>
-                      <td className="px-4 py-3">
+                      <td className="hidden px-4 py-3 text-gray-600 md:table-cell">
                         <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
                           user.role === "admin" ? "bg-yellow-100 text-yellow-800" : "bg-gray-100 text-gray-700"
                         }`}>
                           {normalizeRole(user.role)}
                         </span>
-                      </td>
-                      <td className="hidden px-4 py-3 text-right font-mono text-gray-400 sm:table-cell">
-                        {user.id}
                       </td>
                       <td className="px-4 py-3 text-right">
                         <button

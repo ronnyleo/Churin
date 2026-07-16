@@ -235,7 +235,7 @@ export default function OrdersPage() {
             </button>
           </div>
 
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
+          <div className="flex gap-2 flex-row sm:items-end">
             <label className="flex flex-col text-[11px] font-semibold uppercase tracking-wide text-gray-500">
               Desde
               <input
