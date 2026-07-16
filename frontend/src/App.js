@@ -17,6 +17,7 @@ import AdminOverviewPage from "features/admin/pages/AdminOverviewPage";
 import AdminSettingsPage from "features/admin/pages/AdminSettingsPage";
 import AdminUsersPage from "features/admin/pages/AdminUsersPage";
 import AdminTakeOrderPage from "features/admin/pages/AdminTakeOrderPage";
+import AdminCuponesPage from "features/admin/pages/AdminCuponesPage";
 import { AuthProvider } from "app/context/AuthContext";
 
 const App = () => {
@@ -57,6 +58,7 @@ const App = () => {
               <Route path="orders" element={<OrdersPage />} />
               <Route path="take-order" element={<AdminTakeOrderPage />} />
               <Route path="menu" element={<MenuPage />} />
+              <Route path="cupones" element={<AdminCuponesPage />} />
               <Route path="settings" element={<AdminSettingsPage />} />
               <Route path="users" element={<AdminUsersPage />} />
             </Route>

@@ -9,10 +9,22 @@ export const CartProvider = ({ children }) => {
     return savedCart ? JSON.parse(savedCart) : [];
   });
   const [cartToast, setCartToast] = useState(null);
+  const [appliedCoupon, setAppliedCoupon] = useState(() => {
+    const saved = localStorage.getItem("appliedCoupon");
+    return saved ? JSON.parse(saved) : null;
+  });
 
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
+
+  useEffect(() => {
+    if (appliedCoupon) {
+      localStorage.setItem("appliedCoupon", JSON.stringify(appliedCoupon));
+    } else {
+      localStorage.removeItem("appliedCoupon");
+    }
+  }, [appliedCoupon]);
 
   useEffect(() => {
     if (!cartToast) return undefined;
@@ -55,12 +67,43 @@ export const CartProvider = ({ children }) => {
 
   const clearCart = () => {
     setCartItems([]);
+    setAppliedCoupon(null);
     localStorage.removeItem("cartItems");
+    localStorage.removeItem("appliedCoupon");
+  };
+
+  const applyCoupon = (coupon) => {
+    setAppliedCoupon(coupon);
+  };
+
+  const removeCoupon = () => {
+    setAppliedCoupon(null);
+  };
+
+  const getCouponDiscount = (subtotal) => {
+    if (!appliedCoupon) return 0;
+    if (appliedCoupon.tipo === "porcentaje" || appliedCoupon.tipo === "combo") {
+      return Math.round((subtotal * Number(appliedCoupon.valor)) / 100 * 100) / 100;
+    }
+    if (appliedCoupon.tipo === "monto_fijo") {
+      return Math.min(Number(appliedCoupon.valor), subtotal);
+    }
+    return 0;
   };
 
   return (
     <CartContext.Provider
-      value={{ cartItems, setCartItems, addToCart, removeFromCart, clearCart }}
+      value={{
+        cartItems,
+        setCartItems,
+        addToCart,
+        removeFromCart,
+        clearCart,
+        appliedCoupon,
+        applyCoupon,
+        removeCoupon,
+        getCouponDiscount,
+      }}
     >
       {children}
       {cartToast && (

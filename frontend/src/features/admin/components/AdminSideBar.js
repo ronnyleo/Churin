@@ -5,6 +5,7 @@ const adminLinks = [
   { to: "/admin/orders", label: "Órdenes" },
   { to: "/admin/take-order", label: "Tomar orden" },
   { to: "/admin/menu", label: "Menú" },
+  { to: "/admin/cupones", label: "Cupones" },
   { to: "/admin/settings", label: "Configuración" },
   { to: "/admin/users", label: "Usuarios" },
 ];

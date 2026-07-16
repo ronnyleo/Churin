@@ -14,6 +14,7 @@ const tiposPlatoRouter = require('./routes/tiposPlatoRoutes');
 const estadisticasRouter = require('./routes/estadisticasRoutes');
 const settingsRouter = require('./routes/settingsRoutes');
 const adminOrderRouter = require('./routes/adminOrderRoutes');
+const cuponRouter = require('./routes/cuponRoutes');
 const multer = require('multer');
 
 
@@ -67,6 +68,7 @@ app.use('/api', tiposPlatoRouter);
 app.use('/api', estadisticasRouter);
 app.use('/api', settingsRouter);
 app.use('/api', adminOrderRouter);
+app.use('/api', cuponRouter);
 
 
 app.use(categoriaRoutes);
