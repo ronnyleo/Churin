@@ -5,39 +5,48 @@ export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState(() => {
-    // Carga inicial desde localStorage si existe, de lo contrario usa un array vacío
     const savedCart = localStorage.getItem("cartItems");
     return savedCart ? JSON.parse(savedCart) : [];
   });
+  const [cartToast, setCartToast] = useState(null);
 
-  // Guarda los cambios en localStorage cada vez que se actualiza el carrito
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
 
+  useEffect(() => {
+    if (!cartToast) return undefined;
+
+    const timeoutId = setTimeout(() => {
+      setCartToast(null);
+    }, 2200);
+
+    return () => clearTimeout(timeoutId);
+  }, [cartToast]);
+
   const addToCart = (item) => {
     setCartItems((prevItems) => {
-      // Verifica si ya existe un plato con la misma ID y combinación de ingredientes
+      const sameIngredients = (cartItem) =>
+        JSON.stringify(cartItem.ingredientes) === JSON.stringify(item.ingredientes);
       const existingItem = prevItems.find(
-        (cartItem) =>
-          cartItem.id === item.id &&
-          JSON.stringify(cartItem.ingredientes) ===
-            JSON.stringify(item.ingredientes), // Compara las combinaciones de ingredientes
+        (cartItem) => cartItem.id === item.id && sameIngredients(cartItem),
       );
 
       if (existingItem) {
-        // Si el plato con la misma combinación ya existe, actualiza la cantidad
         return prevItems.map((cartItem) =>
-          cartItem.id === existingItem.id
+          cartItem.id === existingItem.id && sameIngredients(cartItem)
             ? { ...cartItem, cantidad: cartItem.cantidad + 1 }
             : cartItem,
         );
-      } else {
-        // Si no existe, agrega el nuevo plato al carrito
-        return [...prevItems, { ...item, cantidad: 1 }];
       }
+
+      return [...prevItems, { ...item, cantidad: 1 }];
     });
-    alert("Producto agregado");
+
+    setCartToast({
+      title: "Agregado al carrito",
+      message: item?.nombre ? `${item.nombre} se agregó correctamente.` : "Producto agregado correctamente.",
+    });
   };
 
   const removeFromCart = (itemId) => {
@@ -46,7 +55,7 @@ export const CartProvider = ({ children }) => {
 
   const clearCart = () => {
     setCartItems([]);
-    localStorage.removeItem("cartItems"); // Limpia el carrito también del localStorage
+    localStorage.removeItem("cartItems");
   };
 
   return (
@@ -54,6 +63,15 @@ export const CartProvider = ({ children }) => {
       value={{ cartItems, setCartItems, addToCart, removeFromCart, clearCart }}
     >
       {children}
+      {cartToast && (
+        <div
+          aria-live="polite"
+          className="fixed right-4 top-24 z-50 w-[calc(100%-2rem)] max-w-sm rounded-lg border border-green-200 bg-white px-4 py-3 font-comfortaa text-sm text-gray-800 shadow-lg sm:right-6"
+        >
+          <p className="font-bold text-green-700">{cartToast.title}</p>
+          <p className="mt-1 text-gray-600">{cartToast.message}</p>
+        </div>
+      )}
     </CartContext.Provider>
   );
 };
