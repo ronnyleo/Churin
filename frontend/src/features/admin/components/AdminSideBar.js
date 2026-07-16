@@ -4,6 +4,8 @@ const adminLinks = [
   { to: "/admin/overview", label: "Resumen" },
   { to: "/admin/orders", label: "Ordenes" },
   { to: "/admin/menu", label: "Menu" },
+  { to: "/admin/settings", label: "Configuración" },
+  { to: "/admin/users", label: "Usuarios" },
 ];
 
 export default function AdminSideBar() {

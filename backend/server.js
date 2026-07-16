@@ -12,6 +12,7 @@ const ingredientRouter = require('./routes/ingredientRoutes');
 const direccionesRouter = require('./routes/direccionesRoutes');
 const tiposPlatoRouter = require('./routes/tiposPlatoRoutes');
 const estadisticasRouter = require('./routes/estadisticasRoutes');
+const settingsRouter = require('./routes/settingsRoutes');
 const multer = require('multer');
 
 
@@ -63,6 +64,7 @@ app.use('/api', pedidosRouter);
 app.use('/api', direccionesRouter);
 app.use('/api', tiposPlatoRouter);
 app.use('/api', estadisticasRouter);
+app.use('/api', settingsRouter);
 
 
 app.use(categoriaRoutes);

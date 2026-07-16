@@ -14,6 +14,8 @@ import AdminLayout from "features/admin/components/AdminLayout";
 import OrdersPage from "features/admin/pages/AdminOrdersPage";
 import MenuPage from 'features/admin/pages/AdminMenuPage'
 import AdminOverviewPage from "features/admin/pages/AdminOverviewPage";
+import AdminSettingsPage from "features/admin/pages/AdminSettingsPage";
+import AdminUsersPage from "features/admin/pages/AdminUsersPage";
 import { AuthProvider } from "app/context/AuthContext";
 
 const App = () => {
@@ -53,6 +55,8 @@ const App = () => {
               <Route path="overview" element={<AdminOverviewPage />} />
               <Route path="orders" element={<OrdersPage />} />
               <Route path="menu" element={<MenuPage />} />
+              <Route path="settings" element={<AdminSettingsPage />} />
+              <Route path="users" element={<AdminUsersPage />} />
             </Route>
             <Route path="/cart" element={<Cart />} />
           </Routes>

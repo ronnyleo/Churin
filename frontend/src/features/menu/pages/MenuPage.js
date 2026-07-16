@@ -16,6 +16,7 @@ function MenuList() {
   const [customizingItem, setCustomizingItem] = useState(null);
   const [open, setOpen] = useState(false);
   const [showOverlay, setShowOverlay] = useState(true);
+  const [banner, setBanner] = useState(null);
   const { addToCart } = useContext(CartContext);
 
   useEffect(() => {
@@ -28,6 +29,9 @@ function MenuList() {
         const responseCategorias = await axios.get(
           `${process.env.REACT_APP_BACKEND_URL}/api/categorias`,
         );
+        const responseBanner = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/api/settings/banner`,
+        );
 
         const categoriasOrdenadas = responseCategorias.data.sort(
           (a, b) => a.orden - b.orden,
@@ -35,10 +39,11 @@ function MenuList() {
 
         setMenuItems(response.data);
         setCategorias(categoriasOrdenadas);
+        setBanner(responseBanner.data);
       } catch (error) {
-        console.error("Error al obtener el menú:", error);
+        console.error("Error al obtener el menu:", error);
         setError(
-          "Hubo un problema al obtener el menú. Por favor, espera 1 minuto e intenta nuevamente.",
+          "Hubo un problema al obtener el menu. Por favor, espera 1 minuto e intenta nuevamente.",
         );
       } finally {
         setLoading(false);
@@ -72,8 +77,12 @@ function MenuList() {
 
   return (
     <div className="md:p-108 flex flex-col items-center">
-      <Overlay isOpen={showOverlay} onClose={() => setShowOverlay(false)} />
-      <h1 className="my-5 text-center font-paytone text-3xl font-bold md:my-10">
+      <Overlay
+        isOpen={showOverlay && banner?.enabled !== false}
+        imageUrl={banner?.imageUrl}
+        onClose={() => setShowOverlay(false)}
+      />
+<h1 className="my-5 text-center font-paytone text-3xl font-bold md:my-10">
         MENÚ
       </h1>
       {error && <p>{error}</p>}

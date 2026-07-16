@@ -1,8 +1,14 @@
-const { obtenerPedidos, enviarPedido, 
-    enviarDetallePedido, obtenerDetallePedidos, 
-    obtenerPedidosUsuario, obtenerDetalleConRetry, 
-    obtenerPedidoPorId} = require('../models/pedidoModel');
+const {
+    obtenerPedidos,
+    enviarPedido,
+    enviarDetallePedido,
+    obtenerDetallePedidos,
+    obtenerPedidosUsuario,
+    obtenerDetalleConRetry,
+    obtenerPedidoPorId
+} = require('../models/pedidoModel');
 const { notifyTelegram } = require("../notifications/telegram"); // <- tu helper
+const { getOperationSettings } = require('../models/settingsModel');
 
 const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
 const DEFAULT_PAGE = 1;
@@ -81,16 +87,19 @@ const pedidoController = {
             console.error("Error al obtener los pedidos del usuario")
         }
     },
+
     obtenerDetallePedidos: async (req, res) => {
         const pedidoId = parseInt(req.params.id)
         try {
             const detallePedido = await obtenerDetallePedidos(pedidoId);
             res.json(detallePedido);
             const pedido = await obtenerPedidoPorId(pedidoId);
-            payload = {
+            const payload = {
                 id: pedidoId,
-                detalle: detallePedido
-            };          
+                detalle: detallePedido,
+                cliente: pedido ? `${pedido.first_name} ${pedido.last_name}` : ''
+            };
+            return payload;
         } catch (error) {
             console.error('Error al obtener pedidos:', error)
         }
@@ -99,10 +108,18 @@ const pedidoController = {
     enviarPedido: async (req, res) => {
         const { id_cliente, total, delivery, lugar_envio } = req.body;
         try {
+            const operationSettings = await getOperationSettings();
+
+            if (!operationSettings.acceptOrders) {
+                return res.status(403).json({ error: 'El restaurante no esta aceptando pedidos en este momento.' });
+            }
+
             const pedido = await enviarPedido(id_cliente, total, delivery, lugar_envio);
-            
+
             console.log('Pedido insertado', pedido);
             res.status(201).json({ pedido: pedido });
+
+            if (!operationSettings.notifyTelegram) return;
 
             const detalle = await obtenerDetalleConRetry(pedido.id);
             console.log('Detalle pedido', detalle);
@@ -123,9 +140,9 @@ const pedidoController = {
                 }))
             };
 
-            notifyTelegram(payload);
-
-
+            notifyTelegram(payload).catch((notificationError) => {
+                console.error('Error al enviar notificacion de Telegram:', notificationError);
+            });
         } catch (error) {
             console.error('Error al enviar el pedido:', error);
             res.status(500).json({ error: 'Error al enviar el pedido.' });
@@ -135,7 +152,6 @@ const pedidoController = {
     enviarDetallePedido: async (req, res) => {
         console.log('Cuerpo de la solicitud (req.body):', req.body);
         const { pedido_id, menu_id, cantidad, precio, ingredientes } = req.body;
-        // Convertir ingredientes a JSON string
         const ingredientesJson = JSON.stringify(ingredientes);
         try {
             const detallePedido = await enviarDetallePedido(pedido_id, menu_id, cantidad, precio, ingredientesJson);
@@ -143,8 +159,6 @@ const pedidoController = {
                 message: 'Detalle del pedido enviado exitosamente',
                 detalle_id: detallePedido
             });
-
-
         } catch (error) {
             console.error('Error al enviar el detalle del pedido:', error);
         }

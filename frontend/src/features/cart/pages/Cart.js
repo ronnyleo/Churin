@@ -4,28 +4,44 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../../app/context/AuthContext";
 import Loading from "../../../shared/ui/Loading";
 import axios from "axios";
-import logo2 from "../../../assets/logo2.png";
 import "../../../shared/styles/Cart.css";
 
+const API_BASE = (process.env.REACT_APP_BACKEND_URL || "").replace(/\/$/, "");
+
+const DEFAULT_OPERATION_SETTINGS = {
+  acceptOrders: true,
+  freeDelivery: false,
+  notifyTelegram: true,
+  highlightDelivery: true,
+};
+
 const Cart = () => {
-  const { cartItems, setCartItems, removeFromCart, clearCart } =
-    useContext(CartContext);
+  const { cartItems, setCartItems, removeFromCart, clearCart } = useContext(CartContext);
   const { currentUser } = useAuth();
   const [isDelivery, setIsDelivery] = useState(false);
   const [isPickup, setIsPickup] = useState(false);
   const [direcciones, setDirecciones] = useState([]);
   const [cliente, setCliente] = useState("");
   const [direccion, setDireccion] = useState("");
-  const [formaPago, setFormaPago] = useState("");
+  const [formaPago] = useState("");
   const [costoEnvio, setCostoEnvio] = useState(0);
+  const [operationSettings, setOperationSettings] = useState(DEFAULT_OPERATION_SETTINGS);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
   const totalPrice = cartItems.reduce(
     (total, item) => total + item.precio * item.cantidad,
     0,
   );
+  const effectiveShippingCost = isDelivery && operationSettings.freeDelivery ? 0 : Number(costoEnvio);
+  const totalToPay = totalPrice + effectiveShippingCost;
 
   const finalizarPedido = async () => {
+    if (!operationSettings.acceptOrders) {
+      alert("El restaurante no esta aceptando pedidos en este momento");
+      return;
+    }
+
     if (cartItems.length === 0) {
       alert("Debe tener al menos un producto en el carrito");
       return;
@@ -37,7 +53,7 @@ const Cart = () => {
     }
 
     if (isDelivery && !direccion) {
-      alert("Debe seleccionar un lugar de envío");
+      alert("Debe seleccionar un lugar de envio");
       return;
     }
 
@@ -45,65 +61,36 @@ const Cart = () => {
 
     const pedido = {
       id_cliente: `${cliente.id}`,
-      total: totalPrice + Number(costoEnvio),
+      total: totalToPay,
       delivery: isDelivery,
       lugar_envio: isDelivery ? direccion : "",
       id_forma_pago: formaPago,
     };
 
-    console.log("Pedido a enviar:", pedido);
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/api/pedido`,
-        pedido,
-      );
-      console.log("Respuesta de la API al crear el pedido:", response);
+      const response = await axios.post(`${API_BASE}/api/pedido`, pedido);
       if (response.status === 201) {
         const idPedido = response.data.pedido.id;
-
-        // Envía los detalles del pedido
         await enviarDetallesPedido(idPedido);
 
-        const detallePedido = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/api/pedido/detalle-pedido/${idPedido}`,
-        );
-        console.log("detalle: ", detallePedido.data);
-
-        // Verifica si detallePedido.data es null o un array
-        let items = [];
-        if (Array.isArray(detallePedido.data)) {
-          items = detallePedido.data; // Si es un array, lo usamos directamente
-        } else if (detallePedido.data === null) {
-          console.error("Error: La respuesta de la API es null");
-        } else {
-          console.error("Error: La respuesta de la API no es un array");
-        }
+        const detallePedido = await axios.get(`${API_BASE}/api/pedido/detalle-pedido/${idPedido}`);
+        const items = Array.isArray(detallePedido.data) ? detallePedido.data : [];
         const isDesktop = /Mobi|Android/i.test(navigator.userAgent) === false;
-        const phoneNumber = "593996153861"; // Reemplaza con el número deseado
-        const tipoPedido = isDelivery
-          ? `para entregar en ${direccion}`
-          : "para retirar";
+        const phoneNumber = "593996153861";
+        const tipoPedido = isDelivery ? `para entregar en ${direccion}` : "para retirar";
 
         let mensaje = `Hola, hice un pedido ${tipoPedido}.\n\n`;
         mensaje += `*Datos:*\n`;
         mensaje += `Nombres: ${cliente.first_name} ${cliente.last_name}\n`;
-        mensaje += `Teléfono: ${cliente.telefono}\n\n`;
+        mensaje += `Telefono: ${cliente.telefono}\n\n`;
         mensaje += `*Detalle:*\n`;
 
         if (items.length > 0) {
           mensaje += items
             .map((item) => {
-              let ingredientesLista;
-              if (
-                Array.isArray(item.ingredientes) &&
-                item.ingredientes.length > 0
-              ) {
-                ingredientesLista = item.ingredientes
-                  .map((ingrediente) => `${ingrediente.nombre}`)
-                  .join(", ");
-              } else {
-                ingredientesLista = "N/A";
-              }
+              const ingredientesLista = Array.isArray(item.ingredientes) && item.ingredientes.length > 0
+                ? item.ingredientes.map((ingrediente) => ingrediente.nombre).join(", ")
+                : "N/A";
 
               return (
                 `${item.nombre} (Cantidad: ${item.cantidad}, Precio: $${(Number(item.precio) * item.cantidad).toFixed(2)})\n` +
@@ -116,27 +103,22 @@ const Cart = () => {
         }
 
         mensaje += `\n*Subtotal:* $${totalPrice.toFixed(2)}\n`;
-        mensaje += `*Envío:* $${Number(costoEnvio).toFixed(2)}\n`;
-        mensaje += `*Total:* $${(totalPrice + Number(costoEnvio)).toFixed(2)}\n\n`;
+        mensaje += `*Envio:* $${effectiveShippingCost.toFixed(2)}\n`;
+        mensaje += `*Total:* $${totalToPay.toFixed(2)}\n\n`;
         mensaje += `Gracias!`;
 
         const encodedMessage = encodeURIComponent(mensaje);
         const whatsappURLMobile = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
         const whatsappURLEscritorio = `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`;
 
-        alert("Serás redirigido a WhatsApp para completar tu pedido");
+        alert("Seras redirigido a WhatsApp para completar tu pedido");
 
-        // Verifica el dispositivo y redirige
         if (isDesktop) {
-          // Redirige a WhatsApp Web en escritorio
           const newWindow = window.open(whatsappURLEscritorio, "_blank");
           if (!newWindow) {
-            alert(
-              "Por favor, permite las ventanas emergentes para este sitio.",
-            );
+            alert("Por favor, permite las ventanas emergentes para este sitio.");
           }
         } else {
-          // Redirige a la app de WhatsApp en móvil
           window.location.href = whatsappURLMobile;
         }
 
@@ -146,7 +128,7 @@ const Cart = () => {
       }
     } catch (error) {
       console.error("Error al enviar el pedido:", error);
-      alert("Hubo un problema al enviar el pedido");
+      alert(error.response?.data?.error || "Hubo un problema al enviar el pedido");
     } finally {
       setLoading(false);
     }
@@ -163,13 +145,10 @@ const Cart = () => {
     try {
       await Promise.all(
         detallesPedido.map((detalle) =>
-          axios.post(
-            `${process.env.REACT_APP_BACKEND_URL}/api/pedido/detalle-pedido`,
-            {
-              pedido_id: idPedido,
-              ...detalle,
-            },
-          ),
+          axios.post(`${API_BASE}/api/pedido/detalle-pedido`, {
+            pedido_id: idPedido,
+            ...detalle,
+          }),
         ),
       );
     } catch (error) {
@@ -177,12 +156,6 @@ const Cart = () => {
       alert("Hubo un problema al enviar los detalles del pedido");
     }
   };
-
-  useEffect(() => {
-    if (cartItems.length > 0) {
-      console.log("Último valor de cartItems:", cartItems);
-    }
-  }, [cartItems]);
 
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cartItems));
@@ -196,12 +169,28 @@ const Cart = () => {
   }, [setCartItems]);
 
   useEffect(() => {
+    let cancelled = false;
+
+    const fetchOperationSettings = async () => {
+      try {
+        const response = await axios.get(`${API_BASE}/api/settings/operation`);
+        if (!cancelled) {
+          setOperationSettings({ ...DEFAULT_OPERATION_SETTINGS, ...response.data });
+        }
+      } catch (error) {
+        console.error("Error al obtener la configuracion operativa:", error);
+      }
+    };
+
+    fetchOperationSettings();
+    return () => { cancelled = true; };
+  }, []);
+
+  useEffect(() => {
     const fetchDirecciones = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/api/direcciones`,
-        );
+        const response = await axios.get(`${API_BASE}/api/direcciones`);
         setDirecciones(response.data);
       } catch (error) {
         setError("Error al obtener las direcciones");
@@ -217,12 +206,9 @@ const Cart = () => {
     const fetchCliente = async () => {
       if (currentUser) {
         try {
-          const response = await axios.post(
-            `${process.env.REACT_APP_BACKEND_URL}/api/auth/getUser`,
-            {
-              email: currentUser.email,
-            },
-          );
+          const response = await axios.post(`${API_BASE}/api/auth/getUser`, {
+            email: currentUser.email,
+          });
           setCliente(response.data);
         } catch (error) {
           setError("Error al obtener el cliente");
@@ -233,26 +219,21 @@ const Cart = () => {
     fetchCliente();
   }, [currentUser]);
 
-  const handleDireccionChange = (e) => {
-    const selectedDireccion = direcciones.find(
-      (d) => d.nombre === e.target.value,
-    );
-    setDireccion(e.target.value);
+  const handleDireccionChange = (event) => {
+    const selectedDireccion = direcciones.find((item) => item.nombre === event.target.value);
+    setDireccion(event.target.value);
     setCostoEnvio(selectedDireccion ? selectedDireccion.costo_envio : 0);
   };
 
-  const handleDeliveryChange = (e) => {
-    const selectedDireccion = direcciones.find(
-      (d) => d.nombre === e.target.value,
-    );
-    setIsDelivery(e.target.checked);
+  const handleDeliveryChange = (event) => {
+    setIsDelivery(event.target.checked);
     setIsPickup(false);
     setDireccion("");
-    setCostoEnvio(selectedDireccion ? selectedDireccion.costo_envio : 0);
+    setCostoEnvio(0);
   };
 
-  const handlePickupChange = (e) => {
-    setIsPickup(e.target.checked);
+  const handlePickupChange = (event) => {
+    setIsPickup(event.target.checked);
     setIsDelivery(false);
     setDireccion("");
     setCostoEnvio(0);
@@ -263,17 +244,28 @@ const Cart = () => {
 
   return (
     <div className="mx-auto flex flex-col gap-5 p-5 font-comfortaa sm:w-1/2 sm:p-10">
+      {!operationSettings.acceptOrders && cartItems.length > 0 && (
+        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+          El restaurante no esta aceptando pedidos en este momento.
+        </div>
+      )}
+
+      {operationSettings.freeDelivery && cartItems.length > 0 && (
+        <div className="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-700">
+          Delivery gratis activo para pedidos a domicilio.
+        </div>
+      )}
+
       {cartItems.length > 0 && (
         <div className="flex flex-col gap-5 border">
           <h3 className="bg-white px-4 py-2 font-paytone text-lg font-bold">
-            ¿Cómo quieres recibir tu pedido?
+            Como quieres recibir tu pedido?
           </h3>
           <div className="flex flex-col gap-5 px-10 py-5">
             <div className="flex flex-col items-center justify-center gap-2 sm:flex-row sm:gap-5">
               <div className="flex justify-center">
                 <label className="flex gap-2">
                   <input
-                    className=""
                     type="checkbox"
                     checked={isDelivery}
                     onChange={handleDeliveryChange}
@@ -287,7 +279,6 @@ const Cart = () => {
               <div className="flex justify-center">
                 <label className="flex gap-2">
                   <input
-                    className=""
                     type="checkbox"
                     checked={isPickup}
                     onChange={handlePickupChange}
@@ -305,15 +296,15 @@ const Cart = () => {
                   onChange={handleDireccionChange}
                 >
                   <option className="text-sm" value="">
-                    Selecciona una opción
+                    Selecciona una opcion
                   </option>
-                  {direcciones.map((direccion) => (
+                  {direcciones.map((direccionItem) => (
                     <option
                       className="text-sm"
-                      key={direccion.id}
-                      value={direccion.nombre}
+                      key={direccionItem.id}
+                      value={direccionItem.nombre}
                     >
-                      {direccion.nombre} - ${direccion.costo_envio}
+                      {direccionItem.nombre} - {operationSettings.freeDelivery ? "Gratis" : `$${direccionItem.costo_envio}`}
                     </option>
                   ))}
                 </select>
@@ -331,14 +322,14 @@ const Cart = () => {
           {cartItems.length === 0 ? (
             <div className="flex flex-col gap-5">
               <p className="text-center text-lg font-semibold">
-                Tu carrito está vacío
+                Tu carrito esta vacio
               </p>
               <Link
-                className="mx-auto w-full rounded-lg bg-yellow-300 p-2 p-2 text-center sm:w-1/3"
+                className="mx-auto w-full rounded-lg bg-yellow-300 p-2 text-center sm:w-1/3"
                 to="/"
               >
-                Ver menú
-              </Link>{" "}
+                Ver menu
+              </Link>
             </div>
           ) : (
             <>
@@ -356,7 +347,7 @@ const Cart = () => {
                     <div className="flex flex-col justify-center">
                       <h3 className="font-semibold">{item.nombre}</h3>
                       <p>
-                        {item.cantidad} x ${item.precio}{" "}
+                        {item.cantidad} x ${item.precio}
                       </p>
 
                       {item.ingredientes && item.ingredientes.length > 0
@@ -378,7 +369,7 @@ const Cart = () => {
                 </div>
               ))}
               <button
-                className="mx-auto w-1/3 rounded-lg bg-yellow-300 p-2 p-2 text-center"
+                className="mx-auto w-1/3 rounded-lg bg-yellow-300 p-2 text-center"
                 onClick={clearCart}
               >
                 Vaciar carrito
@@ -392,39 +383,40 @@ const Cart = () => {
                     <span className="font-bold">${totalPrice.toFixed(2)}</span>
                   </div>
                   <div className="flex w-full justify-between">
-                    <h3>Envío</h3>
+                    <h3>Envio</h3>
                     <span className="font-bold">
-                      ${Number(costoEnvio).toFixed(2)}
+                      ${effectiveShippingCost.toFixed(2)}
                     </span>
                   </div>
                   <div className="flex w-full justify-between">
                     <h3>Total a pagar</h3>
                     <span className="text-xl font-bold">
-                      ${(totalPrice + Number(costoEnvio)).toFixed(2)}
+                      ${totalToPay.toFixed(2)}
                     </span>
                   </div>
                 </div>
                 {currentUser ? (
                   <div className="flex flex-col items-center gap-2 p-5 sm:p-0">
                     <button
-                      className="w-full rounded-lg bg-yellow-300 p-2 p-2 sm:w-1/3"
+                      className="w-full rounded-lg bg-yellow-300 p-2 disabled:cursor-not-allowed disabled:opacity-60 sm:w-1/3"
                       onClick={finalizarPedido}
+                      disabled={!operationSettings.acceptOrders}
                     >
                       Finalizar
                     </button>
                     <Link
-                      className="w-full rounded-lg bg-yellow-300 p-2 p-2 text-center sm:w-1/3"
+                      className="w-full rounded-lg bg-yellow-300 p-2 text-center sm:w-1/3"
                       to="/"
                     >
-                      Volver al menú
+                      Volver al menu
                     </Link>
                   </div>
                 ) : (
                   <Link
-                    className="rounded-lg bg-yellow-300 p-2 p-2 text-center"
+                    className="rounded-lg bg-yellow-300 p-2 text-center"
                     to="/Login"
                   >
-                    Inicia sesión para finalizar tu pedido
+                    Inicia sesion para finalizar tu pedido
                   </Link>
                 )}
               </div>

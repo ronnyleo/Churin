@@ -4,6 +4,7 @@ import Loading from "shared/ui/Loading";
 
 const API_BASE = (process.env.REACT_APP_BACKEND_URL || "").replace(/\/$/, "");
 const PAGE_SIZE = 20;
+const DEFAULT_OPERATION_SETTINGS = { highlightDelivery: true };
 
 const MESES = [
   "enero", "febrero", "marzo", "abril", "mayo", "junio",
@@ -56,10 +57,28 @@ export default function OrdersPage() {
   const [resumenPorFecha, setResumenPorFecha] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [operationSettings, setOperationSettings] = useState(DEFAULT_OPERATION_SETTINGS);
 
   const [detallesPedidos, setDetallesPedidos] = useState({});
   const [visibilidadDetalles, setVisibilidadDetalles] = useState({});
 
+  useEffect(() => {
+    let cancelado = false;
+
+    const fetchOperationSettings = async () => {
+      try {
+        const response = await axios.get(`${API_BASE}/api/settings/operation`);
+        if (!cancelado) {
+          setOperationSettings({ ...DEFAULT_OPERATION_SETTINGS, ...response.data });
+        }
+      } catch (err) {
+        console.error("Error al obtener la configuracion operativa:", err);
+      }
+    };
+
+    fetchOperationSettings();
+    return () => { cancelado = true; };
+  }, []);
   useEffect(() => {
     let cancelado = false;
 
@@ -310,7 +329,7 @@ export default function OrdersPage() {
                             <td className="px-4 py-3 hidden sm:table-cell">
                               <span
                                 className={`inline-block text-xs font-semibold px-2.5 py-0.5 rounded-full whitespace-nowrap ${
-                                  pedido.delivery
+                                  pedido.delivery && operationSettings.highlightDelivery
                                     ? "bg-green-100 text-green-700"
                                     : "bg-blue-100 text-blue-700"
                                 }`}
