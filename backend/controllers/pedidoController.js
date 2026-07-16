@@ -4,14 +4,71 @@ const { obtenerPedidos, enviarPedido,
     obtenerPedidoPorId} = require('../models/pedidoModel');
 const { notifyTelegram } = require("../notifications/telegram"); // <- tu helper
 
+const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
+const DEFAULT_PAGE = 1;
+const DEFAULT_LIMIT = 20;
+const MAX_LIMIT = 100;
+
+const getTodayDate = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
+
+const isValidDateString = (value) => {
+    if (!DATE_REGEX.test(value)) return false;
+    const date = new Date(`${value}T00:00:00`);
+    if (Number.isNaN(date.getTime())) return false;
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return value === `${year}-${month}-${day}`;
+};
+
+const normalizePositiveInt = (value, fallback) => {
+    const parsed = Number.parseInt(value, 10);
+    return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
+};
+
+const normalizeOrdersQuery = (query) => {
+    const today = getTodayDate();
+    const from = typeof query.from === 'string' && query.from.trim() ? query.from.trim() : today;
+    const to = typeof query.to === 'string' && query.to.trim() ? query.to.trim() : from;
+
+    if (!isValidDateString(from) || !isValidDateString(to)) {
+        const error = new Error('Las fechas deben tener formato YYYY-MM-DD.');
+        error.statusCode = 400;
+        throw error;
+    }
+
+    if (to < from) {
+        const error = new Error('La fecha final no puede ser anterior a la fecha inicial.');
+        error.statusCode = 400;
+        throw error;
+    }
+
+    const page = normalizePositiveInt(query.page, DEFAULT_PAGE);
+    const requestedLimit = normalizePositiveInt(query.limit, DEFAULT_LIMIT);
+    const limit = Math.min(requestedLimit, MAX_LIMIT);
+
+    return { from, to, page, limit };
+};
 
 const pedidoController = {
     obtenerPedidos: async (req, res) => {
         try {
-            const pedidos = await obtenerPedidos();
+            const filtros = normalizeOrdersQuery(req.query);
+            const pedidos = await obtenerPedidos(filtros);
             res.json(pedidos);
         } catch (error) {
-            console.error('Error al obtener pedidos:', error)
+            console.error('Error al obtener pedidos:', error);
+            const statusCode = error.statusCode || 500;
+            res.status(statusCode).json({
+                error: statusCode === 400 ? error.message : 'Error interno del servidor'
+            });
         }
     },
 

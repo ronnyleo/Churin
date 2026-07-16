@@ -1,37 +1,50 @@
 const db = require('../db');
 
-const obtenerPedidos = async () => {
+const obtenerPedidos = async ({ from, to, page, limit }) => {
     try {
-        const query = `SELECT p.*, c.first_name, c.last_name, c.telefono  
+        const offset = (page - 1) * limit;
+        const query = `SELECT 
+                p.*, 
+                c.first_name, 
+                c.last_name, 
+                c.telefono,
+                to_char(p.fecha_hora, 'YYYY-MM-DD') AS fecha,
+                to_char(p.fecha_hora, 'HH24:MI') AS hora
             FROM pedido AS p INNER JOIN users AS c
-            ON p.id_cliente = c.id`;
+            ON p.id_cliente = c.id
+            WHERE p.fecha_hora >= $1::date
+                AND p.fecha_hora < ($2::date + INTERVAL '1 day')
+            ORDER BY p.fecha_hora DESC
+            LIMIT $3 OFFSET $4`;
 
-        const pedidos = await db.any(query);
+        const countQuery = `SELECT COUNT(*)::int AS total
+            FROM pedido AS p
+            WHERE p.fecha_hora >= $1::date
+                AND p.fecha_hora < ($2::date + INTERVAL '1 day')`;
 
-        const pedidosConFechayHora = pedidos.map(pedido => {
-            const fechaCompleta = new Date(pedido.fecha_hora);
+        const [pedidos, countResult] = await db.task(t => t.batch([
+            t.any(query, [from, to, limit, offset]),
+            t.one(countQuery, [from, to])
+        ]));
 
-            // Extraer los componentes de fecha y hora sin convertir a UTC
-            const year = fechaCompleta.getFullYear();
-            const month = String(fechaCompleta.getMonth() + 1).padStart(2, '0'); // Mes va de 0 a 11
-            const day = String(fechaCompleta.getDate()).padStart(2, '0');
-            const hours = String(fechaCompleta.getHours()).padStart(2, '0');
-            const minutes = String(fechaCompleta.getMinutes()).padStart(2, '0');
+        const total = countResult.total;
 
-            // Formatear la fecha y la hora manualmente
-            const fecha = `${year}-${month}-${day}`;
-            const hora = `${hours}:${minutes}`;
-
-
-            return {
-                ...pedido,
-                fecha: fecha,
-                hora: hora,
-            };
-        });
-        return pedidosConFechayHora;
+        return {
+            data: pedidos,
+            pagination: {
+                page,
+                limit,
+                total,
+                totalPages: Math.ceil(total / limit)
+            },
+            filters: {
+                from,
+                to
+            }
+        };
     } catch (error) {
         console.log('Error al obtener los pedidos:', error);
+        throw error;
     }
 }
 
