@@ -41,7 +41,7 @@ const getLineTotal = (item = {}) => {
   return Number(item.precio_unitario || 0) * Number(item.cantidad || 0);
 };
 
-export const buildOrderWhatsAppMessage = ({ order, customer, details = [], subtotal, shippingCost }) => {
+export const buildOrderWhatsAppMessage = ({ order, customer, details = [], subtotal, shippingCost, discount, couponCode }) => {
   const orderId = getOrderId(order);
   const deliveryText = getDeliveryText(order);
   const customerName = getCustomerName(customer || order);
@@ -70,6 +70,9 @@ export const buildOrderWhatsAppMessage = ({ order, customer, details = [], subto
 
   if (subtotal !== undefined) message += `\n\n*Subtotal:* $${formatMoney(subtotal)}`;
   if (shippingCost !== undefined) message += `\n*Envío:* $${formatMoney(shippingCost)}`;
+  if (discount && discount > 0) {
+    message += `\n*Descuento${couponCode ? ` (${couponCode})` : ""}:* -$${formatMoney(discount)}`;
+  }
   message += `\n*Total:* $${formatMoney(order?.total)}\n\n`;
   message += "¡Gracias!";
 

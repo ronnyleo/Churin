@@ -5,6 +5,7 @@ import { useAuth } from "../../../app/context/AuthContext";
 import Loading from "../../../shared/ui/Loading";
 import axios from "axios";
 import { buildOrderWhatsAppUrl } from "shared/lib/whatsappOrder";
+import CuponInput from "../components/CuponInput";
 import "../../../shared/styles/Cart.css";
 
 const API_BASE = (process.env.REACT_APP_BACKEND_URL || "").replace(/\/$/, "");
@@ -17,7 +18,7 @@ const DEFAULT_OPERATION_SETTINGS = {
 };
 
 const Cart = () => {
-  const { cartItems, setCartItems, removeFromCart, clearCart } = useContext(CartContext);
+  const { cartItems, setCartItems, removeFromCart, clearCart, appliedCoupon, getCouponDiscount } = useContext(CartContext);
   const { currentUser } = useAuth();
   const [isDelivery, setIsDelivery] = useState(false);
   const [isPickup, setIsPickup] = useState(false);
@@ -35,8 +36,10 @@ const Cart = () => {
     (total, item) => total + item.precio * item.cantidad,
     0,
   );
-  const effectiveShippingCost = isDelivery && operationSettings.freeDelivery ? 0 : Number(costoEnvio);
-  const totalToPay = totalPrice + effectiveShippingCost;
+  const couponDiscount = getCouponDiscount(totalPrice);
+  const couponCoversShipping = appliedCoupon?.tipo === "envio_gratis";
+  const effectiveShippingCost = isDelivery && (operationSettings.freeDelivery || couponCoversShipping) ? 0 : Number(costoEnvio);
+  const totalToPay = totalPrice - couponDiscount + effectiveShippingCost;
 
   const finalizarPedido = async () => {
     if (!operationSettings.acceptOrders) {
@@ -67,6 +70,8 @@ const Cart = () => {
       delivery: isDelivery,
       lugar_envio: isDelivery ? direccion : "",
       id_forma_pago: formaPago,
+      cupon_id: appliedCoupon?.id || null,
+      descuento: couponDiscount,
     };
 
     try {
@@ -84,6 +89,8 @@ const Cart = () => {
           details,
           subtotal: totalPrice,
           shippingCost: effectiveShippingCost,
+          discount: couponDiscount,
+          couponCode: appliedCoupon?.codigo || null,
         });
 
         setCompletedOrder({
@@ -273,6 +280,12 @@ const Cart = () => {
           </div>
         )}
 
+        {!completedOrder && couponCoversShipping && isDelivery && cartItems.length > 0 && (
+          <div className="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-700">
+            Cupón <span className="font-bold">{appliedCoupon?.codigo}</span> aplicado: envío gratis.
+          </div>
+        )}
+
         {!completedOrder && cartItems.length > 0 && (
           <section className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
             <h2 className="border-b border-gray-100 px-4 py-3 font-paytone text-lg font-bold text-gray-900 sm:px-5">
@@ -316,7 +329,7 @@ const Cart = () => {
                         key={direccionItem.id}
                         value={direccionItem.nombre}
                       >
-                        {direccionItem.nombre} - {operationSettings.freeDelivery ? "Gratis" : `$${direccionItem.costo_envio}`}
+                        {direccionItem.nombre} - {operationSettings.freeDelivery || couponCoversShipping ? "Gratis" : `$${direccionItem.costo_envio}`}
                       </option>
                     ))}
                   </select>
@@ -410,6 +423,18 @@ const Cart = () => {
                           ${effectiveShippingCost.toFixed(2)}
                         </span>
                       </div>
+
+                      <div className="mt-3">
+                        <CuponInput subtotal={totalPrice} />
+                      </div>
+
+                      {couponDiscount > 0 && (
+                        <div className="mt-2 flex w-full justify-between text-sm text-green-700">
+                          <span>Descuento ({appliedCoupon?.codigo})</span>
+                          <span className="font-bold">-${couponDiscount.toFixed(2)}</span>
+                        </div>
+                      )}
+
                       <div className="mt-3 flex w-full justify-between border-t border-gray-200 pt-3 text-base font-bold text-gray-900">
                         <span>Total a pagar</span>
                         <span className="text-xl">${totalToPay.toFixed(2)}</span>
